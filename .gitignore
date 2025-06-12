@@ -1,0 +1,37 @@
+# =============== #
+# Unity Generated #
+# =============== #
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+MemoryCaptures/
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.DS_Store
+*.apk
+*.unitypackage
+*.log
+.vscode/
+.vs/
+.idea/
+
+# Crashlytics generated
+crashlytics-build.properties
+
+# Rider
+.idea/
+*.sln.iml
