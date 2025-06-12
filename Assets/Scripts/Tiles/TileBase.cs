@@ -12,7 +12,7 @@ public abstract class TileBase : MonoBehaviour
         Vector3.left,
         Vector3.right
     };
-
+    [SerializeField]protected FunctionalLand linkLand;//访问该用什么
     public Vector3 GetTopPosition()
     { 
         Vector3 topPosition = transform.position + Vector3.up * offsetDistance;
@@ -21,12 +21,12 @@ public abstract class TileBase : MonoBehaviour
 
     public abstract void TriggerEvent(BasePlayerController pc);
 
-    protected T FindLinker<T>() where T : Component
+    protected T FindLinker<T>(Transform tran ) where T : Component
     {
         foreach (var dir in directions)
         {
-            Vector3 origin = transform.position;
-
+            Vector3 origin = tran.position;
+            print("origin:" + origin);
             Ray ray = new Ray(origin, dir);//方向
             if (Physics.Raycast(ray, out RaycastHit hit, offsetDistance + 0.1f))//（方向，碰撞体，长度）
             {

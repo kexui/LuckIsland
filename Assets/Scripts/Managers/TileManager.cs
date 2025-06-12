@@ -32,7 +32,6 @@ public class TileManager : MonoBehaviour
                 Tiles.Add(routeTileBace);
             }
         }
-        
     }
     public int GetRouteTilesCount()
     {

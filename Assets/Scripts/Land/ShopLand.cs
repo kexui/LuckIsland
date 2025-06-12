@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopLand : LandBase
+public class ShopLand : FunctionalLand
 {
     
 }

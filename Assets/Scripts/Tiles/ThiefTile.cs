@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ThiefTile : TileBase
 {//–°Õµ
+
     private int stealAmout;
     private void Start()
     {
@@ -19,6 +20,6 @@ public class ThiefTile : TileBase
         {
             print("¥ÚΩŸ ß∞‹");
         }
-
+        
     }
 }
