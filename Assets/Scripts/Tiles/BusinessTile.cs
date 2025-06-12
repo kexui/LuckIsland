@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class BusinessTile : TileBase
@@ -42,5 +43,11 @@ public class BusinessTile : TileBase
                 print("你没有足够的铜币，无法购买");
             }
         }
+    }
+    public void ChangeLand()
+    {//有待思考
+        LandBase go = FindLinker<LandBase>();
+        //if (go != null) ;
+
     }
 }

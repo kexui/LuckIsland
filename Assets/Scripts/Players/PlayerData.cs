@@ -43,6 +43,15 @@ public class PlayerData
     public int Copper=>copper;//只访问
 
     private int luck;
+    public int Luck
+    {
+        get => luck;
+        set
+        {
+            luck = Mathf.Max(0, value);
+            OnDataChanged?.Invoke();//数据改变事件
+        }
+    }
 
     //这个属于设置变量
     public bool autoRollDIce = false;//自动摇骰子

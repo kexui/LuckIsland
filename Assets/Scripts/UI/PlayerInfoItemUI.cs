@@ -8,6 +8,8 @@ public class PlayerInfoItemUI : MonoBehaviour
 {
     public Image avatarImage;
     public TextMeshProUGUI idText;
+    public TextMeshProUGUI luckText;
+
     public TextMeshProUGUI copperText;
     public TextMeshProUGUI landText;
 
@@ -16,12 +18,12 @@ public class PlayerInfoItemUI : MonoBehaviour
     public void SetData(PlayerData playerData)
     { 
         data = playerData;
-
     }
     public void RefreshUI()
     { 
         idText.text = "ID:"+data.playerName;
-        copperText.text = "Copper" + data.Copper;
-        landText.text = "产地"+data.ownedTiles;
+        copperText.text = data.Copper.ToString();
+        //landText.text = "产地"+data.ownedTiles;
+        luckText.text = data.Luck.ToString();
     }
 }

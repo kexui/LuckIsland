@@ -58,11 +58,13 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerData newPlayer = new PlayerData(name, id, characterPrefab);
         allPlayerDatas.Add(newPlayer);
+        Debug.Log("Player Created: " + name + " with ID: " + id);
     }
     private void CreateAIPlayer(string name,int id)
     { 
         PlayerData newPlayer = new PlayerData(name, id,AIplayerPrefab);
         allPlayerDatas.Add(newPlayer);
+        Debug.Log("AI Player Created: " + name + " with ID: " + id);
     }
     public PlayerData GetPlayerData(int currentPlayerIndex)
     {
