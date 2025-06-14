@@ -6,6 +6,13 @@ public class NormalTile : TileBase
 {//普通格子
     public override void TriggerEvent(BasePlayerController pc)
     {
-        print("无事发生");
+        foreach (Transform child in transform)
+        {
+            var interactable = child.GetComponent<IInteractable>();
+            if (interactable!=null)
+            {
+                interactable.Interact(pc);
+            }
+        }
     }
 }

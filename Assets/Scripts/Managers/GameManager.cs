@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         _instance = this;
-        DontDestroyOnLoad(gameObject);//确保GameManager在场景切换时不会被销毁
+        //DontDestroyOnLoad(gameObject);//确保GameManager在场景切换时不会被销毁
     }
     private void Start()
     {
@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
     private void PreGame()
     {
         PlayerManager.Instance.PreGame(((int)GameMode.AI), new int[] {1,1 });
-
         SetGameState(GameState.InitGame);
     }
     private void InitGame()

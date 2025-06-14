@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventTile : TileBase
+public class ThiefEventTile : TileBase
 {
     public override void TriggerEvent(BasePlayerController pc)
     {
-        pc.playerData.AddCopper(1); // 触发事件，增加玩家铜币
+        print(" ");// 触发事件逻辑
     }
-
 }

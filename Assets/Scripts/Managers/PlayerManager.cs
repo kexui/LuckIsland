@@ -47,11 +47,11 @@ public class PlayerManager : MonoBehaviour
         int id = 0;
         for (int i = 0; i < ints[0]; i++,id++)
         {
-            CreateAIPlayer("AI"+i, id);
+            CreatePlayer("AI"+i, id);
         }
         for (int i = 0; i < ints[1]; i++,id++)
         {
-            CreatePlayer("Player" + i, id);
+            CreateAIPlayer("Player" + i, id);
         }
     }
     private void CreatePlayer(string name, int id)
@@ -73,5 +73,9 @@ public class PlayerManager : MonoBehaviour
     public int GetPlayersCount()
     {
         return allPlayerDatas.Count;
-    }   
+    }
+    public PlayerData GetCurrentPlayerData()
+    {
+        return allPlayerDatas[TurnManager.Instance.currentPlayerIndex];
+    }
 }

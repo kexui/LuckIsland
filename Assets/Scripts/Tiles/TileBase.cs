@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class TileBase : MonoBehaviour
 {
-    private float offsetDistance = 2f;//检查距离
+    private float offsetDistance = 2f;//偏移距离
     private Vector3[] directions = new Vector3[]
     {
         Vector3.forward,
@@ -12,7 +12,7 @@ public abstract class TileBase : MonoBehaviour
         Vector3.left,
         Vector3.right
     };
-    [SerializeField]protected FunctionalLand linkLand;//访问该用什么
+    protected GameObject Item;
     public Vector3 GetTopPosition()
     { 
         Vector3 topPosition = transform.position + Vector3.up * offsetDistance;
@@ -21,12 +21,11 @@ public abstract class TileBase : MonoBehaviour
 
     public abstract void TriggerEvent(BasePlayerController pc);
 
-    protected T FindLinker<T>(Transform tran ) where T : Component
+    protected T FindNeighbor<T>(Vector3 pos) where T : Component
     {
         foreach (var dir in directions)
         {
-            Vector3 origin = tran.position;
-            print("origin:" + origin);
+            Vector3 origin = pos + Vector3.up * 0.1f;
             Ray ray = new Ray(origin, dir);//方向
             if (Physics.Raycast(ray, out RaycastHit hit, offsetDistance + 0.1f))//（方向，碰撞体，长度）
             {
@@ -36,7 +35,6 @@ public abstract class TileBase : MonoBehaviour
                     return component;
                 }
             }
-
         }
         return null;
     }

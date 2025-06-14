@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1898207038235192179}
   - component: {fileID: 5453125644928806246}
   - component: {fileID: 8158218845215429046}
-  - component: {fileID: 7808237510345115797}
   m_Layer: 0
   m_Name: BusinessTile_Model
   m_TagString: Untagged
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7808237510345115797
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5022039189131648716}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1837085837020228205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -186,7 +164,7 @@ PrefabInstance:
     - target: {fileID: 3996986524522676608, guid: e1564d5251744fc4e80d76cae2390275,
         type: 3}
       propertyPath: m_Name
-      value: BusinessTile
+      value: BuildableTile
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8412925039556456431, guid: e1564d5251744fc4e80d76cae2390275, type: 3}
@@ -226,4 +204,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aa2186dd65f85948ae1e6ae0a54114b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkLand: {fileID: 0}
+  neighborLand: {fileID: 0}

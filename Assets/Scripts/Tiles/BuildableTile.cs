@@ -7,28 +7,37 @@ public class BuildableTile : TileBase
 {//产地
     int baseCopper = 1;//基础费用
     int purchaseCopper = 5;//购买费用
+    int UpgradeCopper = 3;//升级费用
     BasePlayerController owner;
+    BasePlayerController currentPlayer;
     bool isOwned = false;//是否被拥有
+
+    BuildableLand neighborLand;
 
     private void Awake()
     {
-        BuildableLand land = FindLinker<BuildableLand>(transform);
+        
+    }
+    private void Start()
+    {
+        BuildableLand land = FindNeighbor<BuildableLand>(transform.position);
         if (land==null)
         {
-            Debug.Log("FindLinker为空");
+            Debug.Log("BuildableTile：FindLinker为空");
         }
         else
         {
-            linkLand = land;
+            neighborLand = land;
         }
     }
     public override void TriggerEvent(BasePlayerController pc)
     {
+        currentPlayer = pc;
         if (isOwned)
         {//有人拥有
             if (owner == pc)
             {//自己拥有
-                print("这是你的产地");
+                BuildPromptUI.Instance.Show(transform.position, UpgradeBusiness);
             }
             else
             {//别人拥有
@@ -45,19 +54,35 @@ public class BuildableTile : TileBase
         }
         else
         {//没人拥有
-            if (pc.playerData.SubtractCopper(purchaseCopper))
-            {//PC金币够
-                isOwned = true;
-                owner = pc;
-                print("你购买了这个产地");
-            }
-            else
-            {
-                print("你没有足够的铜币，无法购买");
-            }
+            BuildPromptUI.Instance.Show(transform.position, SpawnBusiness);
         }
     }
-    
-
-
+    void SpawnBusiness()
+    { //建造
+        if (currentPlayer.playerData.SubtractCopper(purchaseCopper))
+        {//钱够
+            owner = currentPlayer;
+            isOwned = true;
+            print("你购买了"  + "，花费了" + purchaseCopper + "铜币");
+            neighborLand.SpawmBusiness();
+        }
+        else
+        {//钱不够
+            print("你没有足够的铜币，无法购买");
+            return;
+        }
+    }
+    void UpgradeBusiness()
+    {
+        if (currentPlayer.playerData.SubtractCopper(UpgradeCopper))
+        {
+            print("你升级了建造" + "，花费了" + UpgradeCopper + "铜币");
+            neighborLand.UpgradeBusiness();
+        }
+        else
+        {
+            print("你没有足够的铜币，无法升级");
+            return;
+        }
+    }
 }

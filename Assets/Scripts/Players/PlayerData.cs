@@ -94,7 +94,7 @@ public class PlayerData
         return false;
     }
     public bool HasEnoughCopper(int amount)
-    {//Ç®¹»
+    {//Ç®¹»²»¹»
         return copper >= amount;
     }
     public int GetCurrentStep()

@@ -37,7 +37,6 @@ public class TurnManager : MonoBehaviour
         OnTurnStageChanged?.Invoke(CurrentStage);
         OnPlayerChanged?.Invoke(currentPlayerIndex);
         StartCoroutine(HandlePlayerTurn());
-
     }
 
     private IEnumerator HandlePlayerTurn()
