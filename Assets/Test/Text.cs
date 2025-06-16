@@ -60,7 +60,7 @@ public class Text : MonoBehaviour
             playerAnimator.Jump();
 
             Vector3 start = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();
-            int nextIndex = (playerData.CurrentTileIndex + 1) % TileManager.Instance.GetRouteTilesCount();
+            int nextIndex = (playerData.CurrentTileIndex + 1) % TileManager.Instance.Tiles.Count;
             Vector3 end = TileManager.Instance.Tiles[nextIndex].GetTopPosition();
 
             timeElapsed = 0f;

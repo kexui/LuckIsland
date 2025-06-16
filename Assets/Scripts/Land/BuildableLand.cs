@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class BuildableLand : FunctionalLand
 {//可建造Land
     private bool isBuild;
-    [SerializeField] private GameObject fence;
+    private GameObject fence;
 
     [SerializeField] private GameObject BusinessLv1;
     [SerializeField] private GameObject BusinessLv2;
@@ -15,6 +15,14 @@ public class BuildableLand : FunctionalLand
 
     private void Awake()
     {
+        
+        GameObject go = transform.Find("Fence").gameObject;
+        if (go==null)
+        {
+            Debug.Log("Fence没找到");
+            return;
+        }
+        fence = go;
         Building = fence;
     }
     public void SpawmBusiness()

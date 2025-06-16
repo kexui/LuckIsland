@@ -13,6 +13,7 @@ public abstract class TileBase : MonoBehaviour
         Vector3.right
     };
     protected GameObject Item;
+
     public Vector3 GetTopPosition()
     { 
         Vector3 topPosition = transform.position + Vector3.up * offsetDistance;
@@ -38,5 +39,6 @@ public abstract class TileBase : MonoBehaviour
         }
         return null;
     }
+
 
 }

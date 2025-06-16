@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
 public class PlayerData
 {
-    public event Action OnDataChanged;
-    public string characterName { get; private set; }//角色名
+    public event Action OnDataChanged;//数据改变事件
+
+    private CharacterData characterData;//角色
     public int playerName { get; private set; }//玩家ID
 
     private int currentTileIndex;//当前棋子序号
@@ -56,26 +58,21 @@ public class PlayerData
     //这个属于设置变量
     public bool autoRollDIce = false;//自动摇骰子
 
-    public GameObject character;
     public BasePlayerController playerController;
     public List<TileBase> ownedTiles;
 
 
 
-    public PlayerData(string name,int id,GameObject characterPrefab)
+    public PlayerData(int id)
     {
         //初始化
-        characterName = name;
         playerName = id;
-        character = GameObject.Instantiate(characterPrefab);
         currentTileIndex = 0;
         totalSteps = 0;
         remainingSteps = 0;
         copper = 5;
         ownedTiles = new List<TileBase>();
 
-        character.GetComponent<BasePlayerController>().playerData = this;
-        playerController = character.GetComponent<BasePlayerController>();
     }
 
     public void AddCopper(int amount)
@@ -100,5 +97,9 @@ public class PlayerData
     public int GetCurrentStep()
     {//当前步数
         return totalSteps-remainingSteps;
+    }
+    public void SetCharacter(CharacterData data)
+    {
+        characterData = data;
     }
 }

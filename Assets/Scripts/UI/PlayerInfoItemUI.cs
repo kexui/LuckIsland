@@ -18,6 +18,7 @@ public class PlayerInfoItemUI : MonoBehaviour
     public void SetData(PlayerData playerData)
     { 
         data = playerData;
+        RefreshUI();
     }
     public void RefreshUI()
     { 

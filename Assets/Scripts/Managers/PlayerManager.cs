@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -8,8 +6,9 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager Instance;
 
     public Transform playerSpawnPoint;//角色生成位置   后期拓展
-    [SerializeField] public GameObject characterPrefab;//角色预设体
-    [SerializeField] public GameObject AIplayerPrefab;//AI角色预设体
+
+    public List<CharacterData> allCharacters;
+
     public List<PlayerData> allPlayerDatas = new List<PlayerData>();//角色数据集合
 
     private void Awake()
@@ -47,24 +46,32 @@ public class PlayerManager : MonoBehaviour
         int id = 0;
         for (int i = 0; i < ints[0]; i++,id++)
         {
-            CreatePlayer("AI"+i, id);
+            CreatePlayer(id, allCharacters[0]);
         }
         for (int i = 0; i < ints[1]; i++,id++)
         {
-            CreateAIPlayer("Player" + i, id);
+            CreateAIPlayer(id, allCharacters[1]);
         }
     }
-    private void CreatePlayer(string name, int id)
+    private void CreatePlayer(int id,CharacterData characterData)
     {
-        PlayerData newPlayer = new PlayerData(name, id, characterPrefab);
-        allPlayerDatas.Add(newPlayer);
-        Debug.Log("Player Created: " + name + " with ID: " + id);
+        PlayerData newData = new PlayerData(id);
+        GameObject model = Instantiate(characterData.modelPrefab);
+        PlayerController playerController = model.AddComponent<PlayerController>();
+        playerController.playerData = newData;
+        newData.playerController = playerController;
+        allPlayerDatas.Add(newData);
+        Debug.Log("ID: " + id);
     }
-    private void CreateAIPlayer(string name,int id)
-    { 
-        PlayerData newPlayer = new PlayerData(name, id,AIplayerPrefab);
-        allPlayerDatas.Add(newPlayer);
-        Debug.Log("AI Player Created: " + name + " with ID: " + id);
+    private void CreateAIPlayer(int id,CharacterData characterData)
+    {
+        PlayerData newData = new PlayerData(id);
+        GameObject model = Instantiate(characterData.modelPrefab);
+        AIPlayerController playerController = model.AddComponent<AIPlayerController>();
+        playerController.playerData = newData;
+        newData.playerController = playerController;
+        allPlayerDatas.Add(newData);
+        Debug.Log("ID: " + id);
     }
     public PlayerData GetPlayerData(int currentPlayerIndex)
     {

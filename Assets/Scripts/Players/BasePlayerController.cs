@@ -46,33 +46,46 @@ public abstract class BasePlayerController : MonoBehaviour
         Debug.LogWarning("协程RollDice未重写");
         yield return null;
     }
-    public IEnumerator Move()
-    {//应该不用重写吧？
-        isMoving = true;
-        while (playerData.RemainingSteps > 0)
-        {//每一步
-            playerAnimator.Jump();
-            Vector3 start = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();//起始位置
-            int nextIndex = (playerData.CurrentTileIndex + 1) % TileManager.Instance.GetRouteTilesCount();//目标index
-            Vector3 end = TileManager.Instance.Tiles[nextIndex].GetTopPosition();//目标位置
-            float timeElapsed = 0;//计时器
+    public void Move(int steps)
+    {
+        if (isMoving || steps == 0) return;
 
+        playerData.TotalSteps = steps; //设置总步数
+        playerData.RemainingSteps = steps; //设置剩余步数
+        StartCoroutine(MoveCoroutine());
+    }
+    public IEnumerator MoveCoroutine()
+    {//应该不用重写吧？
+        isMoving =true;
+        int direction = playerData.RemainingSteps > 0 ? 1 : -1; //正向或反向移动
+        int absSteps = Mathf.Abs(playerData.RemainingSteps);
+
+        for (int i = 0; i < absSteps; i++)
+        {
+            //playerAnimator.Jump();
+
+            int tileCount = TileManager.Instance.Tiles.Count;
+            int currentTileIndex = playerData.CurrentTileIndex;
+            int nextTileIndex = (currentTileIndex + direction + tileCount) % tileCount;
+
+            Vector3 start = TileManager.Instance.Tiles[currentTileIndex].GetTopPosition();
+            Vector3 end = TileManager.Instance.Tiles[nextTileIndex].GetTopPosition();
+
+            float timeElapsed = 0f;
             while (timeElapsed < moveLerpDuration)
             {
-                timeElapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(start, end, timeElapsed / moveLerpDuration);//插值
+                timeElapsed+= Time.deltaTime;
+                transform.position = Vector3.Lerp(start, end, timeElapsed/moveLerpDuration);
                 yield return null;
             }
-
-            transform.position = end;
-            playerData.CurrentTileIndex = nextIndex;
-            playerData.RemainingSteps--;
-            UIManager.Instance.UpdatePlayerDataUI();//更新UI
-            yield return new WaitForSeconds(0.1f);
+            transform.position = end; //确保到达终点
+            playerData.CurrentTileIndex = nextTileIndex; //更新当前棋子位置
+            playerData.RemainingSteps -= direction; //更新剩余步数
+            UIManager.Instance.UpdatePlayerDataUI(); //更新UI
+            yield return null;
         }
-        //移动完
-        isMoving = false;
     }
+
     public virtual IEnumerator TriggerTileEvent()
     {
         Debug.LogWarning("协程TriggerTileEvent未重写");
@@ -82,4 +95,9 @@ public abstract class BasePlayerController : MonoBehaviour
     { //摇
         DiceManager.Instance.RollDice();
     }
+    public void SetCharacter(CharacterData characterData)
+    { 
+        playerData.SetCharacter(characterData);
+        Instantiate(characterData.modelPrefab, transform);
+    }    
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThiefTile : TileBase
+public class ThiefEvent : EventBase,IInteractable
 {//小偷
 
     private int stealAmout;
@@ -10,9 +10,11 @@ public class ThiefTile : TileBase
     {
         stealAmout = Random.Range(1, 4);//1~3
     }
-    public override void TriggerEvent(BasePlayerController pc)
+
+
+    public void Interact(BasePlayerController player)
     {
-        if (pc.playerData.SubtractCopper(stealAmout))
+        if (player.playerData.SubtractCopper(stealAmout))
         {//PC金币够
             print("打劫成功");
         }
@@ -20,6 +22,5 @@ public class ThiefTile : TileBase
         {
             print("打劫失败");
         }
-        
     }
 }

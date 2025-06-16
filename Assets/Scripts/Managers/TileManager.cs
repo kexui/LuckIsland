@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class TileManager : MonoBehaviour
 {//棋格管理
@@ -33,10 +34,6 @@ public class TileManager : MonoBehaviour
             }
         }
     }
-    public int GetRouteTilesCount()
-    {
-        return Tiles.Count;
-    }
     private void SpawnRoad()
     {
         foreach (TileBase Tile in Tiles)
@@ -47,8 +44,17 @@ public class TileManager : MonoBehaviour
         }
     }
     public void TriggerEvent(int index,BasePlayerController pc)
-    {
+    {//Tile触发事件
+        foreach (Transform child in Tiles[index].transform)
+        {//遍历子类，查找是否有接口
+            var interactable = child.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                interactable.Interact(pc);
+            }
+        }
         Tiles[index].TriggerEvent(pc);
+
     }
 
 }

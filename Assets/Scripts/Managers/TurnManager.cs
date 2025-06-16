@@ -61,7 +61,7 @@ public class TurnManager : MonoBehaviour
                     OnTurnStageChanged?.Invoke(CurrentStage);
                     break;
                 case TurnStage.Move:
-                    yield return currentPlayerController.Move();
+                    yield return currentPlayerController.MoveCoroutine();
                     CurrentStage = TurnStage.TriggerTileEvent;
                     OnTurnStageChanged?.Invoke(CurrentStage);
                     break;
@@ -89,5 +89,5 @@ public class TurnManager : MonoBehaviour
         CurrentStage = TurnStage.StartTurn;
         OnTurnStageChanged?.Invoke(CurrentStage);
     }
-    
+
 }
