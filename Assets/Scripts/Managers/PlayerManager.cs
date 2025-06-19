@@ -58,8 +58,8 @@ public class PlayerManager : MonoBehaviour
         PlayerData newData = new PlayerData(id);
         GameObject model = Instantiate(characterData.modelPrefab);
         PlayerController playerController = model.AddComponent<PlayerController>();
-        playerController.playerData = newData;
-        newData.playerController = playerController;
+        playerController.SetPlayerData(newData);
+
         allPlayerDatas.Add(newData);
         Debug.Log("ID: " + id);
     }
@@ -68,8 +68,8 @@ public class PlayerManager : MonoBehaviour
         PlayerData newData = new PlayerData(id);
         GameObject model = Instantiate(characterData.modelPrefab);
         AIPlayerController playerController = model.AddComponent<AIPlayerController>();
-        playerController.playerData = newData;
-        newData.playerController = playerController;
+        playerController.SetPlayerData(newData);
+
         allPlayerDatas.Add(newData);
         Debug.Log("ID: " + id);
     }

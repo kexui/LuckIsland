@@ -19467,7 +19467,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0.49999917, y: -0, z: -0, w: 0.8660259}
-  m_LocalPosition: {x: 25, y: 12, z: 9}
+  m_LocalPosition: {x: 25, y: 14, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19485,8 +19485,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adcf6cecccb70954fb3cc972d92db8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slideSpeed: 10
   gameInput: {fileID: 1222428822}
+  slideSpeed: 10
+  zoomedSpeed: 0.5
+  minY: 7
+  maxY: 17
 --- !u!1001 &968972309
 PrefabInstance:
   m_ObjectHideFlags: 0

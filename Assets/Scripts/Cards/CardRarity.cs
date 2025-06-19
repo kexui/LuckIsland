@@ -7,5 +7,4 @@ public enum CardRarity
     Gold,// »Æ½ğ
     Silver,// °×Òø
     Bronze,// ÇàÍ­
-
 }

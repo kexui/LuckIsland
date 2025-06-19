@@ -16,7 +16,11 @@ public class PlayerData
     public int CurrentTileIndex
     {
         get => currentTileIndex;
-        set => currentTileIndex = Mathf.Max(0,value);
+        set
+        {
+            currentTileIndex = Mathf.Max(0, value);
+            OnDataChanged?.Invoke();//数据改变事件
+        }
     }
 
     private int totalSteps;//步数
