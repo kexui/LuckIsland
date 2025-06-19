@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: SpringTrap
   rarity: 1
-  ramge: 0
-  description: 
+  range: -1
+  effectText: 
+  faceImage: 
+  frameImage: 
+  weight: 2
   backwardSteps: 2

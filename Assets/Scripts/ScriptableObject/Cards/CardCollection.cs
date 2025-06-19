@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewBankCard", menuName = "Card/CardCollection")]
 public class CardCollection : ScriptableObject
 {
-    public List<CardBase> cardCollection; // ¿¨×é
+    public List<CardDataBase> cardCollection; // ¿¨×é
 }

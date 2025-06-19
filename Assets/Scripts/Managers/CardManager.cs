@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    public CardBase[] allCards;//¿¨×é
-    private List<CardBase> drawPool;
+    public CardDataBase[] allCards;//¿¨×é
+    private List<CardDataBase> drawPool;
     
     private int[] rarityWeights;
 
     private void Start()
     {
-        allCards = Resources.LoadAll<CardBase>("Cards");
+        allCards = Resources.LoadAll<CardDataBase>("Cards");
         rarityWeights = new int[] { 1, 2, 5 };
     }
 
     public void GenerateDrawPool()
     {
-        drawPool = new List<CardBase>();
-        foreach (CardBase card in allCards)
+        drawPool = new List<CardDataBase>();
+        foreach (CardDataBase card in allCards)
         {
             for (int i = 0; i < card.GetWeight(); i++)
             {
@@ -30,7 +30,7 @@ public class CardManager : MonoBehaviour
             }
         }
     }
-    public CardBase DrawRandomCard()
+    public CardDataBase DrawRandomCard()
     {
         if (drawPool == null||drawPool.Count==0)
             GenerateDrawPool();

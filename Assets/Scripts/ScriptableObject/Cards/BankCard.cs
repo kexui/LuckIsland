@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewBankCard", menuName = "Card/BankCard")]
-public class BankCard : CardBase
+public class BankCard : CardDataBase
 {
     [Range(0,6)]
     public int moneyAmount; // ÒøĞĞ¿¨½ğ¶î

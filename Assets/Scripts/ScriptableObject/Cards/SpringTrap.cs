@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewBankCard", menuName = "Card/SpringTrap")]
-public class SpringTrap : CardBase
+public class SpringTrap : CardDataBase
 {
     [Range(0,3)]
     public int backwardSteps;
