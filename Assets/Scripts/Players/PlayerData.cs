@@ -58,6 +58,8 @@ public class PlayerData
             OnDataChanged?.Invoke();//数据改变事件
         }
     }
+    private List<CardDataBase> handCards;
+
 
     //这个属于设置变量
     public bool autoRollDIce = false;//自动摇骰子
@@ -106,4 +108,18 @@ public class PlayerData
     {
         characterData = data;
     }
+    public void AddHandCard(CardDataBase card)
+    { 
+        handCards.Add(card);
+        OnDataChanged?.Invoke();//数据改变事件
+    }
+    public void RemoveHandCard(CardDataBase card)
+    {
+        if (handCards.Contains(card))
+        {
+            handCards.Remove(card);
+            OnDataChanged?.Invoke();//数据改变事件
+        }
+    }
+
 }

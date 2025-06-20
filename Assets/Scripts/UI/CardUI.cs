@@ -13,7 +13,7 @@ public class CardUI : MonoBehaviour
 
     public void SetData(CardDataBase data)
     { 
-        cardName.text = data.cardName;
+        //cardName.text = data.cardName;
     }
 }
 

@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef337d74032d0a4b982aeacc135d6ab, type: 3}
   m_Name: BanKCard_S
   m_EditorClassIdentifier: 
-  cardName: BankCard
-  rarity: 0
-  ramge: -1
-  description: 
-  moneyAmount: 6
+  cardName: "\u94F6\u884C\u5361"
+  rarity: 1
+  range: -1
+  effectText: 
+  faceImage: {fileID: 0}
+  frameImage: {fileID: 21300000, guid: d8ccb14b42032324e925a222b58220d8, type: 3}
+  weight: 1
+  moneyAmount: 3

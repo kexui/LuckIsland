@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    public CardDataBase[] allCards;//卡组
-    private List<CardDataBase> drawPool;
-    
+    [SerializeField]private CardLibrary cardLibrary;//卡组
+    private List<CardDataBase> drawPool;//卡牌抽取池
+
     private int[] rarityWeights;
 
     private void Start()
     {
-        allCards = Resources.LoadAll<CardDataBase>("Cards");
         rarityWeights = new int[] { 1, 2, 5 };
     }
 
     public void GenerateDrawPool()
-    {
+    {//生成卡牌抽取池
         drawPool = new List<CardDataBase>();
-        foreach (CardDataBase card in allCards)
+        foreach (CardDataBase card in cardLibrary.AllCards)
         {
-            for (int i = 0; i < card.GetWeight(); i++)
+            for (int i = 0; i < card.Weight; i++)
             {
-                int index = (int)card.rarity;
+                int index = (int)card.Rarity;
                 for (int j = 0; j < rarityWeights[index]; j++)
                 {
                     drawPool.Add(card);
@@ -30,6 +29,7 @@ public class CardManager : MonoBehaviour
             }
         }
     }
+
     public CardDataBase DrawRandomCard()
     {
         if (drawPool == null||drawPool.Count==0)

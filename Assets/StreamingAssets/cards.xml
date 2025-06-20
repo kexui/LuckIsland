@@ -1,0 +1,14 @@
+<Cards>
+  <Card>
+    <Id>move_01</Id>
+    <Name>位移卡</Name>
+    <Cost>1</Cost>
+    <MoveDistance>3</MoveDistance>
+  </Card>
+  <Card>
+    <Id>attack_01</Id>
+    <Name>攻击卡</Name>
+    <Cost>2</Cost>
+    <Power>5</Power>
+  </Card>
+</Cards>

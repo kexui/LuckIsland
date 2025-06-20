@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     public List<CharacterData> allCharacters;
 
     public List<PlayerData> allPlayerDatas = new List<PlayerData>();//角色数据集合
+    public int playerCount { get; private set; }
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void OnEnable()
     {
+
     }
     private void OnDisable()
     {
@@ -40,6 +42,7 @@ public class PlayerManager : MonoBehaviour
             default:
                 break;
         }
+        playerCount = allPlayerDatas.Count;
     }
     private void CreatePlayers(int[] ints)
     {
@@ -76,10 +79,6 @@ public class PlayerManager : MonoBehaviour
     public PlayerData GetPlayerData(int currentPlayerIndex)
     {
         return allPlayerDatas[currentPlayerIndex];
-    }
-    public int GetPlayersCount()
-    {
-        return allPlayerDatas.Count;
     }
     public PlayerData GetCurrentPlayerData()
     {

@@ -6,13 +6,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewBankCard", menuName = "Card/SpringTrap")]
 public class SpringTrap : CardDataBase
 {
+    [Header("后退步数")]
     [Range(0,3)]
     public int backwardSteps;
 
-    private void OnEnable()
+
+    private void OnValidate()
     {
-        cardName = "SpringTrap";
-        weight = 2;
+        cardName = "后退卡";
+        var sprite = GetFrameByRarity(rarity);
+        if (sprite == null)
+        {
+            Debug.LogWarning("找不到frameImage");
+            return;
+        }
+        frameImage = sprite;
     }
 
     public override void UseCard(BasePlayerController player)

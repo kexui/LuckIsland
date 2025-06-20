@@ -136,6 +136,11 @@ public abstract class BasePlayerController : MonoBehaviour
         Debug.LogWarning("–≠≥ÃTriggerTileEventŒ¥÷ÿ–¥");
         yield return null;
     }
+    public virtual IEnumerator DoTurn()
+    {
+        yield return new WaitForSeconds(1f);
+    }
+
     protected void Roll()
     { //“°
         DiceManager.Instance.RollDice();
