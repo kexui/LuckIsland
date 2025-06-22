@@ -82,7 +82,8 @@ public class GameManager : MonoBehaviour
     }
     private void PreGame()
     {
-        PlayerManager.Instance.PreGame(((int)GameMode.AI), new int[] {1,1 });
+        PlayerManager.Instance.PreGame(new int[] {1,1 });
+        DiceManager.Instance.PerGame(2);
         SetGameState(GameState.InitGame);
     }
     private void InitGame()

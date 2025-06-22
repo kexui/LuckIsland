@@ -5,11 +5,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
-public class PlayerData
+public class PlayerData//玩家数据
 {
     public event Action OnDataChanged;//数据改变事件
 
-    private CharacterData characterData;//角色
+
+
     public int playerName { get; private set; }//玩家ID
 
     private int currentTileIndex;//当前棋子序号
@@ -31,10 +32,9 @@ public class PlayerData
         {//用方法封装更好
             totalSteps = value;
             remainingSteps = value;
-            //OnDataChanged?.Invoke();//数据改变事件
+            OnDataChanged?.Invoke();//数据改变事件
         }
     }
-
     private int remainingSteps;//剩余步数
     public int RemainingSteps
     {
@@ -45,6 +45,8 @@ public class PlayerData
             OnDataChanged?.Invoke();//数据改变事件
         }
     }
+
+
     private int copper;
     public int Copper=>copper;//只访问
 
@@ -64,12 +66,14 @@ public class PlayerData
     //这个属于设置变量
     public bool autoRollDIce = false;//自动摇骰子
 
-    public BasePlayerController playerController;
+    public CharacterData characterData { get; private set; }//角色
+    public BasePlayerController playerController { get; private set; }//玩家控制器
+
     public List<TileBase> ownedTiles;
 
 
 
-    public PlayerData(int id)
+    public PlayerData(int id,CharacterData characterData,BasePlayerController playerController)
     {
         //初始化
         playerName = id;
@@ -79,6 +83,9 @@ public class PlayerData
         copper = 5;
         ownedTiles = new List<TileBase>();
 
+        this.characterData = characterData;
+        this.playerController = playerController;
+        playerController.SetPlayerData(this);
     }
 
     public void AddCopper(int amount)
@@ -103,10 +110,6 @@ public class PlayerData
     public int GetCurrentStep()
     {//当前步数
         return totalSteps-remainingSteps;
-    }
-    public void SetCharacter(CharacterData data)
-    {
-        characterData = data;
     }
     public void AddHandCard(CardDataBase card)
     { 

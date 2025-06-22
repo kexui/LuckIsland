@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public abstract class BasePlayerController : MonoBehaviour
@@ -11,7 +12,7 @@ public abstract class BasePlayerController : MonoBehaviour
     protected bool isMoving = false;
     [SerializeField] protected float moveLerpDuration = 1;
 
-    [SerializeField] private float turnSpeed = 10f;
+    //[SerializeField] private float turnSpeed = 10f;
     private bool needsTurn = false;
     private bool hasTurned = false;//是否在转向
     private float turnThreshold = 1;//转向距离
@@ -30,28 +31,8 @@ public abstract class BasePlayerController : MonoBehaviour
     {
         transform.position = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();
     }
-    protected virtual void OnEnable()
-    {
-        DiceManager.Instance.OnDiceRolled += DiceManager_OnDiceRolled;
-    }
-    protected virtual void OnDisable()
-    {
-        DiceManager.Instance.OnDiceRolled -= DiceManager_OnDiceRolled;
-    }
 
-    private void DiceManager_OnDiceRolled(int riceResult)
-    {
-        playerData.TotalSteps = riceResult; //设置总步数
-        playerData.RemainingSteps = riceResult; //设置剩余步数
-    }
 
-    public abstract void StartTurn();//抽象方法     开始回合
-    public abstract void EndTurn();
-    public virtual IEnumerator Wait()
-    {
-        Debug.LogWarning("协程Wait未重写");
-        yield return null;
-    }
     public virtual IEnumerator RollDice()
     {
         /*
@@ -139,20 +120,18 @@ public abstract class BasePlayerController : MonoBehaviour
     public virtual IEnumerator DoTurn()
     {
         yield return new WaitForSeconds(1f);
+        Debug.Log("Doturn Over");
     }
 
     protected void Roll()
     { //摇
         DiceManager.Instance.RollDice();
+        playerData.TotalSteps = DiceManager.instance.GetDiceResult(); //设置总步数
+        playerData.RemainingSteps = DiceManager.instance.GetDiceResult(); //设置剩余步数
     }
-    public void SetCharacter(CharacterData characterData)
-    { 
-        playerData.SetCharacter(characterData);
-        Instantiate(characterData.modelPrefab, transform);
-    }
+
     public void SetPlayerData(PlayerData playerData)
     {
         this.playerData = playerData;
-        playerData.playerController = this;
     }
 }

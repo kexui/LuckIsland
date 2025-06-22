@@ -27,11 +27,11 @@ public class TurnManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        currentPlayerIndex = -1;
     }
 
     public void PlayerTurn()
     {
-        currentPlayerIndex = 0; //从第一个玩家开始
         //currentPlayerController = PlayerManager.Instance.allPlayerDatas[currentPlayerIndex].playerController;
         //OnPlayerChanged?.Invoke(currentPlayerIndex);
 
@@ -54,16 +54,19 @@ public class TurnManager : MonoBehaviour
                 case TurnStage.Wait:
                     OnWait();
 
+                    yield return new WaitForSeconds(1f);
                     SetTurn(TurnStage.RollDice);
                     break;
                 case TurnStage.RollDice:
                     OnRollDice();
 
+                    yield return new WaitForSeconds(5f);
                     SetTurn(TurnStage.Move);
                     break;
                 case TurnStage.Move:
                     OnMove();
 
+                    yield return new WaitForSeconds(3f);
                     SetTurn(TurnStage.TriggerTileEvent);
                     break;
                 case TurnStage.TriggerTileEvent:
@@ -77,7 +80,9 @@ public class TurnManager : MonoBehaviour
                     SetTurn(TurnStage.EndTurn);
                     break;
                 case TurnStage.EndTurn:
+                    OnEndTurn();
 
+                    yield return WaitTurn(1);
                     SetTurn(TurnStage.StartTurn);
                     break;
                 default:
@@ -94,9 +99,11 @@ public class TurnManager : MonoBehaviour
     { }
     void OnRollDice()
     {
+        DiceManager.Instance.StartAllDiceRolling();
         BasePlayerController player;
         for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
         {
+            Debug.Log("RollDice：i=" + i);
             player = PlayerManager.Instance.GetPlayerData(i).playerController;
             StartCoroutine(player.RollDice());
         }
@@ -106,6 +113,7 @@ public class TurnManager : MonoBehaviour
         BasePlayerController player;
         for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
         {
+            Debug.Log("Move：i=" + i);
             player = PlayerManager.Instance.GetPlayerData(i).playerController;
             StartCoroutine(player.MoveCoroutine());
         }
@@ -121,15 +129,27 @@ public class TurnManager : MonoBehaviour
 
         while (currentPlayerIndex<PlayerManager.Instance.playerCount)
         {
+            OnTurnStageChanged?.Invoke(CurrentStage);
             yield return currentPlayerController.DoTurn();
-            NextPlayer();
+            yield return new WaitForSeconds(1f);
+            currentPlayerIndex++;
         }
+        currentPlayerIndex = -1;
+    }
+    void OnEndTurn()
+    { 
+    
+    }
+    IEnumerator WaitTurn(int time)
+    { 
+        yield return new WaitForSeconds(time);
     }
     void NextPlayer()
     {
         currentPlayerIndex = (currentPlayerIndex + 1) % PlayerManager.Instance.playerCount;
         currentPlayerController = PlayerManager.Instance.allPlayerDatas[currentPlayerIndex].playerController;
         OnTurnStageChanged?.Invoke(CurrentStage);
+        OnPlayerChanged?.Invoke(currentPlayerIndex);
     }
     void SetTurn(TurnStage nextTurn)
     { 
