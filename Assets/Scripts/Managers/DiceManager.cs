@@ -19,7 +19,6 @@ public class DiceManager : MonoBehaviour
         }
     }
 
-
     public DiceController[] diceArray; //÷»×ÓÊý×é
     private int currentPlayerCount;
 
@@ -52,7 +51,7 @@ public class DiceManager : MonoBehaviour
         rolledPlayerCount++;
         if (rolledPlayerCount==PlayerManager.Instance.playerCount)
         {
-            TurnManager.Instance.OverTurn();
+            TurnManager.Instance.SetOverTurn();
         }
     }
 }

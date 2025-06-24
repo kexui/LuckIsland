@@ -34,7 +34,7 @@ public class ButtonPanel : MonoBehaviour
             case TurnStage.TriggerTileEvent:
                 SetCurrentPanel(null);
                 break;
-            case TurnStage.PlayerTurns:
+            case TurnStage.PlayerTurn:
                 SetCurrentPanel(playerTurnPanel);
                 break;
             case TurnStage.EndTurn:

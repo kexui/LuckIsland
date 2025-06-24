@@ -11,7 +11,7 @@ public enum TurnStage
     RollDice,
     Move,
     TriggerTileEvent,
-    PlayerTurns,
+    PlayerTurn,
     EndTurn
 }
 
@@ -22,16 +22,26 @@ public class TurnManager : MonoBehaviour
     public int currentPlayerIndex { get; private set; }
     private BasePlayerController currentPlayerController;
 
-    private bool overTurn;
+    public bool OverTurn { get; private set; }
 
     public static event Action<TurnStage> OnTurnStageChanged;
     public static event Action<int> OnPlayerChanged;
+
+    private Dictionary<TurnStage, float> Durations = new() {
+        {TurnStage.StartTurn,1f},
+        {TurnStage.Wait ,1f},
+        {TurnStage.RollDice ,10f},
+        {TurnStage.Move ,4f},
+        {TurnStage.TriggerTileEvent ,3f},
+        {TurnStage.PlayerTurn ,10f},
+        {TurnStage.EndTurn ,1f}
+    };
 
     private void Awake()
     {
         Instance = this;
         currentPlayerIndex = -1;
-        overTurn = false;
+        OverTurn = false;
     }
 
     public void PlayerTurn()
@@ -76,9 +86,9 @@ public class TurnManager : MonoBehaviour
                     OnTriggerTileEvent();
 
                     yield return WaitTurnOver(3f);
-                    SetTurn(TurnStage.PlayerTurns);
+                    SetTurn(TurnStage.PlayerTurn);
                     break;
-                case TurnStage.PlayerTurns:
+                case TurnStage.PlayerTurn:
                     yield return HandlePlayerTurns();
 
                     SetTurn(TurnStage.EndTurn);
@@ -140,7 +150,7 @@ public class TurnManager : MonoBehaviour
         {
             OnTurnStageChanged?.Invoke(CurrentStage);
             yield return currentPlayerController.DoTurn();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             currentPlayerIndex++;
         }
         currentPlayerIndex = -1;
@@ -154,7 +164,7 @@ public class TurnManager : MonoBehaviour
         float timer = 0;
         while (timer<turnTime)
         {
-            if (overTurn) break;
+            if (OverTurn) break;
             timer += Time.deltaTime;
             yield return null;
         }
@@ -170,11 +180,15 @@ public class TurnManager : MonoBehaviour
     void SetTurn(TurnStage nextTurn)
     {
         CurrentStage = nextTurn;
-        overTurn = false;
+        OverTurn = false;
         OnTurnStageChanged?.Invoke(CurrentStage);
     }
-    public void OverTurn()
+    public void SetOverTurn()
     {
-        overTurn = true;
+        OverTurn = true;
+    }
+    public float GetTurnTime()
+    {
+        return Durations[CurrentStage];
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public abstract class BasePlayerController : MonoBehaviour
 {
     public PlayerData playerData { get; private set;}
-    protected TextMeshProUGUI playerNameText;
+    //protected TextMeshProUGUI playerNameText;
     protected Image playerRing;
 
     protected bool isMyTurn = false;
@@ -32,7 +32,7 @@ public abstract class BasePlayerController : MonoBehaviour
     {
         playerData = data;
         playerAnimator = GetComponentInChildren<PlayerAnimator>();
-        playerNameText = GetComponentInChildren<TextMeshProUGUI>();
+        //playerNameText = GetComponentInChildren<TextMeshProUGUI>();
         playerRing = GetComponentInChildren<Image>();
         knockbackHeightCurve = CurveData.Library.knockbackHeightCurve;
 
@@ -40,10 +40,10 @@ public abstract class BasePlayerController : MonoBehaviour
         {
             Debug.LogError("PlayerAnimator not found in children of " + gameObject.name);
         }
-        if (playerNameText==null)
-        {
-            Debug.LogWarning("PlayerController未找到TextMeshProUGUI组件");
-        }
+        //if (playerNameText==null)
+        //{
+        //    Debug.LogWarning("PlayerController未找到TextMeshProUGUI组件");
+        //}
         if (playerRing == null)
         {
             Debug.LogWarning("PlayerController未找到Image组件");
@@ -55,7 +55,7 @@ public abstract class BasePlayerController : MonoBehaviour
         transform.position = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();
         isMyTurn = true;
         hasStopRoll = false;
-        playerNameText.text = playerData.PlayerName;
+        //playerNameText.text = playerData.PlayerName;
         playerRing.color = PlayerColorData.GetColor(playerData.ID); //设置玩家颜色
     }
 
@@ -124,7 +124,6 @@ public abstract class BasePlayerController : MonoBehaviour
             transform.position = end; //确保到达终点
             playerData.CurrentTileIndex = nextTileIndex; //更新当前棋子位置
             playerData.RemainingSteps -= direction; //更新剩余步数
-            UIManager.Instance.UpdatePlayerDataUI(); //更新UI
             
             Vector3 finalDirection = endNext - end;
             finalDirection.y = 0;

@@ -6,8 +6,11 @@ using UnityEngine.UI;
 
 public class PlayerInfoItemUI : MonoBehaviour
 {
-    public Image avatarImage;
-    public TextMeshProUGUI idText;
+    [SerializeField] private Image avatar;
+    [SerializeField] private Image frame;
+    [SerializeField] private AvatarFrame avatarFrame;
+
+    public TextMeshProUGUI nameText;
     public TextMeshProUGUI luckText;
 
     public TextMeshProUGUI copperText;
@@ -18,11 +21,13 @@ public class PlayerInfoItemUI : MonoBehaviour
     public void SetData(PlayerData playerData)
     { 
         data = playerData;
+        frame.sprite = avatarFrame.avatarFrames[playerData.ID];
+        avatar.color = PlayerColorData.GetColor(data.ID);
         RefreshUI();
     }
     public void RefreshUI()
     { 
-        idText.text = "ID:"+data.ID;
+        nameText.text = data.PlayerName;
         copperText.text = data.Copper.ToString();
         //landText.text = "ฒ๚ตุ"+data.ownedTiles;
         luckText.text = data.Luck.ToString();
