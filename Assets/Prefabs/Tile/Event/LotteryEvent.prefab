@@ -8,15 +8,85 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2001436564476019097, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2001436564476019097, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2001436564476019097, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2001436564476019097, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.9069362
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278249471
+      objectReference: {fileID: 0}
     - target: {fileID: 5568697411359911670, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 58106cc57a9d0df4483fcd14b8338310, type: 2}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.935015
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5811673897052336400, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}
       propertyPath: m_Name
       value: LotteryEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8528180650582990151, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}

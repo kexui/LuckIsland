@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum TurnStage
@@ -21,6 +22,8 @@ public class TurnManager : MonoBehaviour
     public int currentPlayerIndex { get; private set; }
     private BasePlayerController currentPlayerController;
 
+    private bool overTurn;
+
     public static event Action<TurnStage> OnTurnStageChanged;
     public static event Action<int> OnPlayerChanged;
 
@@ -28,12 +31,11 @@ public class TurnManager : MonoBehaviour
     {
         Instance = this;
         currentPlayerIndex = -1;
+        overTurn = false;
     }
 
     public void PlayerTurn()
     {
-        //currentPlayerController = PlayerManager.Instance.allPlayerDatas[currentPlayerIndex].playerController;
-        //OnPlayerChanged?.Invoke(currentPlayerIndex);
 
         SetTurn(TurnStage.StartTurn);
         StartCoroutine(RunGameLoop());
@@ -58,20 +60,22 @@ public class TurnManager : MonoBehaviour
                     SetTurn(TurnStage.RollDice);
                     break;
                 case TurnStage.RollDice:
+                    yield return new WaitForSeconds(1f);
                     OnRollDice();
 
-                    yield return new WaitForSeconds(5f);
+                    yield return WaitTurnOver(8f);
                     SetTurn(TurnStage.Move);
                     break;
                 case TurnStage.Move:
                     OnMove();
+                    yield return WaitTurnOver(3f);
 
-                    yield return new WaitForSeconds(3f);
                     SetTurn(TurnStage.TriggerTileEvent);
                     break;
                 case TurnStage.TriggerTileEvent:
                     OnTriggerTileEvent();
 
+                    yield return WaitTurnOver(3f);
                     SetTurn(TurnStage.PlayerTurns);
                     break;
                 case TurnStage.PlayerTurns:
@@ -82,7 +86,7 @@ public class TurnManager : MonoBehaviour
                 case TurnStage.EndTurn:
                     OnEndTurn();
 
-                    yield return WaitTurn(1);
+                    yield return WaitTurnOver(1f);
                     SetTurn(TurnStage.StartTurn);
                     break;
                 default:
@@ -100,27 +104,32 @@ public class TurnManager : MonoBehaviour
     void OnRollDice()
     {
         DiceManager.Instance.StartAllDiceRolling();
+
         BasePlayerController player;
         for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
         {
-            Debug.Log("RollDice：i=" + i);
             player = PlayerManager.Instance.GetPlayerData(i).playerController;
             StartCoroutine(player.RollDice());
         }
     }
+
     void OnMove()
     {
         BasePlayerController player;
         for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
         {
-            Debug.Log("Move：i=" + i);
             player = PlayerManager.Instance.GetPlayerData(i).playerController;
             StartCoroutine(player.MoveCoroutine());
         }
     }
     void OnTriggerTileEvent()
-    { 
-        
+    {//触发地块事件不用经过玩家？
+        BasePlayerController player;
+        for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
+        {
+            player = PlayerManager.Instance.GetPlayerData(i).playerController;
+            StartCoroutine(player.TriggerTileEvent());
+        }
     }
     IEnumerator HandlePlayerTurns()
     {//用方法可能更好
@@ -140,9 +149,16 @@ public class TurnManager : MonoBehaviour
     { 
     
     }
-    IEnumerator WaitTurn(int time)
-    { 
-        yield return new WaitForSeconds(time);
+    IEnumerator WaitTurnOver(float turnTime)
+    {
+        float timer = 0;
+        while (timer<turnTime)
+        {
+            if (overTurn) break;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSeconds(1f);
     }
     void NextPlayer()
     {
@@ -152,8 +168,13 @@ public class TurnManager : MonoBehaviour
         OnPlayerChanged?.Invoke(currentPlayerIndex);
     }
     void SetTurn(TurnStage nextTurn)
-    { 
+    {
         CurrentStage = nextTurn;
+        overTurn = false;
         OnTurnStageChanged?.Invoke(CurrentStage);
+    }
+    public void OverTurn()
+    {
+        overTurn = true;
     }
 }

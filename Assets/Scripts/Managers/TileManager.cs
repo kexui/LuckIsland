@@ -12,6 +12,7 @@ public class TileManager : MonoBehaviour
 
     public List<TileBase> Tiles = new List<TileBase>();
 
+
     
     private void Awake()
     {
@@ -45,16 +46,9 @@ public class TileManager : MonoBehaviour
     }
     public void TriggerEvent(int index,BasePlayerController pc)
     {//Tile触发事件
-        foreach (Transform child in Tiles[index].transform)
-        {//遍历子类，查找是否有接口
-            var interactable = child.GetComponent<IInteractable>();
-            if (interactable != null)
-            {
-                interactable.Interact(pc);
-            }
-        }
         Tiles[index].TriggerEvent(pc);
-
+        if (!Tiles[index].HasRandomEvent) return;
+        Tiles[index].RandomEvent.TriggerEvent(pc); //触发随机事件
     }
 
 }

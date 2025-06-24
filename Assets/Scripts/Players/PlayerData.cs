@@ -9,9 +9,8 @@ public class PlayerData//玩家数据
 {
     public event Action OnDataChanged;//数据改变事件
 
-
-
-    public int playerName { get; private set; }//玩家ID
+    public int ID { get; private set; }//玩家ID
+    public string PlayerName { get; private set; }
 
     private int currentTileIndex;//当前棋子序号
     public int CurrentTileIndex
@@ -45,6 +44,7 @@ public class PlayerData//玩家数据
             OnDataChanged?.Invoke();//数据改变事件
         }
     }
+    public DiceController dice{ get; private set; }
 
 
     private int copper;
@@ -76,16 +76,20 @@ public class PlayerData//玩家数据
     public PlayerData(int id,CharacterData characterData,BasePlayerController playerController)
     {
         //初始化
-        playerName = id;
+        ID = id;
         currentTileIndex = 0;
         totalSteps = 0;
         remainingSteps = 0;
-        copper = 5;
+        PlayerName = "Player " + id; //默认玩家名
+
+        copper = 15;
         ownedTiles = new List<TileBase>();
+
+        dice = DiceManager.Instance.diceArray[id];//获取骰子
 
         this.characterData = characterData;
         this.playerController = playerController;
-        playerController.SetPlayerData(this);
+        playerController.Init(this);
     }
 
     public void AddCopper(int amount)

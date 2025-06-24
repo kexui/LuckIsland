@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class StartTile : TileBase
 {
+
     public override void TriggerEvent(BasePlayerController pc)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("¿ªÊ¼Tile");
     }
 }

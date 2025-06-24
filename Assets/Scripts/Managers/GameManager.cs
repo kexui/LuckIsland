@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int localPlayerIndex { get; private set; } = 1; //本地玩家索引，默认为0
+    public BasePlayerController localPlayer { get; private set; }
+
     public GameState currentGameState { get; private set; } = GameState.PreGame; //初始状态为开始游戏
 
     enum GameMode
@@ -82,9 +85,10 @@ public class GameManager : MonoBehaviour
     }
     private void PreGame()
     {
-        PlayerManager.Instance.PreGame(new int[] {1,1 });
         DiceManager.Instance.PerGame(2);
+        PlayerManager.Instance.PreGame(new int[] {1,1 });
         SetGameState(GameState.InitGame);
+        localPlayer = PlayerManager.Instance.allPlayerDatas[localPlayerIndex].playerController;
     }
     private void InitGame()
     {

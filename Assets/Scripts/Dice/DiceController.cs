@@ -14,12 +14,23 @@ public static class FlipData
             Quaternion.AngleAxis(-90f,Vector3.right),
             Quaternion.AngleAxis(-90f,Vector3.up),
         };
+    public static readonly Vector3[] faceNormals = 
+        {
+            Vector3.forward, //1点
+            Vector3.up, //2点
+            Vector3.left, //3点
+            Vector3.right, //4点
+            Vector3.down, //5点
+            Vector3.back //6点
+        };
 }
 
 public class DiceController : MonoBehaviour
 {
-    private float rollDuration = 8f; // 滚动持续时间
-    private float StopRollDuration = 3f; // 停止滚动持续时间
+    public int id { get; private set; }
+
+    private float rollDuration = 7f; // 滚动持续时间
+    private float StopRollDuration = 2f; // 停止滚动持续时间
     [SerializeField] private float baseFlipTime = 0.15f; // 默认转动的时间间隔
     private float currentFlipTime; // 实际每次转动的时间间隔
     private int flipCount; // 每次转动的次数
@@ -46,22 +57,26 @@ public class DiceController : MonoBehaviour
 
         StartCoroutine(RollDice());
     }
+    public void StartStopRollDice(float stopRollTime)
+    {
+        if (hasStartStop) return;
+        StartCoroutine(StopRoll(stopRollTime));
+    }
     public IEnumerator RollDice()
     {
-        Debug.Log("开始Roll");
         int stopFlipCount = flipCount - Mathf.RoundToInt(StopRollDuration / baseFlipTime);
         for (int i = 0; i < flipCount; i++)
         {
             if (i == stopFlipCount && !hasStartStop)
             {
                 Debug.Log("开始减速");
-                StartCoroutine(StopRoll());
+                StartCoroutine(StopRoll(StopRollDuration));
             }
             yield return StartRolling();
             if (stopRolling)
             {
-                
                 Debug.Log("停止滚动");
+                DiceManager.Instance.DiceResult(id, GetDicePoint());
                 yield break;
             }
         }
@@ -89,22 +104,38 @@ public class DiceController : MonoBehaviour
         lastRan = ran;
         return FlipData.All[ran];
     }
-    IEnumerator StopRoll()
+    IEnumerator StopRoll(float stopRollTime)
     {
         hasStartStop = true;
         float timer = 0f;
         while (timer < 1f)
         {
-            timer += Time.deltaTime / StopRollDuration;
+            timer += Time.deltaTime / stopRollTime;
             currentFlipTime = Mathf.SmoothStep(baseFlipTime, 2f, stopCurve.Evaluate(timer));
             yield return null;
         }
         stopRolling = true; // 设置停止滚动标志
     }
-    public void StartStopRollDice()
+    
+    public int GetDicePoint()
     {
-        if (hasStartStop) return;
-        StartCoroutine(StopRoll());
+        float maxDot = -1f;
+        int result = -1;
+        for (int i = 0; i < FlipData.faceNormals.Length; i++)
+        {
+            Vector3 wordNormal = transform.rotation * FlipData.faceNormals[i];
+            float dot = Vector3.Dot(wordNormal, Vector3.up);
+            if (dot > maxDot)
+            {
+                maxDot = dot;
+                result = i + 1; // 点数从1开始
+            }
+        }
+        return result;
+    }
+    public void SetId(int id)
+    {
+        this.id = id;
     }
 }
 

@@ -1,37 +1,63 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class BasePlayerController : MonoBehaviour
 {
     public PlayerData playerData { get; private set;}
-    protected bool isMyTurn = false;
-    protected bool hasDiceRolled = false;
-    protected bool isMoving = false;
-    [SerializeField] protected float moveLerpDuration = 1;
+    protected TextMeshProUGUI playerNameText;
+    protected Image playerRing;
 
-    //[SerializeField] private float turnSpeed = 10f;
+    protected bool isMyTurn = false;
+    protected bool hasStopRoll = false;
+    protected bool isMoving = false;
+    protected float moveLerpDuration = 0.5f; //移动插值持续时间
     private bool needsTurn = false;
-    private bool hasTurned = false;//是否在转向
-    private float turnThreshold = 1;//转向距离
 
     protected PlayerAnimator playerAnimator;
+    protected AnimationCurve knockbackHeightCurve;
+
+    protected float knockbackHeight = 3f; //击飞高度
 
     private void Awake()
     {
+        
+    }
+
+    public void Init(PlayerData data)
+    {
+        playerData = data;
         playerAnimator = GetComponentInChildren<PlayerAnimator>();
+        playerNameText = GetComponentInChildren<TextMeshProUGUI>();
+        playerRing = GetComponentInChildren<Image>();
+        knockbackHeightCurve = CurveData.Library.knockbackHeightCurve;
+
         if (playerAnimator == null)
         {
             Debug.LogError("PlayerAnimator not found in children of " + gameObject.name);
         }
-    }
-    protected virtual void Start()
-    {
+        if (playerNameText==null)
+        {
+            Debug.LogWarning("PlayerController未找到TextMeshProUGUI组件");
+        }
+        if (playerRing == null)
+        {
+            Debug.LogWarning("PlayerController未找到Image组件");
+        }
+        if (knockbackHeightCurve==null)
+        {
+            Debug.LogWarning("PlayerController未找到击飞高度曲线");
+        }
         transform.position = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();
+        isMyTurn = true;
+        hasStopRoll = false;
+        playerNameText.text = playerData.PlayerName;
+        playerRing.color = PlayerColorData.GetColor(playerData.ID); //设置玩家颜色
     }
-
 
     public virtual IEnumerator RollDice()
     {
@@ -111,27 +137,44 @@ public abstract class BasePlayerController : MonoBehaviour
         isMoving = false;
         playerAnimator.SetWalk(isMoving);
     }
-
-    public virtual IEnumerator TriggerTileEvent()
+    public IEnumerator TriggerTileEvent()
     {
-        Debug.LogWarning("协程TriggerTileEvent未重写");
-        yield return null;
+        TileManager.Instance.TriggerEvent(playerData.CurrentTileIndex, this);
+        yield return new WaitForSeconds(0.1f);//换成动画事件控制时间最好
     }
     public virtual IEnumerator DoTurn()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         Debug.Log("Doturn Over");
     }
-
-    protected void Roll()
-    { //摇
-        DiceManager.Instance.RollDice();
-        playerData.TotalSteps = DiceManager.instance.GetDiceResult(); //设置总步数
-        playerData.RemainingSteps = DiceManager.instance.GetDiceResult(); //设置剩余步数
+    public void StopRoll()
+    { 
+        hasStopRoll = true;
     }
-
-    public void SetPlayerData(PlayerData playerData)
+    public void KnockBack(int moveStep)
     {
-        this.playerData = playerData;
+        StartCoroutine(KnockBackMove(moveStep));
+    }
+    IEnumerator KnockBackMove(int moveStep)
+    {
+        int tileCount = TileManager.Instance.Tiles.Count;
+        int currentTileIndex = playerData.CurrentTileIndex;
+        int endIndex = (currentTileIndex + moveStep + tileCount) % tileCount;
+
+        Vector3 start = TileManager.Instance.Tiles[currentTileIndex].GetTopPosition();
+        Vector3 end = TileManager.Instance.Tiles[endIndex].GetTopPosition();
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / Mathf.Abs(moveStep);
+
+            Vector3 horizontalPos = Vector3.Lerp(start, end, t); //简单的插值移动
+            float height = Mathf.Lerp(0, knockbackHeight, knockbackHeightCurve.Evaluate(t));
+            transform.position = horizontalPos + Vector3.up * height; //添加高度偏移
+            yield return null;
+        }
+        transform.position = end; //确保到达终点
+        playerData.CurrentTileIndex = endIndex; //更新当前棋子位置
     }
 }

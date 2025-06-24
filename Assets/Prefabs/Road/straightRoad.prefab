@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1208122075451347972}
+  - component: {fileID: -3800703813392552323}
   m_Layer: 0
   m_Name: straightRoad
   m_TagString: Untagged
@@ -32,6 +33,18 @@ Transform:
   - {fileID: 1638403130402610178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3800703813392552323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882072188604981572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afea1871e61240d4f8975e6451f6a6eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1240318978408348649
 PrefabInstance:
   m_ObjectHideFlags: 0

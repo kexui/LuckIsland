@@ -9,8 +9,9 @@ public class ShopTile : TileBase
     {
         
     }
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         ShopLand land = FindNeighbor<ShopLand>(transform.position);
         if (land == null)
         {

@@ -25,7 +25,7 @@ public class PlayerInfoUIManager : MonoBehaviour
 
         foreach (PlayerData playerData in PlayerManager.Instance.allPlayerDatas)
         {
-            Debug.Log("Generating UI for player: " + playerData.playerName);
+            Debug.Log("Generating UI for player: " + playerData.ID);
             GameObject go = Instantiate(playerInfoPrefab, PlayerInfoUI);
             PlayerInfoItemUI ui = go.GetComponent<PlayerInfoItemUI>();
             ui.SetData(playerData);

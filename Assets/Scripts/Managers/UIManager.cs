@@ -33,4 +33,6 @@ public class UIManager : MonoBehaviour
     {//左侧信息更新  投骰子/走完一步
         playerDataUI.UpdatePlayerDataUI();
     }
+
+
 }

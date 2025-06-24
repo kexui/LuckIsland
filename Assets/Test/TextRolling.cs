@@ -6,20 +6,29 @@ using UnityEngine;
 
 namespace Test
 {
-    
 
     public static class FlipData
     {
         public static readonly Quaternion[] All =
             {
-            Quaternion.AngleAxis(90f,Vector3.forward),
-            Quaternion.AngleAxis(90f,Vector3.right),
-            Quaternion.AngleAxis(90f,Vector3.up),
-            Quaternion.AngleAxis(-90f,Vector3.forward),
-            Quaternion.AngleAxis(-90f,Vector3.right),
-            Quaternion.AngleAxis(-90f,Vector3.up),
+            Quaternion.AngleAxis(90f, Vector3.forward),
+            Quaternion.AngleAxis(90f, Vector3.right),
+            Quaternion.AngleAxis(90f, Vector3.up),
+            Quaternion.AngleAxis(-90f, Vector3.forward),
+            Quaternion.AngleAxis(-90f, Vector3.right),
+            Quaternion.AngleAxis(-90f, Vector3.up),
+        };
+        public static readonly Vector3[] faceNormals = {
+            Vector3.forward, //1点
+            Vector3.up, //2点
+            Vector3.left, //3点
+            Vector3.right, //4点
+            Vector3.down, //5点
+            Vector3.back //6点
         };
     }
+
+    
 
     public class TextRolling : MonoBehaviour
     {
@@ -31,7 +40,6 @@ namespace Test
         public AnimationCurve stopCurve;// 停止的曲线
 
 
-        private bool hasStartStop = false;
         private bool stopRolling = false; // 是否停止滚动
 
         int lastRan = -1;
@@ -44,7 +52,6 @@ namespace Test
         {
             currentFlipTime = baseFlipTime; // 初始化当前翻转时间
             stopRolling = false;
-            hasStartStop = false;
             if (stopCurve == null)
             {
                 Debug.LogError("请设置减速曲线");
@@ -68,6 +75,7 @@ namespace Test
                 {
 
                     print(transform.up);
+                    print(GetDicePoint());
                     Debug.Log("停止滚动");
                     yield break;
                 }
@@ -106,6 +114,22 @@ namespace Test
                 yield return null;
             }
             stopRolling = true; // 设置停止滚动标志
+        }
+        int GetDicePoint()
+        {
+            float maxDot = -1f;
+            int result = -1;
+            for (int i = 0;i<FlipData.faceNormals.Length;i++)
+            { 
+                Vector3 wordNormal = transform.rotation * FlipData.faceNormals[i];
+                float dot = Vector3.Dot(wordNormal, Vector3.up);
+                if (dot>maxDot)
+                {
+                    maxDot = dot;
+                    result = i + 1; // 点数从1开始
+                }
+            }
+            return result;
         }
     }
 }

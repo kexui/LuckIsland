@@ -28,7 +28,7 @@ public class CameraMove : MonoBehaviour
     private void Zoom()
     { 
         float zoom = gameInput.GetZoom();
-        float y = transform.position.y + zoom * zoomedSpeed * Time.deltaTime;
+        float y = transform.position.y - zoom * zoomedSpeed * Time.deltaTime;
         y = Mathf.Clamp(y, minY, maxY);
         transform.position = new Vector3(transform.position.x, y, transform.position.z);
     }

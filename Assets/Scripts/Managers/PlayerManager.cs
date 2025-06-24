@@ -39,17 +39,20 @@ public class PlayerManager : MonoBehaviour
         
         GameObject model = Instantiate(characterData.modelPrefab, transform.position, Quaternion.identity);
         BasePlayerController playerController;
+        PlayerData newPlayerData;
         if (isAI)
         {
             playerController = model.AddComponent<AIPlayerController>();
+            newPlayerData = new PlayerData(id, characterData, playerController);
         }
         else
         {
             playerController = model.AddComponent<PlayerController>();
+            newPlayerData = new PlayerData(id, characterData, playerController);
         }
-        PlayerData newData = new PlayerData(id, characterData, playerController);
+        
 
-        allPlayerDatas.Add(newData);
+        allPlayerDatas.Add(newPlayerData);
         Debug.Log("ID: " + id);
     }
 

@@ -14,12 +14,9 @@ public class BuildableTile : TileBase
 
     BuildableLand neighborLand;
 
-    private void Awake()
+    protected override void Start()
     {
-        
-    }
-    private void Start()
-    {
+        base.Start();
         BuildableLand land = FindNeighbor<BuildableLand>(transform.position);
         if (land==null)
         {

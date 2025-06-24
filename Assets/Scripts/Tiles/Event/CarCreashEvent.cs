@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarCreashEvent : EventBase, IInteractable
+public class CarCreashEvent : RandomEventBase
 {
-    public void Interact(BasePlayerController player)
+    protected override void Start()
     {
-        //
+        EventName = "车祸"; // 事件名称
+        base.Start();
+    }
+    public override void TriggerEvent(BasePlayerController player)
+    {
+        Debug.Log("随机事件触发成功");
     }
 }

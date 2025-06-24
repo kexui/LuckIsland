@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class TileBase : MonoBehaviour
 {
-    private float offsetDistance = 2f;//偏移距离
+    private float offsetDistance = 2.02f;//偏移距离
     private Vector3[] directions = new Vector3[]
     {
         Vector3.forward,
@@ -12,7 +12,23 @@ public abstract class TileBase : MonoBehaviour
         Vector3.left,
         Vector3.right
     };
-    protected GameObject Item;
+    protected bool hasTileEvent;
+    public bool HasTileEvent => hasTileEvent;
+
+    protected bool hasRandomEvent;
+    public bool HasRandomEvent => hasRandomEvent;
+
+    protected RandomEventBase randomEvent;
+    public RandomEventBase RandomEvent => randomEvent;
+
+    protected virtual void Start()
+    {
+        Init();
+    }
+    protected virtual void Init()
+    {
+        hasTileEvent = this is NormalTile ? false : true; //如果是普通格子，则没有事件，否则有事件
+    }
 
     public Vector3 GetTopPosition()
     { 
@@ -20,7 +36,7 @@ public abstract class TileBase : MonoBehaviour
         return topPosition;
     }
 
-    public abstract void TriggerEvent(BasePlayerController pc);
+    public abstract void TriggerEvent(BasePlayerController pc);//事件触发
 
     protected T FindNeighbor<T>(Vector3 pos) where T : Component
     {
@@ -39,6 +55,14 @@ public abstract class TileBase : MonoBehaviour
         }
         return null;
     }
-
-
+    public void SetRandomEvent(RandomEventBase randomEvent)
+    {
+        if (randomEvent == null)
+        {
+            Debug.LogError("RandomEventBase is null");
+            return;
+        }
+        this.randomEvent = randomEvent;
+        hasRandomEvent = true;
+    }
 }

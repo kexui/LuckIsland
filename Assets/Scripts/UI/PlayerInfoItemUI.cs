@@ -22,7 +22,7 @@ public class PlayerInfoItemUI : MonoBehaviour
     }
     public void RefreshUI()
     { 
-        idText.text = "ID:"+data.playerName;
+        idText.text = "ID:"+data.ID;
         copperText.text = data.Copper.ToString();
         //landText.text = "ฒ๚ตุ"+data.ownedTiles;
         luckText.text = data.Luck.ToString();

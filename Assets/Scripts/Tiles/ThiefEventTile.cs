@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ThiefEventTile : TileBase
 {
+
     public override void TriggerEvent(BasePlayerController pc)
     {
-        print(" ");// 触发事件逻辑
+        print(" 小偷");// 触发事件逻辑
     }
 }

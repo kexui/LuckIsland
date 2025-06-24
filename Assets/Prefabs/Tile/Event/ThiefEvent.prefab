@@ -18,15 +18,65 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.24123985
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.97562474
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470477279512022341, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4282318841
+      objectReference: {fileID: 0}
     - target: {fileID: 5568697411359911670, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 867b3f8798ef69a48a2cfff48465b568, type: 2}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672026924547662050, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5811673897052336400, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}
       propertyPath: m_Name
       value: ThiefEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104260179493029661, guid: 8fa18088ac5f48647b693d87c2cef4c0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8528180650582990151, guid: 8fa18088ac5f48647b693d87c2cef4c0,
         type: 3}

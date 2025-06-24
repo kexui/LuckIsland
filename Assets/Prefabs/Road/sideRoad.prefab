@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8393812051816572775}
+  - component: {fileID: 8221007071221481265}
   m_Layer: 0
   m_Name: sideRoad
   m_TagString: Untagged
@@ -32,6 +33,18 @@ Transform:
   - {fileID: 834498667478168636}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8221007071221481265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8482634685036459072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afea1871e61240d4f8975e6451f6a6eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &873141290285388759
 PrefabInstance:
   m_ObjectHideFlags: 0
