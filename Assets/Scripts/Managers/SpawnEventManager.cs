@@ -16,12 +16,12 @@ public class SpawnEventManager : MonoBehaviour
             int eventIndex = Random.Range(0, allEvent.Count);
             SpawnEvent(TileManager.Instance.Tiles[tileIndex], allEvent[2]);
         }
+        Debug.Log($"生成{eventCount}个随机事件");
     }
 
     public void SpawnEvent(TileBase tile,RandomEventBase randomEvent)
     {
         GameObject go = Instantiate(randomEvent.gameObject, tile.GetTopPosition(), Quaternion.identity, tile.transform);
         tile.SetRandomEvent(go.GetComponent<RandomEventBase>());
-        Debug.Log("生成随机事件");
     }
 }

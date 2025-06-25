@@ -25,13 +25,16 @@ public class DiceManager : MonoBehaviour
     private int rolledPlayerCount = 0; //已摇骰子的玩家数量
 
     //public event Action<int> OnDiceRolled;
-
-    public void PerGame(int PlayerCount)
+    private void OnEnable()
     {
-        currentPlayerCount = PlayerCount;
+        GameManager.OnInitPlayers += PerGame; //注册游戏开始事件
+    }
+    public void PerGame(int[] ints)
+    {
+        currentPlayerCount = ints.Length;
         for (int i = 0; i < diceArray.Length; i++)
         {
-            diceArray[i].gameObject.SetActive(i < PlayerCount);
+            diceArray[i].gameObject.SetActive(i < ints.Length);
             diceArray[i].SetId(i);
         }
     }

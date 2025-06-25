@@ -4,14 +4,47 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
+    public static CardManager Instance { get; private set; }
+
     [SerializeField]private CardLibrary cardLibrary;//卡组
     private List<CardDataBase> drawPool;//卡牌抽取池
 
     private int[] rarityWeights;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         rarityWeights = new int[] { 1, 2, 5 };
+        GenerateDrawPool();
+    }
+    public void DealCardsToAllPlayers(List<PlayerData> players)
+    {
+        if (drawPool == null || drawPool.Count == 0)
+        {
+            Debug.LogWarning("卡牌抽取池为空，无法发牌");
+            return;
+        }
+        foreach (PlayerData player in players)
+        {
+            DealCardsToplayer(player);
+        }
+    }
+    public void DealCardsToplayer(PlayerData playerData)
+    {
+        CardDataBase newCard = GetRandomCard();
+        if (newCard != null)
+        {
+            playerData.AddCard(newCard);
+            Debug.Log($"发牌给玩家 {playerData.PlayerName}：{newCard.CardName}");
+        }
+        else
+        {
+            Debug.LogWarning("无法发牌，抽取池为空或未正确生成。");
+        }
     }
 
     public void GenerateDrawPool()
@@ -30,13 +63,15 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    public CardDataBase DrawRandomCard()
+    public CardDataBase GetRandomCard()
     {
-        if (drawPool == null||drawPool.Count==0)
-            GenerateDrawPool();
+        if (drawPool == null || drawPool.Count == 0)
+        {
+            Debug.Log("卡牌池为空");
+        }
         int index = Random.Range(0, drawPool.Count);
-        return drawPool[index];
-        //卡牌删除？
+        CardDataBase newCard = drawPool[index];
+        drawPool.RemoveAt(index); // 从抽取池中移除已抽取的卡牌
+        return newCard;
     }
-
 }

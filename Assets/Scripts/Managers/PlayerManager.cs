@@ -10,13 +10,17 @@ public class PlayerManager : MonoBehaviour
     public List<CharacterData> allCharacters;//角色数据集合
     public List<PlayerData> allPlayerDatas = new List<PlayerData>();//玩家数据集合
 
+
     public int playerCount { get; private set; }
 
     private void Awake()
     {
         Instance = this;
     }
-
+    private void OnEnable()
+    {
+        GameManager.OnInitPlayers += PreGame; //注册游戏开始前事件
+    }
     public void PreGame(int[] ints)
     {
         CreatePlayers(ints);

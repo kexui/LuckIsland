@@ -15,18 +15,12 @@ public class TurnUI : MonoBehaviour
     private void OnEnable()
     {
         TurnManager.OnTurnStageChanged += UpdateTurnStageUI;
-        TurnManager.OnPlayerChanged += StartPlayerTurn;
     }
     public void UpdateTurnStageUI(TurnStage turnStage)
     {
         turnStageText.text = turnStage.ToString();
         StartTurn();
     }
-    private void StartPlayerTurn(int obj)
-    {
-        throw new NotImplementedException();
-    }
-
 
     public void StartTurn()
     { 

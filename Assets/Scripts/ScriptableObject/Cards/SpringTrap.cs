@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBankCard", menuName = "Card/SpringTrap")]
+[CreateAssetMenu(fileName = "NewSpringTrap", menuName = "Card/SpringTrap")]
 public class SpringTrap : CardDataBase
-{
+{//弹簧卡
     [Header("后退步数")]
     [Range(0,3)]
-    public int backwardSteps;
-
+    private int backwardSteps;
 
     private void OnValidate()
     {
@@ -25,7 +24,8 @@ public class SpringTrap : CardDataBase
 
     public override void UseCard(BasePlayerController player)
     {
-        //退后方法
+        //放置道具
+
         Debug.Log("后退");
     }
 }

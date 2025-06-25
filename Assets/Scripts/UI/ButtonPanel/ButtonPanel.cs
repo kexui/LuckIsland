@@ -14,7 +14,17 @@ public class ButtonPanel : MonoBehaviour
     {
         TurnManager.OnTurnStageChanged += OnTurnStageChanged;
     }
-
+    private void Awake()
+    {
+        rollDicePanel = transform.Find("RollDice").gameObject;
+        playerTurnPanel = transform.Find("PlayerTurn").gameObject;
+        if (rollDicePanel == null && playerTurnPanel == null)
+        {
+            Debug.LogError("RollDice button not found in ButtonPanel.");
+        }
+        rollDicePanel.SetActive(false);
+        playerTurnPanel.SetActive(false);
+    }
     private void OnTurnStageChanged(TurnStage stage)
     {
         switch (stage)
@@ -35,6 +45,8 @@ public class ButtonPanel : MonoBehaviour
                 SetCurrentPanel(null);
                 break;
             case TurnStage.PlayerTurn:
+                if (TurnManager.Instance.currentPlayerIndex != GameManager.Instance.LocalPlayerIndex) return;
+                //如果不是本地玩家的回合，则不显示玩家操作面板
                 SetCurrentPanel(playerTurnPanel);
                 break;
             case TurnStage.EndTurn:
@@ -44,26 +56,16 @@ public class ButtonPanel : MonoBehaviour
                 break;
         }
     }
-    private void Awake()
-    {
-        rollDicePanel = transform.Find("RollDice").gameObject;
-        playerTurnPanel = transform.Find("PlayerTurn").gameObject;
-        if (rollDicePanel == null&&playerTurnPanel==null)
-        {
-            Debug.LogError("RollDice button not found in ButtonPanel.");
-        }
-        rollDicePanel.SetActive(false);
-        playerTurnPanel.SetActive(false);
-    }
+
     void SetCurrentPanel(GameObject panel)
     {
         if (currentPanel != null)
-        {
+        {//隐藏当前panel
             currentPanel.SetActive(false);
         }
         currentPanel = panel;
         if (currentPanel != null)
-        {
+        {//显示新panel
             currentPanel.SetActive(true);
         }
         else
@@ -73,13 +75,13 @@ public class ButtonPanel : MonoBehaviour
     }
 
     public void OnRollClick()
-    { 
-        GameManager.Instance.localPlayer.StopRoll();
+    {//摇骰子按钮点击事件
+        GameManager.Instance.LocalPlayer.StopRoll();
         TimerUtility.Instance.StartTimer(0.25f, () => SetCurrentPanel(null));
     }
-    public void OnPlayerTurnClick()
+    public void OnOverPlayerTurnClick()
     {
-        //逻辑
-        SetCurrentPanel(null);
+        TurnManager.Instance.SetOverTurn();
+        //SetCurrentPanel(null);
     }
 }

@@ -26,7 +26,7 @@ public class PlayerInfoItemUI : MonoBehaviour
         RefreshUI();
     }
     public void RefreshUI()
-    { 
+    {//Ë¢ÐÂUI
         nameText.text = data.PlayerName;
         copperText.text = data.Copper.ToString();
         //landText.text = "²úµØ"+data.ownedTiles;

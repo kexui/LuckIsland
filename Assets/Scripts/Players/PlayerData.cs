@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerData//玩家数据
 {
     public event Action OnDataChanged;//数据改变事件
-
+    public event Action OnCardChanged;
     public int ID { get; private set; }//玩家ID
     public string PlayerName { get; private set; }
 
@@ -60,8 +60,7 @@ public class PlayerData//玩家数据
             OnDataChanged?.Invoke();//数据改变事件
         }
     }
-    private List<CardDataBase> handCards;
-
+    
 
     //这个属于设置变量
     public bool autoRollDIce = false;//自动摇骰子
@@ -70,6 +69,9 @@ public class PlayerData//玩家数据
     public BasePlayerController playerController { get; private set; }//玩家控制器
 
     public List<TileBase> ownedTiles;
+
+    private List<CardDataBase> handCards;
+    public List<CardDataBase> HandCards => handCards;//手牌
 
 
 
@@ -84,6 +86,7 @@ public class PlayerData//玩家数据
 
         copper = 15;
         ownedTiles = new List<TileBase>();
+        handCards = new List<CardDataBase>();
 
         dice = DiceManager.Instance.diceArray[id];//获取骰子
 
@@ -128,5 +131,9 @@ public class PlayerData//玩家数据
             OnDataChanged?.Invoke();//数据改变事件
         }
     }
-
+    public void AddCard(CardDataBase newCard)
+    {
+        handCards.Add(newCard);
+        OnCardChanged?.Invoke();
+    }
 }

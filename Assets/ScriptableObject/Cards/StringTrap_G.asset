@@ -16,7 +16,6 @@ MonoBehaviour:
   rarity: 2
   range: 3
   effectText: 
-  faceImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 875c9aa8f532c524a89fca0742d03319, type: 3}
   frameImage: {fileID: 21300000, guid: e3fb1a6f381065e4d9a493733a260096, type: 3}
   weight: 1
-  backwardSteps: 3

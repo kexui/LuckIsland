@@ -43,8 +43,6 @@ public abstract class CardDataBase : ScriptableObject
     /// <param name="player">Ä¿±êÍæ¼Ò</param>
     public abstract void UseCard(BasePlayerController player);
 
-
-
     public Sprite GetFrameByRarity(CardRarity rarity)
     {
         switch (rarity)

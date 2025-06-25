@@ -27,13 +27,13 @@ public class TurnManager : MonoBehaviour
     public static event Action<TurnStage> OnTurnStageChanged;
     public static event Action<int> OnPlayerChanged;
 
-    private Dictionary<TurnStage, float> Durations = new() {
+    private Dictionary<TurnStage, float> TurnDurations = new() {
         {TurnStage.StartTurn,1f},
         {TurnStage.Wait ,1f},
         {TurnStage.RollDice ,10f},
         {TurnStage.Move ,4f},
         {TurnStage.TriggerTileEvent ,3f},
-        {TurnStage.PlayerTurn ,10f},
+        {TurnStage.PlayerTurn ,2f},
         {TurnStage.EndTurn ,1f}
     };
 
@@ -44,9 +44,8 @@ public class TurnManager : MonoBehaviour
         OverTurn = false;
     }
 
-    public void PlayerTurn()
+    public void StartGame()
     {
-
         SetTurn(TurnStage.StartTurn);
         StartCoroutine(RunGameLoop());
     }
@@ -60,32 +59,31 @@ public class TurnManager : MonoBehaviour
                 case TurnStage.StartTurn:
                     OnStartTurn();
 
-                    yield return new WaitForSeconds(1f);
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.Wait);
                     break;
                 case TurnStage.Wait:
                     OnWait();
 
-                    yield return new WaitForSeconds(1f);
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.RollDice);
                     break;
                 case TurnStage.RollDice:
-                    yield return new WaitForSeconds(1f);
                     OnRollDice();
 
-                    yield return WaitTurnOver(8f);
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.Move);
                     break;
                 case TurnStage.Move:
                     OnMove();
-                    yield return WaitTurnOver(3f);
 
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.TriggerTileEvent);
                     break;
                 case TurnStage.TriggerTileEvent:
                     OnTriggerTileEvent();
 
-                    yield return WaitTurnOver(3f);
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.PlayerTurn);
                     break;
                 case TurnStage.PlayerTurn:
@@ -96,7 +94,7 @@ public class TurnManager : MonoBehaviour
                 case TurnStage.EndTurn:
                     OnEndTurn();
 
-                    yield return WaitTurnOver(1f);
+                    yield return WaitTurnOver();
                     SetTurn(TurnStage.StartTurn);
                     break;
                 default:
@@ -107,7 +105,7 @@ public class TurnManager : MonoBehaviour
     }
     void OnStartTurn()
     { 
-        
+        CardManager.Instance.DealCardsToAllPlayers(PlayerManager.Instance.allPlayerDatas);
     }
     void OnWait()
     { }
@@ -122,7 +120,6 @@ public class TurnManager : MonoBehaviour
             StartCoroutine(player.RollDice());
         }
     }
-
     void OnMove()
     {
         BasePlayerController player;
@@ -147,11 +144,12 @@ public class TurnManager : MonoBehaviour
         currentPlayerController = PlayerManager.Instance.GetPlayerData(currentPlayerIndex).playerController;
 
         while (currentPlayerIndex<PlayerManager.Instance.playerCount)
-        {
-            OnTurnStageChanged?.Invoke(CurrentStage);
-            yield return currentPlayerController.DoTurn();
-            yield return new WaitForSeconds(3f);
+        {//重复玩家回合
+            OnTurnStageChanged?.Invoke(CurrentStage);//玩家回合跟新
+            //yield return currentPlayerController.DoTurn();
+            TimerUtility.Instance.StartTimer(GetTurnTime(), () => { StartCoroutine(currentPlayerController.DoTurn()); },()=>OverTurn);
             currentPlayerIndex++;
+            yield return WaitTurnOver();
         }
         currentPlayerIndex = -1;
     }
@@ -159,16 +157,26 @@ public class TurnManager : MonoBehaviour
     { 
     
     }
-    IEnumerator WaitTurnOver(float turnTime)
-    {
-        float timer = 0;
-        while (timer<turnTime)
+    IEnumerator WaitTurnOver()
+    {//等待当前回合结束
+        float timer = 0f;
+        while (timer < GetTurnTime() - 1)
         {
             if (OverTurn) break;
             timer += Time.deltaTime;
             yield return null;
         }
         yield return new WaitForSeconds(1f);
+    }
+    IEnumerator WaitTurnOver(float Timer)
+    {
+        float timer = 0;
+        while (timer<Timer)
+        {
+            if (OverTurn) break;
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
     void NextPlayer()
     {
@@ -189,6 +197,6 @@ public class TurnManager : MonoBehaviour
     }
     public float GetTurnTime()
     {
-        return Durations[CurrentStage];
+        return TurnDurations[CurrentStage];
     }
 }

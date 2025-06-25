@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Accessibility;
 
+enum GameMode
+{//游戏模式 暂时写在这  未来：模式1 【1（玩家），3（AI）】 这样的数据类型
+    AI,
+    Player
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -26,16 +32,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int localPlayerIndex { get; private set; } = 1; //本地玩家索引，默认为0
-    public BasePlayerController localPlayer { get; private set; }
+    public int LocalPlayerIndex { get; private set; } //本地玩家索引，默认为0
+    public BasePlayerController LocalPlayer { get; private set; }
 
-    public GameState currentGameState { get; private set; } = GameState.PreGame; //初始状态为开始游戏
+    public GameState currentGameState { get; private set; } = GameState.LoadResources; //初始状态为开始游戏
 
-    enum GameMode
-    {//游戏模式 暂时写在这  未来：模式1 【1（玩家），3（AI）】 这样的数据类型
-        AI,
-        Player
-    }
+    public static event Action<PlayerData> OnLocalPlayerSet; //本地玩家设置事件
+    public static event Action<int[]> OnInitPlayers;
 
     private void Awake()
     {
@@ -50,25 +53,31 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        currentGameState = GameState.PreGame;
+        GameStart();
+    }
+    void GameStart()
+    {
+        currentGameState = GameState.LoadResources;
         ChangeGameState();
     }
-
     void ChangeGameState()
-    {
+    {//是否需要改成协程
         switch (currentGameState)
         {
-            case GameState.PreGame:
+            case GameState.LoadResources:
                 PreGame();
                 break;
-            case GameState.InitGame:
-                InitGame();
+            case GameState.InitPlayers:
+                InitPlayers();
+                break;
+            case GameState.InitUI:
+                InitUI();
+                break;
+            case GameState.WaitForReady:
+                WaitForReady();
                 break;
             case GameState.StartGame:
                 StartGame();
-                break;
-            case GameState.PlayerTurn:
-                PlayerTurn();
                 break;
             case GameState.EndGame:
                 EndGame();
@@ -79,33 +88,40 @@ public class GameManager : MonoBehaviour
     }
     private void SetGameState(GameState newState)
     {
-        if (newState == currentGameState) return;
+        if (newState == currentGameState) return;//!!!
         currentGameState = newState;
         ChangeGameState();
     }
     private void PreGame()
     {
-        DiceManager.Instance.PerGame(2);
-        PlayerManager.Instance.PreGame(new int[] {1,1 });
-        SetGameState(GameState.InitGame);
-        localPlayer = PlayerManager.Instance.allPlayerDatas[localPlayerIndex].playerController;
+        SetGameState(GameState.InitPlayers);
     }
-    private void InitGame()
+    private void InitPlayers()
+    {
+        OnInitPlayers?.Invoke(new int[] { 1, 1 });
+
+        //设置本地玩家索引和本地玩家控制器
+        LocalPlayerIndex = 1;//假设本地玩家索引为1
+        OnLocalPlayerSet?.Invoke(PlayerManager.Instance.allPlayerDatas[LocalPlayerIndex]);
+        LocalPlayer = PlayerManager.Instance.allPlayerDatas[LocalPlayerIndex].playerController;
+
+        SetGameState(GameState.InitUI);
+    }
+    private void InitUI()
+    {
+        SetGameState(GameState.WaitForReady);
+    }
+    private void WaitForReady()
     {
         SetGameState(GameState.StartGame);
     }
     private void StartGame()
     {
-
-        SetGameState(GameState.PlayerTurn);
-    }
-    private void PlayerTurn()
-    {
-        TurnManager.Instance.PlayerTurn();
+        TurnManager.Instance.StartGame();
         //SetGameState(GameState.EndGame);
     }
     private void EndGame()
-    { 
+    {
     
     }
 }
