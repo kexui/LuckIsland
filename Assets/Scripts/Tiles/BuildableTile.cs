@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BuildableTile : TileBase
@@ -11,6 +12,7 @@ public class BuildableTile : TileBase
     BasePlayerController owner;
     BasePlayerController currentPlayer;
     bool isOwned = false;//是否被拥有
+    bool isUpgraded = false;//是否升级
 
     BuildableLand neighborLand;
 
@@ -27,14 +29,16 @@ public class BuildableTile : TileBase
             neighborLand = land;
         }
     }
-    public override void TriggerEvent(BasePlayerController pc)
+    public override IEnumerator TriggerEvent(BasePlayerController pc)
     {
         currentPlayer = pc;
         if (isOwned)
         {//有人拥有
             if (owner == pc)
             {//自己拥有
-                BuildPromptUI.Instance.Show(transform.position, UpgradeBusiness);
+                if (isUpgraded) yield break;
+                if (GameManager.Instance.LocalPlayer != pc) yield break;
+                WorldSpaceUI.Instance.buildPromptUI.Show(transform.position, UpgradeBusiness);
             }
             else
             {//别人拥有
@@ -46,13 +50,16 @@ public class BuildableTile : TileBase
                 else
                 {
                     print("你没有足够的铜币，无法支付");
+                    //！
                 }
             }
         }
         else
         {//没人拥有
-            BuildPromptUI.Instance.Show(transform.position, SpawnBusiness);
+            if (GameManager.Instance.LocalPlayer != pc) yield break;
+            WorldSpaceUI.Instance.buildPromptUI.Show(transform.position,SpawnBusiness); //显示购买UI
         }
+        yield return null;
     }
     void SpawnBusiness()
     { //建造
@@ -74,6 +81,7 @@ public class BuildableTile : TileBase
         if (currentPlayer.playerData.SubtractCopper(UpgradeCopper))
         {
             print("你升级了建造" + "，花费了" + UpgradeCopper + "铜币");
+            isUpgraded = true;
             neighborLand.UpgradeBusiness();
         }
         else

@@ -36,7 +36,7 @@ public abstract class TileBase : MonoBehaviour
         return topPosition;
     }
 
-    public abstract void TriggerEvent(BasePlayerController pc);//事件触发
+    public abstract IEnumerator TriggerEvent(BasePlayerController pc);//事件触发
 
     protected T FindNeighbor<T>(Vector3 pos) where T : Component
     {
@@ -64,5 +64,11 @@ public abstract class TileBase : MonoBehaviour
         }
         this.randomEvent = randomEvent;
         hasRandomEvent = true;
+    }
+    public void DestroyRandomEvent()
+    { 
+        hasRandomEvent = false;
+        Destroy(randomEvent.gameObject,0.1f);
+        randomEvent = null;
     }
 }

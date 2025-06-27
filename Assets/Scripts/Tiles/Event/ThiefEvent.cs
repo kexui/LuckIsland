@@ -13,7 +13,7 @@ public class ThiefEvent : RandomEventBase
         EventName = $"小偷 {richText}"; // 事件名称
         base.Start();
     }
-    public override void TriggerEvent(BasePlayerController player)
+    public override IEnumerator TriggerEvent(BasePlayerController player)
     {
         if (player.playerData.SubtractCopper(stealAmout))
         {//PC金币够
@@ -24,5 +24,6 @@ public class ThiefEvent : RandomEventBase
             print("打劫失败");
         }
         Debug.Log("随机事件触发成功");
+        yield break;
     }
 }

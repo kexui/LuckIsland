@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.WSA;
+//using UnityEngine.WSA;
 
 public class GameInput : MonoBehaviour
 {
@@ -25,6 +25,7 @@ public class GameInput : MonoBehaviour
         if (gameControl!=null)
         {
             gameControl.Player.Dice.performed += Dice_performed;
+            gameControl.Player.ESC.performed += ESC_performed;
             //gameControl.Player.Dice.performed += Di;
         }
         else
@@ -32,6 +33,13 @@ public class GameInput : MonoBehaviour
             Debug.LogError("gameControlŒ¥≥ı ºªØ/Œ¥ø’");
         }
     }
+
+    private void ESC_performed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("esc");
+        SceneLoader.Instance.QuitGame();
+    }
+
     private void Dice_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         

@@ -40,6 +40,7 @@ public class DiceManager : MonoBehaviour
     }
     public void StartAllDiceRolling()
     {
+        //AudioManager.Instance.StartPlayerRollDiceSound();
         rolledPlayerCount = 0;
         for (int i = 0; i < currentPlayerCount; i++)
         {
@@ -55,6 +56,7 @@ public class DiceManager : MonoBehaviour
         if (rolledPlayerCount==PlayerManager.Instance.playerCount)
         {
             TurnManager.Instance.SetOverTurn();
+            //AudioManager.Instance.StopPlayerRollDiceSound();
         }
     }
 }

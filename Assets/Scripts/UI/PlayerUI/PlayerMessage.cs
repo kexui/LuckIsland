@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerMessage : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI messageText;
-    private Image icon;
+    public TextMeshProUGUI messageText;
+    public Image icon;
 
     private void Start()
     {
@@ -16,8 +16,11 @@ public class PlayerMessage : MonoBehaviour
             messageText = GetComponentInChildren<TextMeshProUGUI>();
         }
         icon = GetComponentInChildren<Image>();
+
+        if (messageText==null&&icon==null)
+        {
+            Debug.Log("玩家message引用未实现！！！");
+        }
     }
-
-
 
 }

@@ -4,46 +4,22 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject SinglePlayerUI;
-    public GameObject MultiplayerUI;
-    public GameObject SettingsUI;
-    public GameObject MainMenuUI;
-
-
-    public void OnClick(MenuStage menuStage)
-    {
-        switch (menuStage)
-        {
-            case MenuStage.SinglePlayer:
-                SinglePlayerUI.SetActive(true);
-                break;
-            case MenuStage.Multiplayer:
-
-                break;
-            case MenuStage.Settings:
-                SettingsUI.SetActive(true);
-                break;
-            case MenuStage.Quit:
-                break;
-            default:
-                break;
-        }
-    }
+    [SerializeField] SceneLoader sceneLoader;
     public void OnSinglePlayerClick()
-    { 
-        SinglePlayerUI.SetActive(true);
+    { //单人模式
+        sceneLoader.LoadGameScene();
     }
     public void OnMultiplayerClick()
-    { 
+    { //多人模式
     
     }
     public void OnSettingsClick()
-    { 
-        SettingsUI.SetActive(true);
+    { //设置
+        
     }
     // void OnTutorialClick(){ }
     public void OnQuitClick()
     { 
-        
+        sceneLoader.QuitGame();
     }
 }

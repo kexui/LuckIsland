@@ -38,7 +38,10 @@ public class GameManager : MonoBehaviour
     public GameState currentGameState { get; private set; } = GameState.LoadResources; //初始状态为开始游戏
 
     public static event Action<PlayerData> OnLocalPlayerSet; //本地玩家设置事件
+
+    public static event Action OnLoadResources;
     public static event Action<int[]> OnInitPlayers;
+    public static event Action OnInitUI;
 
     private void Awake()
     {
@@ -49,7 +52,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         _instance = this;
-        //DontDestroyOnLoad(gameObject);//确保GameManager在场景切换时不会被销毁
+        DontDestroyOnLoad(gameObject);//确保GameManager在场景切换时不会被销毁
     }
     private void Start()
     {
@@ -65,7 +68,7 @@ public class GameManager : MonoBehaviour
         switch (currentGameState)
         {
             case GameState.LoadResources:
-                PreGame();
+                LoadResources();
                 break;
             case GameState.InitPlayers:
                 InitPlayers();
@@ -88,17 +91,20 @@ public class GameManager : MonoBehaviour
     }
     private void SetGameState(GameState newState)
     {
-        if (newState == currentGameState) return;//!!!
+        //if (newState == currentGameState) return;//!!!
         currentGameState = newState;
         ChangeGameState();
     }
-    private void PreGame()
+    private void LoadResources()
     {
+        Debug.Log("LoadingResources");
+        OnLoadResources?.Invoke();
         SetGameState(GameState.InitPlayers);
     }
     private void InitPlayers()
     {
-        OnInitPlayers?.Invoke(new int[] { 1, 1 });
+        Debug.Log("InitPlayers");
+        OnInitPlayers?.Invoke(new int[] { 1, 1});
 
         //设置本地玩家索引和本地玩家控制器
         LocalPlayerIndex = 1;//假设本地玩家索引为1
@@ -109,14 +115,18 @@ public class GameManager : MonoBehaviour
     }
     private void InitUI()
     {
+        Debug.Log("InitUI");
+        OnInitUI?.Invoke();
         SetGameState(GameState.WaitForReady);
     }
     private void WaitForReady()
     {
+        Debug.Log("WaitForReady");
         SetGameState(GameState.StartGame);
     }
     private void StartGame()
     {
+        Debug.Log("Game Started");
         TurnManager.Instance.StartGame();
         //SetGameState(GameState.EndGame);
     }

@@ -243,8 +243,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 9.7
-  m_fontSizeBase: 9.7
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -382,6 +382,7 @@ MonoBehaviour:
   Frames: {fileID: 5088292510899640047}
   cardName: {fileID: 6370571935690666465}
   effectText: {fileID: 2650458020859676065}
+  handCardPanel: {fileID: 0}
 --- !u!95 &4078704544810707686
 Animator:
   serializedVersion: 5

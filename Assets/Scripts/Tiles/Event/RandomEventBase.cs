@@ -19,7 +19,6 @@ public abstract class RandomEventBase : MonoBehaviour
             eventNameText.text = EventName;
         }
     }
-    public abstract void TriggerEvent(BasePlayerController player);
-
+    public abstract IEnumerator TriggerEvent(BasePlayerController player);
 }
 

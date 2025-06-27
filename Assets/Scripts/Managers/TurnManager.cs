@@ -21,19 +21,21 @@ public class TurnManager : MonoBehaviour
     public TurnStage CurrentStage{ get; private set; }
     public int currentPlayerIndex { get; private set; }
     private BasePlayerController currentPlayerController;
+    public bool IsLocalPlayerTurn { get; private set; }
 
     public bool OverTurn { get; private set; }
 
     public static event Action<TurnStage> OnTurnStageChanged;
     public static event Action<int> OnPlayerChanged;
+    public static event Action OnEndTurn;
 
     private Dictionary<TurnStage, float> TurnDurations = new() {
         {TurnStage.StartTurn,1f},
         {TurnStage.Wait ,1f},
         {TurnStage.RollDice ,10f},
-        {TurnStage.Move ,4f},
+        {TurnStage.Move ,6f},
         {TurnStage.TriggerTileEvent ,3f},
-        {TurnStage.PlayerTurn ,2f},
+        {TurnStage.PlayerTurn ,5f},
         {TurnStage.EndTurn ,1f}
     };
 
@@ -57,42 +59,49 @@ public class TurnManager : MonoBehaviour
             switch (CurrentStage)
             {
                 case TurnStage.StartTurn:
+                    // 开始新回合
                     OnStartTurn();
 
                     yield return WaitTurnOver();
                     SetTurn(TurnStage.Wait);
                     break;
                 case TurnStage.Wait:
+                    // 等待玩家准备
                     OnWait();
 
                     yield return WaitTurnOver();
                     SetTurn(TurnStage.RollDice);
                     break;
                 case TurnStage.RollDice:
+                    // 处理掷骰子
                     OnRollDice();
 
                     yield return WaitTurnOver();
                     SetTurn(TurnStage.Move);
                     break;
                 case TurnStage.Move:
+                    // 处理玩家移动
                     OnMove();
 
                     yield return WaitTurnOver();
                     SetTurn(TurnStage.TriggerTileEvent);
                     break;
                 case TurnStage.TriggerTileEvent:
-                    OnTriggerTileEvent();
+                    // 触发地块事件
+                    OnTriggerTileEvent();//次
 
-                    yield return WaitTurnOver();
+                    yield return WaitTurnOver();//主
                     SetTurn(TurnStage.PlayerTurn);
                     break;
                 case TurnStage.PlayerTurn:
+                    // 处理玩家回合
                     yield return HandlePlayerTurns();
 
                     SetTurn(TurnStage.EndTurn);
                     break;
                 case TurnStage.EndTurn:
-                    OnEndTurn();
+                    // 结束当前回合
+                    OnEndTurn?.Invoke();
 
                     yield return WaitTurnOver();
                     SetTurn(TurnStage.StartTurn);
@@ -121,41 +130,30 @@ public class TurnManager : MonoBehaviour
         }
     }
     void OnMove()
-    {
-        BasePlayerController player;
-        for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
-        {
-            player = PlayerManager.Instance.GetPlayerData(i).playerController;
-            StartCoroutine(player.MoveCoroutine());
-        }
+    { 
+        PlayerManager.Instance.StartAllPlayersMove();
     }
     void OnTriggerTileEvent()
     {//触发地块事件不用经过玩家？
-        BasePlayerController player;
-        for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
-        {
-            player = PlayerManager.Instance.GetPlayerData(i).playerController;
-            StartCoroutine(player.TriggerTileEvent());
-        }
+        PlayerManager.Instance.StartAllPlayersTriggerTileEvent();
     }
     IEnumerator HandlePlayerTurns()
-    {//用方法可能更好
+    {
         currentPlayerIndex = 0;
         currentPlayerController = PlayerManager.Instance.GetPlayerData(currentPlayerIndex).playerController;
 
         while (currentPlayerIndex<PlayerManager.Instance.playerCount)
         {//重复玩家回合
-            OnTurnStageChanged?.Invoke(CurrentStage);//玩家回合跟新
+            IsLocalPlayerTurn = currentPlayerIndex == GameManager.Instance.LocalPlayerIndex;
+
             //yield return currentPlayerController.DoTurn();
-            TimerUtility.Instance.StartTimer(GetTurnTime(), () => { StartCoroutine(currentPlayerController.DoTurn()); },()=>OverTurn);
+            TimerUtility.Instance.StartTimer(GetTurnTime(), () => { StartCoroutine(currentPlayerController.DoTurn()); }, () => OverTurn);
             currentPlayerIndex++;
             yield return WaitTurnOver();
+            OnTurnStageChanged?.Invoke(CurrentStage);//玩家回合跟新
         }
+        IsLocalPlayerTurn = false;
         currentPlayerIndex = -1;
-    }
-    void OnEndTurn()
-    { 
-    
     }
     IEnumerator WaitTurnOver()
     {//等待当前回合结束

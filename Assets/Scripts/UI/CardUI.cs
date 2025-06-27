@@ -11,11 +11,14 @@ public class CardUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPo
     [SerializeField] private Image Frames;//框
     [SerializeField] private TextMeshProUGUI cardName;
     [SerializeField] private TextMeshProUGUI effectText;
-    private CardDataBase cardData;
+    public CardDataBase cardData { get; private set; }
+    public int Index { get; private set; }
     
     private Animator animator;
     AnimationClip[] clips;
     private float timer;
+
+    public HandPanelUI handCardPanel;
 
     private void Start()
     {
@@ -33,13 +36,15 @@ public class CardUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPo
                 timer = clip.length; //获取动画时长
                 break;
             }
-            Debug.LogWarning("Card_Click animation not found in animator on " + gameObject.name);
+            //Debug.LogWarning("Card_Click animation not found in animator on " + gameObject.name);
         }
     }
 
-    public void SetData(CardDataBase data)
+    public void SetData(int index, CardDataBase data,HandPanelUI hand)
     {
+        Index = index;
         cardData = data;
+        handCardPanel = hand;
         Init();
     }
     private void Init()
@@ -60,14 +65,19 @@ public class CardUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPo
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        animator.SetTrigger("Clixk");
-        TimerUtility.Instance.StartTimer(timer, () =>
+        if (TurnManager.Instance.IsLocalPlayerTurn)
+        {//是出牌阶段并且是自己回合
+            animator.SetTrigger("Click");
+            TimerUtility.Instance.StartTimer(0.15f, () =>
+            {
+                cardData.UseCard(GameManager.Instance.LocalPlayer);
+                handCardPanel.RemoveCard(this);
+            });
+        }
+        else
         {
-            cardData.UseCard(GameManager.Instance.LocalPlayer);
-            Destroy(gameObject); //销毁卡牌UI
-        });
-        //发牌方法触发
-        //卡牌消失
+            Debug.Log("未到你的回合");
+        }
     }
 }
 

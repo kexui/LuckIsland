@@ -23,9 +23,10 @@ public class ShopTile : TileBase
         }
     }
 
-    public override void TriggerEvent(BasePlayerController pc)
+    public override IEnumerator TriggerEvent(BasePlayerController pc)
     {
         print("Çë¹ºÂò¿¨ÅÆ");
+        yield break;
     }
 
     

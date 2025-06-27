@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &489819919536241539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &7460215551832167156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,8 +183,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u4E0D\u5EFA\u9020"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c86c4cdccd67c6947859347edc577bcb, type: 2}
-  m_sharedMaterial: {fileID: -4891124336541403935, guid: c86c4cdccd67c6947859347edc577bcb,
+  m_fontAsset: {fileID: 11400000, guid: 4a520f550821f664abba6dfd195dbc63, type: 2}
+  m_sharedMaterial: {fileID: 8395926605064633873, guid: 4a520f550821f664abba6dfd195dbc63,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -318,8 +318,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u5EFA\u9020"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c86c4cdccd67c6947859347edc577bcb, type: 2}
-  m_sharedMaterial: {fileID: -4891124336541403935, guid: c86c4cdccd67c6947859347edc577bcb,
+  m_fontAsset: {fileID: 11400000, guid: 4a520f550821f664abba6dfd195dbc63, type: 2}
+  m_sharedMaterial: {fileID: 8395926605064633873, guid: 4a520f550821f664abba6dfd195dbc63,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -486,7 +486,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0.92941177, g: 0.9019608, b: 0.5686275, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -607,7 +607,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0.9299191, g: 0.90174276, b: 0.57023335, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1

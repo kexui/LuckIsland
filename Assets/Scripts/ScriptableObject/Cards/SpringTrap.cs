@@ -25,7 +25,6 @@ public class SpringTrap : CardDataBase
     public override void UseCard(BasePlayerController player)
     {
         //放置道具
-
-        Debug.Log("后退");
+        Debug.Log("使用弹簧卡，后退" + backwardSteps + "步");
     }
 }

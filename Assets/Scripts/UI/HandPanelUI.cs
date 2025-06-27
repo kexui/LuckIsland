@@ -4,7 +4,6 @@ using UnityEngine;
 
 /*思路
  初始化确定本地玩家并绑定玩家卡牌数改变方法
- 
 */
 public class HandPanelUI : MonoBehaviour
 {
@@ -38,18 +37,20 @@ public class HandPanelUI : MonoBehaviour
         {//删除手牌
             Destroy(child.gameObject);
         }
+        int i =0;
         foreach (var card in localplayerData.HandCards)
         {//遍历手牌 生成新手牌并绑定数据
             GameObject go = Instantiate(cardUI.gameObject, transform);
             CardUI newCardUI = go.GetComponent<CardUI>();
             if (newCardUI != null)
             {
-                newCardUI.SetData(card);
+                newCardUI.SetData(i,card,this);            
             }
             else
             {
                 Debug.LogError("卡牌未挂载脚本");
             }
+            i++;
         }
     }
     public void AddCardUI(CardDataBase card)
@@ -58,11 +59,15 @@ public class HandPanelUI : MonoBehaviour
         CardUI newCardUI = go.GetComponent<CardUI>();
         if (newCardUI != null)
         {
-            newCardUI.SetData(card);
+            newCardUI.SetData(-1, card,this);
         }
         else
         {
             Debug.LogError("卡牌未挂载脚本");
         }
+    }
+    public void RemoveCard(CardUI cardUI)
+    {
+        localplayerData.RemoveHandCard(cardUI.Index);
     }
 }

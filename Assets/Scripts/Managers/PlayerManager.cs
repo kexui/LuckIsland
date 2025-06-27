@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,11 +6,12 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
 
-    public Transform playerSpawnPoint;//角色生成位置   后期拓展
+    private Transform playerSpawnPoint;//角色生成位置   后期拓展
 
-    public List<CharacterData> allCharacters;//角色数据集合
+    [SerializeField]private List<CharacterData> allCharacters;//角色数据集合
     public List<PlayerData> allPlayerDatas = new List<PlayerData>();//玩家数据集合
-
+    private List<BasePlayerController> allPlayerControllers = new List<BasePlayerController>();
+    
 
     public int playerCount { get; private set; }
 
@@ -25,6 +27,10 @@ public class PlayerManager : MonoBehaviour
     {
         CreatePlayers(ints);
         playerCount = allPlayerDatas.Count;
+        foreach (PlayerData playerData in allPlayerDatas)
+        {
+            allPlayerControllers.Add(playerData.playerController);//将所有玩家控制器添加到列表中
+        }
     }
     private void CreatePlayers(int[] ints)
     {
@@ -55,7 +61,6 @@ public class PlayerManager : MonoBehaviour
             newPlayerData = new PlayerData(id, characterData, playerController);
         }
         
-
         allPlayerDatas.Add(newPlayerData);
         Debug.Log("ID: " + id);
     }
@@ -67,5 +72,30 @@ public class PlayerManager : MonoBehaviour
     public PlayerData GetCurrentPlayerData()
     {
         return allPlayerDatas[TurnManager.Instance.currentPlayerIndex];
+    }
+    public void StartAllPlayersMove()
+    {//开始所有玩家的移动协程
+        AudioManager.Instance.StartPlayerWalkSound();
+        foreach (PlayerData playerData in allPlayerDatas)
+        {
+            StartCoroutine(playerData.playerController.MoveCoroutine());
+        }
+    }
+    public bool AllPlayersFinished()
+    {
+        foreach (BasePlayerController player in allPlayerControllers)
+        {
+            if (!player.HasFinishedTurn)return false;
+        }
+        AudioManager.Instance.StopPlayerWalkSound();
+        TurnManager.Instance.SetOverTurn();//所有玩家都完成了回合
+        return true;
+    }
+    public void StartAllPlayersTriggerTileEvent()
+    {
+        foreach (PlayerData playerData in allPlayerDatas)
+        {
+            StartCoroutine(TileManager.Instance.TriggerEvent(playerData.CurrentTileIndex, playerData.playerController));
+        }
     }
 }

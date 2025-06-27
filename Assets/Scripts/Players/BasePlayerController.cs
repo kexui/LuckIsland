@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Build.Content;
+//using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,15 +18,15 @@ public abstract class BasePlayerController : MonoBehaviour
     protected float moveLerpDuration = 0.5f; //移动插值持续时间
     private bool needsTurn = false;
 
+    public bool HasFinishedTurn { get; private set; }
+
     protected PlayerAnimator playerAnimator;
     protected AnimationCurve knockbackHeightCurve;
 
+    protected bool isKnockback = false; //是否击飞中
     protected float knockbackHeight = 3f; //击飞高度
 
-    private void Awake()
-    {
-        
-    }
+    public PlayerFloatingUI playerFloatingUI { get; private set; }
 
     public void Init(PlayerData data)
     {
@@ -35,6 +35,8 @@ public abstract class BasePlayerController : MonoBehaviour
         //playerNameText = GetComponentInChildren<TextMeshProUGUI>();
         playerRing = GetComponentInChildren<Image>();
         knockbackHeightCurve = CurveData.Library.knockbackHeightCurve;
+        HasFinishedTurn = false;
+        playerFloatingUI = GetComponentInChildren<PlayerFloatingUI>();
 
         if (playerAnimator == null)
         {
@@ -52,6 +54,11 @@ public abstract class BasePlayerController : MonoBehaviour
         {
             Debug.LogWarning("PlayerController未找到击飞高度曲线");
         }
+        if (playerFloatingUI == null)
+        {
+            Debug.LogWarning("PlayerController未找到PlayerFloatingUI");
+        }
+
         transform.position = TileManager.Instance.Tiles[playerData.CurrentTileIndex].GetTopPosition();
         isMyTurn = true;
         hasStopRoll = false;
@@ -61,11 +68,6 @@ public abstract class BasePlayerController : MonoBehaviour
 
     public virtual IEnumerator RollDice()
     {
-        /*
-        是否开启自动摇骰子 
-        1.开启，执行自动摇骰子（随机动画）
-        2.没，循环检测是否摇骰子，到指定时间自动摇骰子
-        */
         Debug.LogWarning("协程RollDice未重写");
         yield return null;
     }
@@ -79,9 +81,7 @@ public abstract class BasePlayerController : MonoBehaviour
     }
     public IEnumerator MoveCoroutine()
     {
-        
-        isMoving =true;
-        playerAnimator.SetWalk(isMoving);
+        SetMove(true); //开始移动
 
         int direction = playerData.RemainingSteps > 0 ? 1 : -1; //正向或反向移动
         int absSteps = Mathf.Abs(playerData.RemainingSteps);
@@ -133,29 +133,32 @@ public abstract class BasePlayerController : MonoBehaviour
 
             yield return null;
         }
-        isMoving = false;
-        playerAnimator.SetWalk(isMoving);
+        SetMove(false); //移动结束
     }
-    public IEnumerator TriggerTileEvent()
-    {
-        TileManager.Instance.TriggerEvent(playerData.CurrentTileIndex, this);
-        yield return new WaitForSeconds(0.1f);//换成动画事件控制时间最好
-    }
+    //public IEnumerator TriggerTileEvent()
+    //{
+    //    TileManager.Instance.TriggerEvent(playerData.CurrentTileIndex, this);
+    //    yield return new WaitForSeconds(0.1f);//换成动画事件控制时间最好
+    //}
+
     public virtual IEnumerator DoTurn()
     {
         yield return new WaitForSeconds(3f);
         Debug.Log("Doturn Over");
     }
+
     public void StopRoll()
     { 
         hasStopRoll = true;
     }
-    public void KnockBack(int moveStep)
-    {
-        StartCoroutine(KnockBackMove(moveStep));
+
+    public void StartKnockUP(int moveStep)
+    {//击飞移动
+        StartCoroutine(KnockUp(moveStep));
     }
-    IEnumerator KnockBackMove(int moveStep)
+    public IEnumerator KnockUp(int moveStep)
     {
+        isKnockback = true;
         int tileCount = TileManager.Instance.Tiles.Count;
         int currentTileIndex = playerData.CurrentTileIndex;
         int endIndex = (currentTileIndex + moveStep + tileCount) % tileCount;
@@ -175,5 +178,19 @@ public abstract class BasePlayerController : MonoBehaviour
         }
         transform.position = end; //确保到达终点
         playerData.CurrentTileIndex = endIndex; //更新当前棋子位置
+        isKnockback = false; //击飞结束
+        AudioManager.Instance.PlayerKnockDownSound(); //播放击飞音效
+    }
+
+    private void SetMove(bool isMove)
+    { 
+        isMoving = isMove;
+        playerAnimator.SetWalk(isMoving);
+        
+        HasFinishedTurn = !isMoving; //如果不在移动，则回合结束
+        if (isMove == false)
+        {
+            PlayerManager.Instance.AllPlayersFinished();
+        }
     }
 }

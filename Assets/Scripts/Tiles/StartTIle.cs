@@ -5,8 +5,10 @@ using UnityEngine;
 public class StartTile : TileBase
 {
 
-    public override void TriggerEvent(BasePlayerController pc)
+    public override IEnumerator TriggerEvent(BasePlayerController pc)
     {
+        
         Debug.Log("¿ªÊ¼Tile");
+        yield break;
     }
 }

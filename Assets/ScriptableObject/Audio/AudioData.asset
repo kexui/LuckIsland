@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6178523d78421354697e21c3ba322a23, type: 3}
+  m_Name: AudioData
+  m_EditorClassIdentifier: 
+  buildingMusic:
+  - {fileID: 8300000, guid: 7ef5eff17add7864aa8856016d581591, type: 3}
+  clickMusic:
+  - {fileID: 8300000, guid: 333fcdb83afedb84589f2af3991b6bf9, type: 3}
+  - {fileID: 8300000, guid: e52c2f0eafa24f4459f6ac8f5882c948, type: 3}
+  - {fileID: 8300000, guid: c699f9d86aa613b4a99a7dd4a4d9dd6e, type: 3}
+  - {fileID: 8300000, guid: 6425e84475f65e74a8463dc6a3243665, type: 3}
+  - {fileID: 8300000, guid: 027ad16445108ab42aed190405e0bbe4, type: 3}
+  backgroundMusic:
+  - {fileID: 8300000, guid: 392846f045734024abde20938cf23e8b, type: 3}
+  - {fileID: 8300000, guid: a7fd3041cffad10419075412efc1d82c, type: 3}
+  knockUpMusic:
+  - {fileID: 8300000, guid: aef03e37564c8d84da24e78b034d4dd5, type: 3}
+  knockDownMusic:
+  - {fileID: 8300000, guid: ffa6c2aa72a61c744a2930bd1e607c97, type: 3}
+  diceMusic:
+  - {fileID: 8300000, guid: f005ef56c8955cb4e8e253d1528a0f1a, type: 3}
+  - {fileID: 8300000, guid: 1dc38a1c183a6104980f7fa4a0e43aea, type: 3}
+  - {fileID: 8300000, guid: 60d3dba3328c718469f7179bd20d983a, type: 3}
+  walkMusic:
+  - {fileID: 8300000, guid: 3295fa70501caf3459079264eba82c9c, type: 3}

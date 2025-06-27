@@ -13,9 +13,10 @@ public class LotteryEvent : RandomEventBase
         base.Start();
     }
 
-    public override void TriggerEvent(BasePlayerController player)
+    public override IEnumerator TriggerEvent(BasePlayerController player)
     {
         player.playerData.AddCopper(Amout);
         Debug.Log("随机事件触发成功");
+        yield break;
     }
 }

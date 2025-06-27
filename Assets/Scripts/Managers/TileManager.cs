@@ -13,7 +13,6 @@ public class TileManager : MonoBehaviour
     public List<TileBase> Tiles = new List<TileBase>();
 
 
-    
     private void Awake()
     {
         Instance = this;
@@ -44,11 +43,16 @@ public class TileManager : MonoBehaviour
             Instantiate(TilePrefabToSpawn, position, Quaternion.identity, Tile.transform);
         }
     }
-    public void TriggerEvent(int index,BasePlayerController pc)
+    public IEnumerator TriggerEvent(int index,BasePlayerController pc)
     {//Tile触发事件
-        Tiles[index].TriggerEvent(pc);
-        if (!Tiles[index].HasRandomEvent) return;
-        Tiles[index].RandomEvent.TriggerEvent(pc); //触发随机事件
-    }
+        //先执行完随机事件 再执行本地事件
+        if (Tiles[index].HasRandomEvent)
+        {            
+            yield return Tiles[index].RandomEvent.TriggerEvent(pc);
+            Tiles[index].DestroyRandomEvent();
+        }
+        yield return Tiles[pc.playerData.CurrentTileIndex].TriggerEvent(pc);
 
+        TurnManager.Instance.SetOverTurn();
+    }
 }

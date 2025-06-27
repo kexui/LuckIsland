@@ -29,6 +29,7 @@ public class ButtonPrefab : MonoBehaviour,IPointerEnterHandler, IPointerExitHand
     public void OnPointerClick(PointerEventData eventData)
     {
         animator.SetTrigger("Click");
+        AudioManager.Instance.PlayerClickSound(); // 播放点击音效
         //事件
         onClick?.Invoke();
     }

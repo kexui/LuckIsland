@@ -15,12 +15,17 @@ public class CardManager : MonoBehaviour
     {
         Instance = this;
     }
-
-    private void Start()
+    private void OnEnable()
     {
-        rarityWeights = new int[] { 1, 2, 5 };
+        GameManager.OnLoadResources += GameManager_OnLoadResources;
+    }
+
+    private void GameManager_OnLoadResources()
+    {
+        rarityWeights = new int[] { 1, 2, 3 };
         GenerateDrawPool();
     }
+
     public void DealCardsToAllPlayers(List<PlayerData> players)
     {
         if (drawPool == null || drawPool.Count == 0)
@@ -38,7 +43,7 @@ public class CardManager : MonoBehaviour
         CardDataBase newCard = GetRandomCard();
         if (newCard != null)
         {
-            playerData.AddCard(newCard);
+            playerData.AddHandCard(newCard);
             Debug.Log($"·¢ÅÆ¸øÍæ¼Ò {playerData.PlayerName}£º{newCard.CardName}");
         }
         else

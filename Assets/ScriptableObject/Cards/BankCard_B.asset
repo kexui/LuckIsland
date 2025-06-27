@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: "\u91D1\u5E01\u5361"
   rarity: 2
   range: -1
-  effectText: 
+  effectText: "+2 \u91D1\u5E01"
   faceImage: {fileID: 21300000, guid: e10b719c5a6df7a4aab6e40afc287fc9, type: 3}
   frameImage: {fileID: 21300000, guid: e3fb1a6f381065e4d9a493733a260096, type: 3}
   weight: 1
+  moneyAmount: 2

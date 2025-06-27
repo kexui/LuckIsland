@@ -5,8 +5,9 @@ using UnityEngine;
 public class ThiefEventTile : TileBase
 {
 
-    public override void TriggerEvent(BasePlayerController pc)
+    public override IEnumerator TriggerEvent(BasePlayerController pc)
     {
         print(" 小偷");// 触发事件逻辑
+        yield break;
     }
 }

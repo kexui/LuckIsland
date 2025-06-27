@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u987D\u75BE\u65B9\u6CD5"
+  m_text: "\u6D88\u606F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c86c4cdccd67c6947859347edc577bcb, type: 2}
-  m_sharedMaterial: {fileID: -4891124336541403935, guid: c86c4cdccd67c6947859347edc577bcb,
+  m_fontAsset: {fileID: 11400000, guid: 4a520f550821f664abba6dfd195dbc63, type: 2}
+  m_sharedMaterial: {fileID: 8395926605064633873, guid: 4a520f550821f664abba6dfd195dbc63,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.4
+  m_fontSize: 30
   m_fontSizeBase: 17.25
   m_fontWeight: 400
   m_enableAutoSizing: 1

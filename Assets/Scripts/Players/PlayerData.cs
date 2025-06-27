@@ -98,6 +98,7 @@ public class PlayerData//玩家数据
     public void AddCopper(int amount)
     { 
         copper += amount;
+        playerController.playerFloatingUI.ShowMessage(amount);
         OnDataChanged?.Invoke();//数据改变事件
     }
     public bool SubtractCopper(int amount)
@@ -105,6 +106,7 @@ public class PlayerData//玩家数据
         if (copper>=amount)
         {//钱够
             copper -= amount;
+            playerController.playerFloatingUI.ShowMessage(-amount);
             OnDataChanged?.Invoke();//数据改变事件
             return true;
         }
@@ -121,19 +123,12 @@ public class PlayerData//玩家数据
     public void AddHandCard(CardDataBase card)
     { 
         handCards.Add(card);
-        OnDataChanged?.Invoke();//数据改变事件
+        OnCardChanged?.Invoke();
     }
-    public void RemoveHandCard(CardDataBase card)
+
+    public void RemoveHandCard(int index)
     {
-        if (handCards.Contains(card))
-        {
-            handCards.Remove(card);
-            OnDataChanged?.Invoke();//数据改变事件
-        }
-    }
-    public void AddCard(CardDataBase newCard)
-    {
-        handCards.Add(newCard);
+        handCards.RemoveAt(index);
         OnCardChanged?.Invoke();
     }
 }
