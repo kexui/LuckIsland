@@ -22,7 +22,6 @@ public class TurnManager : MonoBehaviour
     public int currentPlayerIndex { get; private set; }
     private BasePlayerController currentPlayerController;
     public bool IsLocalPlayerTurn { get; private set; }
-
     public bool OverTurn { get; private set; }
 
     public static event Action<TurnStage> OnTurnStageChanged;

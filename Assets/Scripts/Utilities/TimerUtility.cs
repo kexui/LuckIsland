@@ -23,7 +23,7 @@ public class TimerUtility: MonoBehaviour
     { 
         StartCoroutine(TimerCoroutine(duration, onComplete, cancelCondition));
     }
-    public IEnumerator TimerCoroutine(float duration,Action onCororine,Func<bool>canelCondition)
+    public IEnumerator TimerCoroutine(float duration,Action onComplete,Func<bool>canelCondition)
     {
         float timer = 0f;
         while (timer<duration)
@@ -32,6 +32,6 @@ public class TimerUtility: MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
-        onCororine?.Invoke(); //调用完成回调
+        onComplete?.Invoke(); //调用完成回调
     }
 }
