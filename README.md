@@ -6,7 +6,8 @@
 
 ## 游戏功能简介
 
--  **回合状态管理**（如 `startTurn`、`Wait`、`RollDice`、`Move`、`TriggerTileEvent`、`PlayerTurn`、`EndTurn` 等）  
+-  **回合状态管理**  
+-   ![alt text](Turn.png)
     使用协程控制完整回合，回合时间有限制时间，所有操作完成会提前进入下一个回合  
     公共回合（除PlayerTurn外的所有回合），玩家没有先后操作顺序  
     PlayerTurn（出牌回合），玩家依次轮换，传统回合制，可跳过回合
@@ -14,7 +15,6 @@
 -  骰子系统  
     脚本控制随机转面  
     使用 协程+AnimationCurve 实现骰子滚动，减速，  
-    
 
 -  购买地块并建房收租  
    玩家到达对应地块可选择建房（升级产地）  
