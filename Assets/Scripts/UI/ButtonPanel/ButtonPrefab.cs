@@ -30,7 +30,6 @@ public class ButtonPrefab : MonoBehaviour,IPointerEnterHandler, IPointerExitHand
     {
         animator.SetTrigger("Click");
         AudioManager.Instance.PlayerClickSound(); // 播放点击音效
-        //事件
         onClick?.Invoke();
     }
 }

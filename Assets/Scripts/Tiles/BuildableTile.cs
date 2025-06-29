@@ -69,6 +69,7 @@ public class BuildableTile : TileBase
             isOwned = true;
             print("你购买了"  + "，花费了" + purchaseCopper + "铜币");
             neighborLand.SpawmBusiness();
+            AudioManager.Instance.PlayerBuildSound();
         }
         else
         {//钱不够
@@ -83,6 +84,7 @@ public class BuildableTile : TileBase
             print("你升级了建造" + "，花费了" + UpgradeCopper + "铜币");
             isUpgraded = true;
             neighborLand.UpgradeBusiness();
+            AudioManager.Instance.PlayerBuildSound();
         }
         else
         {

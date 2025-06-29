@@ -49,7 +49,7 @@ public class TileManager : MonoBehaviour
         if (Tiles[index].HasRandomEvent)
         {            
             yield return Tiles[index].RandomEvent.TriggerEvent(pc);
-            Tiles[index].DestroyRandomEvent();
+            RandomEventManager.Instance.RemoveRandomEvent(index);
         }
         yield return Tiles[pc.playerData.CurrentTileIndex].TriggerEvent(pc);
 

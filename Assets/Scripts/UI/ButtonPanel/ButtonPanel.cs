@@ -18,9 +18,11 @@ public class ButtonPanel : MonoBehaviour
     {
         rollDicePanel = transform.Find("RollDice").gameObject;
         playerTurnPanel = transform.Find("PlayerTurn").gameObject;
-        if (rollDicePanel == null && playerTurnPanel == null)
+
+        if (rollDicePanel == null || playerTurnPanel == null)
         {
             Debug.LogError("RollDice button not found in ButtonPanel.");
+            return;
         }
         rollDicePanel.SetActive(false);
         playerTurnPanel.SetActive(false);
@@ -67,10 +69,6 @@ public class ButtonPanel : MonoBehaviour
         if (currentPanel != null)
         {//ÏÔÊ¾ÐÂpanel
             currentPanel.SetActive(true);
-        }
-        else
-        {
-            
         }
     }
 

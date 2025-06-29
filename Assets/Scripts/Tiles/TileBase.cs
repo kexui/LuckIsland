@@ -55,6 +55,8 @@ public abstract class TileBase : MonoBehaviour
         }
         return null;
     }
+
+    //设置随机事件
     public void SetRandomEvent(RandomEventBase randomEvent)
     {
         if (randomEvent == null)
@@ -65,10 +67,9 @@ public abstract class TileBase : MonoBehaviour
         this.randomEvent = randomEvent;
         hasRandomEvent = true;
     }
-    public void DestroyRandomEvent()
+    public void ClearRandomEvent()
     { 
         hasRandomEvent = false;
-        Destroy(randomEvent.gameObject,0.1f);
         randomEvent = null;
     }
 }
