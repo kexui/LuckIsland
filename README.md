@@ -53,7 +53,7 @@
 - C# 脚本编写
 - 协程控制（用于投骰与流程）
 - ScriptableObject 管理格卡牌、角色、音效数据
-- 
+
 ##  游戏截图
 -
 -    ![alt text](image-1.png)
