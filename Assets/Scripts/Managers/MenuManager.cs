@@ -5,6 +5,8 @@ using UnityEngine;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] SceneLoader sceneLoader;
+    [SerializeField] private GameObject SettingUI;
+
     public void OnSinglePlayerClick()
     { //单人模式
         sceneLoader.LoadGameScene();
@@ -15,7 +17,7 @@ public class MenuManager : MonoBehaviour
     }
     public void OnSettingsClick()
     { //设置
-        
+        SettingUI.SetActive(true);
     }
     // void OnTutorialClick(){ }
     public void OnQuitClick()

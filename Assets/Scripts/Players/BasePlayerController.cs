@@ -71,14 +71,14 @@ public abstract class BasePlayerController : MonoBehaviour
         Debug.LogWarning("协程RollDice未重写");
         yield return null;
     }
-    public void Move(int steps)
-    {
-        if (isMoving || steps == 0) return;
+    //public void Move(int steps)
+    //{
+    //    if (isMoving || steps == 0) return;
 
-        playerData.TotalSteps = steps; //设置总步数
-        playerData.RemainingSteps = steps; //设置剩余步数
-        StartCoroutine(MoveCoroutine());
-    }
+    //    playerData.TotalSteps = steps; //设置总步数
+    //    playerData.RemainingSteps = steps; //设置剩余步数
+    //    StartCoroutine(MoveCoroutine());
+    //}
     public IEnumerator MoveCoroutine()
     {
         SetMove(true); //开始移动
@@ -91,6 +91,7 @@ public abstract class BasePlayerController : MonoBehaviour
             int tileCount = TileManager.Instance.Tiles.Count;
             int currentTileIndex = playerData.CurrentTileIndex;
             int nextTileIndex = (currentTileIndex + direction + tileCount) % tileCount;
+
             int nextNextTileIndex = (currentTileIndex + direction * 2 + tileCount) % tileCount;
 
             Vector3 start = TileManager.Instance.Tiles[currentTileIndex].GetTopPosition();
@@ -123,6 +124,16 @@ public abstract class BasePlayerController : MonoBehaviour
 
             transform.position = end; //确保到达终点
             playerData.CurrentTileIndex = nextTileIndex; //更新当前棋子位置
+            if (playerData.CurrentTileIndex == 0)
+            {
+                Debug.LogWarning("!!!");
+                playerData.LopCount++;
+                if (playerData.LopCount >= GameManager.Instance.TurnCount)
+                {
+                    //GameOver
+                    GameManager.Instance.EndGame();
+                }
+            }
             playerData.RemainingSteps -= direction; //更新剩余步数
             
             Vector3 finalDirection = endNext - end;

@@ -46,6 +46,15 @@ public class PlayerData//玩家数据
     }
     public DiceController dice{ get; private set; }
 
+    private int lopCount;
+    public int LopCount
+    {
+        get=> lopCount;
+        set
+        {
+            lopCount = (int)Mathf.Clamp(value,0,4);
+        }
+    }
 
     private int copper;
     public int Copper=>copper;//只访问
@@ -89,6 +98,7 @@ public class PlayerData//玩家数据
         handCards = new List<CardDataBase>();
 
         dice = DiceManager.Instance.diceArray[id];//获取骰子
+        LopCount = 0;
 
         this.characterData = characterData;
         this.playerController = playerController;
@@ -115,6 +125,23 @@ public class PlayerData//玩家数据
     public bool HasEnoughCopper(int amount)
     {//钱够不够
         return copper >= amount;
+    }
+    public void SetTotalSteps(int step)
+    {
+        int tileCount = TileManager.Instance.Tiles.Count;
+        int maxSteps = tileCount - currentTileIndex;
+        if (step> maxSteps)
+        {
+            totalSteps = maxSteps ;
+            remainingSteps = maxSteps;
+            lopCount++;
+            Debug.Log("LopCount:" + lopCount);
+        }
+        else
+        {
+            totalSteps = step;
+            remainingSteps = step;
+        }
     }
     public int GetCurrentStep()
     {//当前步数

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -73,7 +74,14 @@ public class PlayerManager : MonoBehaviour
     {
         return allPlayerDatas[TurnManager.Instance.currentPlayerIndex];
     }
-    public void StartAllPlayersMove()
+    public void StartRollDice()
+    {
+        foreach (PlayerData playerData in allPlayerDatas)
+        {
+            StartCoroutine(playerData.playerController.RollDice());
+        }
+    }
+    public void StartMove()
     {//开始所有玩家的移动协程
         AudioManager.Instance.StartPlayerWalkSound();
         foreach (PlayerData playerData in allPlayerDatas)
@@ -91,11 +99,16 @@ public class PlayerManager : MonoBehaviour
         TurnManager.Instance.SetOverTurn();//所有玩家都完成了回合
         return true;
     }
-    public void StartAllPlayersTriggerTileEvent()
+    public void StartTriggerTileEvent()
     {
         foreach (PlayerData playerData in allPlayerDatas)
         {
             StartCoroutine(TileManager.Instance.TriggerEvent(playerData.CurrentTileIndex, playerData.playerController));
         }
+    }
+    public List<PlayerData> GetRankPlayers()
+    {
+        List<PlayerData> sortedPlayers = allPlayerDatas.OrderByDescending(p => p.Copper).ToList();
+        return sortedPlayers;
     }
 }

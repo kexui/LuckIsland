@@ -28,6 +28,8 @@ public class TurnManager : MonoBehaviour
     public static event Action<int> OnPlayerChanged;
     public static event Action OnEndTurn;
 
+    private Coroutine runGameLoop;
+
     private Dictionary<TurnStage, float> TurnDurations = new() {
         {TurnStage.StartTurn,1f},
         {TurnStage.Wait ,1f},
@@ -48,7 +50,7 @@ public class TurnManager : MonoBehaviour
     public void StartGame()
     {
         SetTurn(TurnStage.StartTurn);
-        StartCoroutine(RunGameLoop());
+        runGameLoop = StartCoroutine(RunGameLoop());
     }
 
     private IEnumerator RunGameLoop()
@@ -120,21 +122,15 @@ public class TurnManager : MonoBehaviour
     void OnRollDice()
     {
         DiceManager.Instance.StartAllDiceRolling();
-
-        BasePlayerController player;
-        for (int i = 0; i < PlayerManager.Instance.playerCount; i++)
-        {
-            player = PlayerManager.Instance.GetPlayerData(i).playerController;
-            StartCoroutine(player.RollDice());
-        }
+        PlayerManager.Instance.StartRollDice();
     }
     void OnMove()
     { 
-        PlayerManager.Instance.StartAllPlayersMove();
+        PlayerManager.Instance.StartMove();
     }
     void OnTriggerTileEvent()
     {//触发地块事件不用经过玩家？
-        PlayerManager.Instance.StartAllPlayersTriggerTileEvent();
+        PlayerManager.Instance.StartTriggerTileEvent();
     }
     IEnumerator HandlePlayerTurns()
     {
@@ -195,5 +191,9 @@ public class TurnManager : MonoBehaviour
     public float GetTurnTime()
     {
         return TurnDurations[CurrentStage];
+    }
+    public void StopTurn()
+    {
+        StopCoroutine(runGameLoop);
     }
 }

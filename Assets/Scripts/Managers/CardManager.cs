@@ -22,7 +22,7 @@ public class CardManager : MonoBehaviour
 
     private void GameManager_OnLoadResources()
     {
-        rarityWeights = new int[] { 1, 2, 3 };
+        rarityWeights = new int[] { 1, 2, 5 };
         GenerateDrawPool();
     }
 

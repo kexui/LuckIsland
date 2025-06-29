@@ -8,6 +8,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     private Animator animator;
     public UnityEvent onClick; // 事件触发
+    public int musiceIndex;
 
     protected void Awake()
     {
@@ -28,6 +29,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerClick(PointerEventData eventData)
     {
         animator.SetTrigger("Click");
+        AudioManager.Instance.PlayerClickSound(musiceIndex);
         //事件
         onClick?.Invoke();
     }

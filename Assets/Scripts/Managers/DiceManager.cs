@@ -50,7 +50,7 @@ public class DiceManager : MonoBehaviour
 
     public void DiceResult(int id,int result)
     { 
-        PlayerManager.Instance.GetPlayerData(id).TotalSteps = result; //设置玩家的骰子结果
+        PlayerManager.Instance.GetPlayerData(id).SetTotalSteps(result);
 
         rolledPlayerCount++;
         if (rolledPlayerCount==PlayerManager.Instance.playerCount)

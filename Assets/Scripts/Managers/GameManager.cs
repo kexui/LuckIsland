@@ -36,12 +36,13 @@ public class GameManager : MonoBehaviour
     public BasePlayerController LocalPlayer { get; private set; }
 
     public GameState currentGameState { get; private set; } = GameState.LoadResources; //初始状态为开始游戏
-
+    public int TurnCount { get; private set; }
     public static event Action<PlayerData> OnLocalPlayerSet; //本地玩家设置事件
 
     public static event Action OnLoadResources;
     public static event Action<int[]> OnInitPlayers;
     public static event Action OnInitUI;
+    [SerializeField] private GameOverUI gameOverUI;
 
     private void Awake()
     {
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
     void GameStart()
     {
         currentGameState = GameState.LoadResources;
+        TurnCount = 1;
         ChangeGameState();
     }
     void ChangeGameState()
@@ -130,8 +132,10 @@ public class GameManager : MonoBehaviour
         TurnManager.Instance.StartGame();
         //SetGameState(GameState.EndGame);
     }
-    private void EndGame()
+    public void EndGame()
     {
-    
+        TurnManager.Instance.StopTurn();
+        List<PlayerData> playerResult = PlayerManager.Instance.GetRankPlayers();
+        gameOverUI.Show(playerResult);
     }
 }
