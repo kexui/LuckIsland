@@ -1,0 +1,45 @@
+# ========== Unity ==========
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+[Oo]bj/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+
+# Visual Studio / Rider
+.vs/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.unityproj
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+
+# ========== Unity Asset Store ==========
+*.unitypackage
+
+# ========== Auto-generated ==========
+sysinfo.txt
+
+# ========== OS files ==========
+.DS_Store
+Thumbs.db
+
+# ========== Rider ==========
+.idea/
+
+# ========== Gradle (Android) ==========
+.gradle/
+*.apk
+*.aab
+
+# ========== Cache ==========
+Library/
