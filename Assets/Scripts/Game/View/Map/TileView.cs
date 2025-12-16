@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Core.Grid;
+using Game.Data.Config;
 using Game.Logic.Map;
 using Game.Managers;
 using UnityEngine;
@@ -7,20 +9,19 @@ namespace Game.View.Map
 {
     public class TileView : MonoBehaviour
     {
-        public int tileIndex = 0;
-        
-        [Header("邻居关系（Editor工具自动生成）")]
-        public int FrontIndex = -1;
-        public int BackIndex = -1;
-        public int[] adjacentLandIds = new int[2];  // 相邻Land的ID
+        public TileConfig Config;
         
         private TileLogic tileLogic;
         public TileLogic TileLogic => tileLogic;
-        public Vector3 Position => transform.position;
-
+        
         private void Start()
         {
             RegisterToMapSystem();
+        }
+
+        public int GetId()
+        {
+            return Config.TileId;
         }
 
         private void RegisterToMapSystem()
@@ -28,18 +29,18 @@ namespace Game.View.Map
             var gameManager = GameManager.Instance;
             if (gameManager == null || gameManager.MapSystem == null)
             {
-                Debug.LogWarning($"TileView {tileIndex}: GameManager或MapSystem未初始化");
+                Debug.LogWarning($"TileView {Config.TileId}: GameManager或MapSystem未初始化");
                 return;
             }
             
             var mapSystem = gameManager.MapSystem;
             
             // 获取或创建Logic
-            tileLogic = mapSystem.GetTile(tileIndex);
+            tileLogic = mapSystem.GetTile(Config.TileId);
             if (tileLogic == null)
             {
                 // 创建新的Logic
-                tileLogic = new TileLogic(tileIndex);
+                tileLogic = new TileLogic(Config.TileId);
                 mapSystem.AddTile(tileLogic);
             }
         }
@@ -51,7 +52,7 @@ namespace Game.View.Map
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireCube(Position, Vector3.one);
+            Gizmos.DrawWireCube(transform.position, Vector3.one);
         }
     }
 }

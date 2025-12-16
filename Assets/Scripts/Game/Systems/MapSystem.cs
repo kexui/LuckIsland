@@ -20,7 +20,7 @@ namespace Game.Systems
         {
             mapLogic = new MapLogic();
             mapLogic.Initialize();
-            CollectViewFromScene();
+            //CollectViewFromScene();
             
             Debug.Log($"MapSystem 初始化完成: {mapLogic.GetTileCount()} Tiles, {mapLogic.GetLandCount()} Lands");
         }
@@ -71,25 +71,25 @@ namespace Game.Systems
         // ========== 初始化Demo地图（测试用）==========
         
         //收集场景中的View
-        private void CollectViewFromScene()
-        {
-            // 收集所有LandView（先收集Land，因为Tile需要关联Land）
-            var landViews = Object.FindObjectsOfType<LandView>();
-            foreach (var view in landViews)
-            {
-                var land = new LandLogic(view.landId);
-                mapLogic.AddLand(land);
-                Debug.Log($"收集Land: {view.landId}");
-            }
-            
-            var tileViews = Object.FindObjectsOfType<TileView>();
-            foreach (var view in tileViews)
-            {
-                var tile = new TileLogic(view.tileIndex);
-                mapLogic.AddTile(tile);
-                Debug.Log($"收集Land: {view.tileIndex}");
-            }
-        }
+        // private void CollectViewFromScene()
+        // {
+        //     // 收集所有LandView（先收集Land，因为Tile需要关联Land）
+        //     var landViews = Object.FindObjectsOfType<LandView>();
+        //     foreach (var view in landViews)
+        //     {
+        //         var land = new LandLogic(view.landId);
+        //         mapLogic.AddLand(land);
+        //         Debug.Log($"收集Land: {view.landId}");
+        //     }
+        //     
+        //     var tileViews = Object.FindObjectsOfType<TileView>();
+        //     foreach (var view in tileViews)
+        //     {
+        //         var tile = new TileLogic(view.tileIndex);
+        //         mapLogic.AddTile(tile);
+        //         Debug.Log($"收集Land: {view.tileIndex}");
+        //     }
+        // }
         
         //确定连接
         private void LinkAllTileAndLand()

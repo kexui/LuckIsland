@@ -3,13 +3,13 @@ using Core.Logic;
 
 namespace Game.Logic.Building
 {
-    public class Buildinglogic : LogicBase
+    public class BuildingLogic : LogicBase
     {
         public BuildingType BuildingType { get; }
         public int OwnerId { get; private set; }
         public int Level { get; private set; }
 
-        public Buildinglogic(int id,BuildingType buildingType,int ownerId)
+        public BuildingLogic(int id,BuildingType buildingType,int ownerId)
         {
             this.id = id;
             this.BuildingType = buildingType;

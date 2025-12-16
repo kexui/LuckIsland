@@ -2,6 +2,7 @@
 {
     public enum BuildingType
     {
+        None,
         Start,
         Shop,
         Property,
