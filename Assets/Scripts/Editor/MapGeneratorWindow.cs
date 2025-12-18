@@ -1,4 +1,4 @@
-using Game.Data.Comfig;
+using Game.Data.Config;
 using Game.Data.Map;
 using Game.Managers;
 using UnityEditor;
@@ -8,7 +8,7 @@ namespace Editor
 {
     public class MapGeneratorWindow : EditorWindow
     {
-        private MapTemplateConfig mapTemplateConfig;
+        private MapTemplateConfig mapTemplateConfig;//
         private GridManager grid;
         private GameObject tilePrefab;
         private GameObject landPrefab;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Core.Grid;
 using UnityEngine;
 
-namespace Game.Data.Comfig
+namespace Game.Data.Config
 {
     //模板地图，用于生成简易版地图
     [CreateAssetMenu(menuName = "Data/MapTemplate")]

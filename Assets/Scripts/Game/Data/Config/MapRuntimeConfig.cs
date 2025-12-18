@@ -3,7 +3,7 @@ using Game.Data.Config;
 using Game.Data.Map;
 using UnityEngine;
 
-namespace Game.Data.Comfig
+namespace Game.Data.Config
 {
     public class MapRuntimeConfig : ScriptableObject
     {
