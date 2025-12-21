@@ -13,8 +13,8 @@
 |----------|------|--------|------|
 | **核心框架** | ✅ | 100% | Singleton、EventBus、SystemBase、Grid系统 |
 | **GameManager** | 🟡 | 60% | 基础框架完成，System管理待完善 |
-| **MapSystem** | ✅ | 90% | 地图管理（Tile/Land关联待完善） |
-| **PlayerSystem** | 🟡 | 50% | 基础框架，玩家数据/经济逻辑待完善 |
+| **MapSystem** | 🟡 | 60% | 地图管理（Tile/Land关联待完善） |
+| **PlayerSystem** | 🟡 | 10% | 基础框架，玩家数据/经济逻辑待完善 |
 | **TurnSystem** | 🟡 | 30% | 基础框架，回合流程待完善 |
 | **DiceSystem** | ❌ | 0% | 待实现 |
 | **MoveSystem** | ❌ | 0% | 待实现 |
@@ -27,35 +27,20 @@
 | Logic类 | 状态 | 完成度 |
 |---------|------|--------|
 | **MapLogic/TileLogic/LandLogic** | ✅ | 80-90% |
-| **PlayerLogic** | 🟡 | 60% |
-| **BuildingLogic** | ✅ | 85% |
-| **BuildingEffect** | ✅ | 100% | 建筑效果系统（Start/Shop/Property） |
+| **PlayerLogic** | ❌ | 30% |
+| **BuildingLogic** | 🟡 | 60% |
+| **BuildingEffect** | ❌ | 20% | 建筑效果系统（Start/Shop/Property） |
 
 ## View层
 
 | View组件 | 状态 | 完成度 |
 |---------|------|--------|
-| **TileView/LandView/BuildingView** | ✅ | 70% |
+| **TileView/LandView/BuildingView** | 🟡 | 60% |
 | **PlayerView** | ❌ | 0% |
-| **UI系统** | 🟡 | 40% |
+| **UI系统** | ❌ | 0% |
 
-## 辅助系统
 
-| 系统 | 状态 | 说明 |
-|------|------|------|
-| **编辑器工具** | ✅ | 地图编辑器完整 |
-| **AnimationSystem** | ❌ | 待实现 |
-| **AudioSystem** | ❌ | 待实现 |
-| **SaveLoadSystem** | ❌ | 待实现 |
-| **网络功能** | ❌ | 预留接口，待实现 |
-
-## 进度统计
-
-- **✅ 已实现**：8 项
-- **🟡 部分实现**：6 项  
-- **❌ 待实现**：10 项
-
-**总体完成度：约 35-40%**
+**总体完成度：约 20%**
 
 ### 下一步优先级
 
