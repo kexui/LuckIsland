@@ -21,19 +21,19 @@ namespace Game.Editor.Map
         private TileView startTileView; //起点
         private LandView startLandView; //Start下的Land
         private LandView ShopLandView; //Shop下的Land
-
+        private Transform buildingRoot;
         private List<TileView> allTiles;
         private List<LandView> allLands;
-        private List<BuildingView> allBuilding;
+        private List<BuildingView> allBuildings;
 
-        private float neighborDistanceThreshold = 1f;
+        private float neighborDistance = 1f;
+        private float distanceOffset = 0.1f;
         private Vector2 scrollPosition;
 
         private string configName = "MapConfig"; //默认名
         private const string folderPath = "Assets/Resources/Configs/MapRuntime"; //配置保存地址
-
         private const string PrefabPath = "Assets/Resources/Prefabs";
-
+        
         // ========== 窗口打开 ==========
 
         [MenuItem("Tools/Map/Map Editor")]
@@ -50,14 +50,15 @@ namespace Game.Editor.Map
         {
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            // 标题
+            // 标题，地图编辑器
             EditorGUILayout.LabelField("地图编辑器", EditorStyles.boldLabel);
             EditorGUILayout.Space();
 
-            // 起点TileView选择
+            // 标题，起点TileView选择
             EditorGUILayout.LabelField("起点设置", EditorStyles.boldLabel);
 
-            //起点 TileView
+            //起点 TileVie
+            
             startTileView = (TileView)EditorGUILayout.ObjectField(
                 "起点 TileView",
                 startTileView,
@@ -83,9 +84,9 @@ namespace Game.Editor.Map
 
             // 配置参数
             EditorGUILayout.LabelField("计算参数", EditorStyles.boldLabel);
-            neighborDistanceThreshold = EditorGUILayout.FloatField(
+            neighborDistance = EditorGUILayout.FloatField(
                 "邻居距离阈值",
-                neighborDistanceThreshold
+                neighborDistance
             );
             EditorGUILayout.HelpBox(
                 "两个Tile之间的距离小于等于此值时，视为邻居",
@@ -116,6 +117,13 @@ namespace Game.Editor.Map
                 LinkLandToTile();
             }
 
+
+            buildingRoot = (Transform)EditorGUILayout.ObjectField(
+                "buildingRoot",
+                buildingRoot,
+                typeof(Transform),
+                true
+            );
             // 使用 ObjectField 来拖入对象
             startLandView = (LandView)EditorGUILayout.ObjectField(
                 "起点 LandView",
@@ -187,7 +195,7 @@ namespace Game.Editor.Map
                     var tile = allTiles[i];
                     float distance = Vector3.Distance(currentTile.transform.position, tile.transform.position);
 
-                    if (distance < neighborDistanceThreshold)
+                    if (distance < neighborDistance + distanceOffset)
                     {
                         foundNeighbor = true;
                         index++;
@@ -225,7 +233,7 @@ namespace Game.Editor.Map
 
             //判断是否闭环
             float dis = Vector3.Distance(currentTile.transform.position, startTileView.transform.position);
-            if (dis > neighborDistanceThreshold)
+            if (dis > neighborDistance + distanceOffset)
             {
                 EditorUtility.DisplayDialog("错误", "路线未闭环", "确定");
                 return;
@@ -290,7 +298,7 @@ namespace Game.Editor.Map
                 foreach (var land in allLands)
                 {
                     float distance = Vector3.Distance(currentTile.transform.position, land.transform.position);
-                    if (distance < neighborDistanceThreshold)
+                    if (distance < neighborDistance)
                     {
                         // 防止数组越界
                         if (nums < maxCount)
@@ -351,30 +359,12 @@ namespace Game.Editor.Map
         /// </summary>
         private void BuildBuilding()
         {
-            if (startLandView == null)
-            {
-                EditorUtility.DisplayDialog("错误", "请先拖入一个LandView作为StartBuilding", "确定");
-                return;
-            }
-
-            if (startTileView == null)
-            {
-                EditorUtility.DisplayDialog("错误", "请先拖入一个TileView作为起点", "确定");
-                return;
-            }
-
-            if (startTileView.Config.AdjacentLandIds == null ||
-                !startTileView.Config.AdjacentLandIds.Contains(startLandView.GetID()))
-            {
-                EditorUtility.DisplayDialog("错误", "startLandView与startTileView没有相邻", "确定");
-                return;
-            }
-
+            bool hasStart = false;
             int index = 0;
-            allBuilding = new List<BuildingView>(FindObjectsOfType<BuildingView>());
-            if (allBuilding != null && allBuilding.Count != 0)
+            allBuildings = new List<BuildingView>(FindObjectsOfType<BuildingView>());
+            if (allBuildings != null && allBuildings.Count != 0)
             {
-                foreach (var building in allBuilding)
+                foreach (var building in allBuildings)
                 {
                     if (building == null)
                     {
@@ -384,24 +374,53 @@ namespace Game.Editor.Map
                     {
                         index = building.GetId();
                     }
+
+                    if (building.Config.Type == BuildingType.Start)
+                    {
+                        hasStart = true;
+                    }
                 }
             }
 
-            var startPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "/Building/Start.prefab");
-            if (startPrefab == null)
+            if (!hasStart)
             {
-                EditorUtility.DisplayDialog("错误", $"找不到起点建筑 Prefab：\n{PrefabPath}/Building/Start.prefab","确定");
-                return;
+                if (startLandView == null)
+                {
+                    EditorUtility.DisplayDialog("错误", "请先拖入一个LandView作为StartBuilding", "确定");
+                    return;
+                }
+
+                if (startTileView == null)
+                {
+                    EditorUtility.DisplayDialog("错误", "请先拖入一个TileView作为起点", "确定");
+                    return;
+                }
+
+                if (startTileView.Config.AdjacentLandIds == null ||
+                    !startTileView.Config.AdjacentLandIds.Contains(startLandView.GetID()))
+                {
+                    EditorUtility.DisplayDialog("错误", "startLandView与startTileView没有相邻", "确定");
+                    return;
+                }
+                
+                var startPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "/Building/Start.prefab");
+                if (startPrefab == null)
+                {
+                    EditorUtility.DisplayDialog("错误", $"找不到起点建筑 Prefab：\n{PrefabPath}/Building/Start.prefab","确定");
+                    return;
+                }
+
+                BuildingView start = (BuildingView)PrefabUtility.InstantiatePrefab(startPrefab, buildingRoot);
+                start.transform.position = startLandView.transform.position + Vector3.up * neighborDistance;
+            
+                start.Config.BuildingId = ++index;
+                start.Config.LandId = startLandView.GetID();
+                startLandView.Config.BuildingId = start.Config.BuildingId;
+                EditorUtility.SetDirty(startLandView);
+            
+                EditorUtility.SetDirty(start);
+                EditorUtility.SetDirty(startLandView);
             }
-            BuildingView start = (BuildingView)PrefabUtility.InstantiatePrefab(startPrefab);
-            start.transform.position = startLandView.transform.position + Vector3.up * neighborDistanceThreshold;
-            
-            start.Config.BuildingId = ++index;
-            startLandView.Config.BuildingId = start.Config.BuildingId;
-            EditorUtility.SetDirty(startLandView);
-            
-            EditorUtility.SetDirty(start);
-            EditorUtility.SetDirty(startLandView);
 
             if (ShopLandView == null)
             {
@@ -409,15 +428,17 @@ namespace Game.Editor.Map
             }
             else
             {
-                var shopPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "Building/Shop.prefab");
+                var shopPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "/Building/Shop.prefab");
                 if (shopPrefab == null)
                 {
                     EditorUtility.DisplayDialog("错误", $"找不到商店建筑 Prefab：\n{PrefabPath}/Building/Shop.prefab", "确定");
                     return;
                 }
-                BuildingView shop = (BuildingView)PrefabUtility.InstantiatePrefab(shopPrefab);
-                shop.transform.position = ShopLandView.transform.position + Vector3.up * neighborDistanceThreshold;
+
+                BuildingView shop = (BuildingView)PrefabUtility.InstantiatePrefab(shopPrefab, buildingRoot);
+                shop.transform.position = ShopLandView.transform.position + Vector3.up * neighborDistance;
                 shop.Config.BuildingId = ++index;
+                shop.Config.LandId = ShopLandView.GetID();
                 ShopLandView.Config.BuildingId = shop.Config.BuildingId;
                 
                 EditorUtility.SetDirty(shop);
@@ -490,7 +511,7 @@ namespace Game.Editor.Map
                 asset.lands.Add(new LandConfig(land.Config));
             }
 
-            foreach (var building in allBuilding)
+            foreach (var building in allBuildings)
             {
                 asset.buildings.Add(new BuildingConfig(building.Config));
             }

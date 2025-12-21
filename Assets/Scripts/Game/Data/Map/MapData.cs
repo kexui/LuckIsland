@@ -6,6 +6,8 @@ namespace Game.Data.Map
     public class MapData
     {
         List<TileData> tiles;
-        private Dictionary<int, LandData> lands;
+        private Dictionary<int, LandData> landDic;
+        private List<LandData> lands;
+        private Dictionary<int, BuildingData> buildingDic;
     }
 }

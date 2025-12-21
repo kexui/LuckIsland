@@ -7,12 +7,14 @@ namespace Game.Data.Config
     public class BuildingConfig
     {
         public int BuildingId;
-        public BuildingType type;
+        public int LandId;
+        public BuildingType Type;
 
         public BuildingConfig(BuildingConfig config)
         {
             BuildingId = config.BuildingId;
-            type = config.type;
+            LandId = config.LandId;
+            Type = config.Type;
         }
     }
 }
