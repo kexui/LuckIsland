@@ -1,18 +1,52 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Data.Config;
+using Game.Data.Map;
+using Game.Logic.Building;
 using UnityEngine;
 
 namespace Game.Logic.Map
 {
     public class MapLogic
     {
-        private Dictionary<int ,LandLogic> lands;
-        private List<TileLogic> tiles;
+        private List<TileData> tiles;
+        private Dictionary<int, LandData> landDic;
+        private List<LandData> lands;
+        private Dictionary<int, BuildingData> buildingDic;
+        private List<BuildingData> buildings;
 
-        public MapLogic()
+        public MapLogic(MapData mapData)
         {
-            lands = new Dictionary<int, LandLogic>();
-            tiles = new List<TileLogic>();
+            tiles = new();
+            landDic = new();
+            lands = new();
+            buildingDic = new();
+            buildings = new();
+            
+            tiles = mapData.tiles;
+            foreach (var land in mapData.lands)
+            {
+                lands.Add(land);
+                landDic.Add(land.LandId, land);
+            }
+
+            foreach (var building in mapData.buildings)
+            {
+                buildings.Add(building);
+                buildingDic.Add(building.BuildingId, building);
+            }
+        }
+
+        public MapData(MapRuntimeConfig mapConfig)
+        {
+            tiles = new();
+            landDic = new();
+            lands = new();
+            buildingDic = new();
+            buildings = new();
+
+            tiles = mapConfig.tiles;
+            
         }
 
         public void Initialize()

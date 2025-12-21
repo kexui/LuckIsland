@@ -5,9 +5,20 @@ namespace Game.Data.Map
     [System.Serializable]
     public class MapData
     {
-        List<TileData> tiles;
-        private Dictionary<int, LandData> landDic;
-        private List<LandData> lands;
-        private Dictionary<int, BuildingData> buildingDic;
+        public List<TileData> tiles;
+        public List<LandData> lands;
+        public List<BuildingData> buildings;
+        
+        // JSON 序列化方法
+        public string ToJson()
+        {
+            return UnityEngine.JsonUtility.ToJson(this, true);
+        }
+        
+        // JSON 反序列化方法
+        public static MapData FromJson(string json)
+        {
+            return UnityEngine.JsonUtility.FromJson<MapData>(json);
+        }
     }
 }

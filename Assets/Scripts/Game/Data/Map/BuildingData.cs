@@ -6,10 +6,7 @@ namespace Game.Data.Map
     public class BuildingData : ScriptableObject
     {
         public int BuildingId;
+        public int LandId;
         public BuildingType Type;
-        public string Name;
-        public int MaxLevel;
-        public LandData Land;
-        public GameObject prefab;
     }
 }

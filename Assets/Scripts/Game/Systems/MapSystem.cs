@@ -19,7 +19,6 @@ namespace Game.Systems
         protected override void OnInitialize()
         {
             mapLogic = new MapLogic();
-            mapLogic.Initialize();
             //CollectViewFromScene();
             
             Debug.Log($"MapSystem 初始化完成: {mapLogic.GetTileCount()} Tiles, {mapLogic.GetLandCount()} Lands");
