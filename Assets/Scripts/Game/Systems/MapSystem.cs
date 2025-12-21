@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Core.Systems;
+using Game.Data.Config;
 using Game.Logic.Map;
 using Game.View.Map;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Game.Systems
 {
     public class MapSystem : SystemBase ,IMapSystem
     {
+        private const string configPath = "Configs/MapRuntime//MapConfig";
         private MapLogic mapLogic;
         
         public MapSystem()
@@ -18,8 +20,18 @@ namespace Game.Systems
         // ========== SystemBase 继承实现 ==========
         protected override void OnInitialize()
         {
-            mapLogic = new MapLogic();
-            //CollectViewFromScene();
+            //加载地图数据
+            MapRuntimeConfig mapConfig = Resources.Load<MapRuntimeConfig>(configPath);
+            if (mapConfig == null)
+            {
+                Debug.LogError($"MapRuntimeConfig 加载失败，路径: {configPath}");
+                throw new System.Exception($"MapRuntimeConfig not found at path: {configPath}");
+            }
+            if (mapConfig.tiles == null || mapConfig.lands == null || mapConfig.buildings == null)
+            {
+                Debug.LogWarning("MapRuntimeConfig 包含空数据，使用空列表初始化");
+            }
+            mapLogic = new MapLogic(mapConfig);
             
             Debug.Log($"MapSystem 初始化完成: {mapLogic.GetTileCount()} Tiles, {mapLogic.GetLandCount()} Lands");
         }
@@ -42,16 +54,6 @@ namespace Game.Systems
         {
             return mapLogic?.GetLand(landId);
         }
-
-        public void AddTile(TileLogic tile)
-        {
-            mapLogic?.AddTile(tile);
-        }
-
-        public void AddLand(LandLogic land)
-        {
-            mapLogic?.AddLand(land);
-        }
         
         public List<TileLogic> GetAllTiles()
         {
@@ -65,38 +67,5 @@ namespace Game.Systems
         //public List<LandLogic> GetAdjacentLands(int tileIndex)
         //public List<TileLogic> GetTilesAdjacentToLand(int landId)
         //public void LinkTileToLand(int tileIndex, int landId)
-        
-        
-        // ========== 初始化Demo地图（测试用）==========
-        
-        //收集场景中的View
-        // private void CollectViewFromScene()
-        // {
-        //     // 收集所有LandView（先收集Land，因为Tile需要关联Land）
-        //     var landViews = Object.FindObjectsOfType<LandView>();
-        //     foreach (var view in landViews)
-        //     {
-        //         var land = new LandLogic(view.landId);
-        //         mapLogic.AddLand(land);
-        //         Debug.Log($"收集Land: {view.landId}");
-        //     }
-        //     
-        //     var tileViews = Object.FindObjectsOfType<TileView>();
-        //     foreach (var view in tileViews)
-        //     {
-        //         var tile = new TileLogic(view.tileIndex);
-        //         mapLogic.AddTile(tile);
-        //         Debug.Log($"收集Land: {view.tileIndex}");
-        //     }
-        // }
-        
-        //确定连接
-        private void LinkAllTileAndLand()
-        {
-            foreach (var VARIABLE in GetAllTiles())
-            {
-                
-            }
-        }
     }
 }

@@ -1,12 +1,19 @@
 ﻿using Core.Enums;
-using UnityEngine;
 
 namespace Game.Data.Map
 {
-    public class BuildingData : ScriptableObject
+    [System.Serializable]
+    public class BuildingData
     {
-        public int BuildingId;
+        public int Id;
         public int LandId;
         public BuildingType Type;
+
+        public BuildingData(BuildingData data)
+        {
+            Id = data.Id;
+            LandId = data.LandId;
+            Type = data.Type;
+        }
     }
 }

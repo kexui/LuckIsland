@@ -3,50 +3,66 @@ using System.Linq;
 using Game.Data.Config;
 using Game.Data.Map;
 using Game.Logic.Building;
+using Game.Logic.Map.Building;
 using UnityEngine;
 
 namespace Game.Logic.Map
 {
     public class MapLogic
     {
-        private List<TileData> tiles;
-        private Dictionary<int, LandData> landDic;
-        private List<LandData> lands;
-        private Dictionary<int, BuildingData> buildingDic;
-        private List<BuildingData> buildings;
+        private List<TileLogic> tiles;
+        private Dictionary<int, LandLogic> landDic;
+        private List<LandLogic> lands;
+        private List<BuildingLogic> buildings;
 
         public MapLogic(MapData mapData)
         {
             tiles = new();
             landDic = new();
             lands = new();
-            buildingDic = new();
             buildings = new();
+
+            foreach (var tile in mapData.tiles)
+            {
+                tiles.Add(new TileLogic(tile));
+            }
             
-            tiles = mapData.tiles;
             foreach (var land in mapData.lands)
             {
-                lands.Add(land);
-                landDic.Add(land.LandId, land);
+                LandLogic newLand = new LandLogic(land);
+                lands.Add(newLand);
+                landDic.Add(newLand.GetId(), newLand);
             }
 
             foreach (var building in mapData.buildings)
             {
-                buildings.Add(building);
-                buildingDic.Add(building.BuildingId, building);
+                buildings.Add(new BuildingLogic(building));
             }
         }
 
-        public MapData(MapRuntimeConfig mapConfig)
+        public MapLogic(MapRuntimeConfig mapConfig)
         {
             tiles = new();
             landDic = new();
             lands = new();
-            buildingDic = new();
             buildings = new();
-
-            tiles = mapConfig.tiles;
             
+            foreach (var tile in mapConfig.tiles)
+            {
+                tiles.Add(new TileLogic(tile));
+            }
+            
+            foreach (var land in mapConfig.lands)
+            {
+                LandLogic newLand = new LandLogic(land);
+                lands.Add(newLand);
+                landDic.Add(newLand.GetId(), newLand);
+            }
+
+            foreach (var building in mapConfig.buildings)
+            {
+                buildings.Add(new BuildingLogic(building));
+            }
         }
 
         public void Initialize()
@@ -58,45 +74,21 @@ namespace Game.Logic.Map
         {
             tiles?.Clear();
             lands?.Clear();
+            buildings?.Clear();
         }
 
         // ========== Tile管理 ==========
-        
-        //添加Tile
-        public void AddTile(TileLogic tile)
-        {
-            if (tile == null)
-            {
-                Debug.LogWarning("MapLogic: 尝试添加null的Tile");
-                return;
-            }
-            
-            // 检查是否已存在
-            if (GetTile(tile.Index) != null)
-            {
-                Debug.LogWarning($"MapLogic: Tile {tile.Index} 已存在");
-                return;
-            }
-            
-            tiles.Add(tile);
-        }
 
         //按index获取Tile
-        public TileLogic GetTile(int index)
+        public TileLogic GetTile(int id)
         {
-            if (index < 0 || index >= tiles.Count)
-            {
-                Debug.Log("超出查找范围");
-                return null;
-            }
-
-            return tiles.FirstOrDefault(t => t.GetId() == index);
+            return tiles[id];
         }
         
         //获取所有Tile
         public List<TileLogic> GetAllTiles()
         {
-            return new List<TileLogic>(tiles);
+            return tiles;
         }
         
         //获取Tile数量
@@ -106,29 +98,15 @@ namespace Game.Logic.Map
         }
         
         // ========== Land管理 ==========
-
-        public void AddLand(LandLogic land)
+        
+        public LandLogic GetLand(int Id)
         {
-            if (land == null)
-            {
-                Debug.LogWarning("MapLogic: 尝试添加null的land");
-            }
-
-            lands.Add(land.GetId(), land);
-        }
-
-        public LandLogic GetLand(int landId)
-        {
-            if (lands.TryGetValue(landId, out LandLogic land))
-            {
-                return land;
-            }
-            return null;
+            return landDic[Id];
         }
 
         public List<LandLogic> GetAllLands()
         {
-            return new List<LandLogic>(lands.Values);
+            return lands;
         }
 
         public int GetLandCount()
@@ -136,26 +114,20 @@ namespace Game.Logic.Map
             return lands.Count;
         }
         
-        // ========== 关联关系管理 ==========
-        
-        //建立Tile和Land的关联关系
-        public void LinkTileToLand(int tileIndex, int landId)
+        // ========== Building管理 ==========
+        public BuildingLogic GetBuilding(int id)
         {
-            var tile = GetTile(tileIndex);
-            if (tile == null)
-            {
-                Debug.LogWarning($"MapLogic: 无法关联，Tile {tileIndex} 不存在");
-                return;
-            }
-            
-            var land = GetLand(landId);
-            if (land == null)
-            {
-                Debug.LogWarning($"MapLogic: 无法关联，Land {landId} 不存在");
-                return;
-            }
-            
-            tile.AddAdjacentLand(landId);
+            return buildings[id];
+        }
+
+        public List<BuildingLogic> GetAllBuildings()
+        {
+            return buildings;
+        }
+
+        public int GetBuildingCount()
+        {
+            return buildings.Count;
         }
     }
 }

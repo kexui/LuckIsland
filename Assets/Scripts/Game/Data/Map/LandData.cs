@@ -1,17 +1,27 @@
-using System.Collections.Generic;
-using Core.Grid;
-using Game.View.Map;
-using UnityEngine;
+﻿using System;
 
 namespace Game.Data.Map
 {
-    [System.Serializable]
+    [Serializable]
     public class LandData
     {
         public int LandId;
-        public BuildingData building;
-        public int ownerPlayerId;
-        public GridPos Pos;
+        
+        public int TileId;
+        public int BuildingId;
 
+        public LandData()
+        {
+            LandId = -1;
+            TileId = -1;
+            BuildingId = -1;
+        }
+
+        public LandData(LandData data)
+        {
+            LandId =  data.LandId;
+            TileId = data.TileId;
+            BuildingId = data.BuildingId;
+        }
     }
 }

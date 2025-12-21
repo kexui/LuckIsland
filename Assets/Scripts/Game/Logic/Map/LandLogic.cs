@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Logic;
+using Game.Data.Map;
 using Game.Logic.Building;
 using UnityEngine;
 
@@ -12,16 +13,20 @@ namespace Game.Logic.Map
     /// </summary>
     public class LandLogic : LogicBase
     {
+        private int tileId;
+        private int buildingId;
+        
         public int OwnerId { get; set; } = -1;
-        public BuildingLogic Building { get; set; }
-        public LandLogic(int landId, int ownerId = -1)
+        public LandLogic(LandData data)
         {
-            id = landId;  // 设置基类的id
-            OwnerId = ownerId;
-            Building = null;
+            id = data.TileId;  // 设置基类的id
+            tileId = data.TileId;
+            buildingId = data.BuildingId;
+            
+            OwnerId = -1;
         }
         
-        public bool HasBuilding => Building != null;
+        public bool HasBuilding => buildingId != -1;
         public bool IsOwned => OwnerId != -1;
         public bool CanBuild => !HasBuilding;
         
@@ -56,10 +61,10 @@ namespace Game.Logic.Map
             OwnerId = playerId;
         }
         
-        public BuildingType? GetBuildingType()
-        {
-            return Building?.BuildingType;
-        }
+        // public BuildingType? GetBuildingType()
+        // {
+        //     
+        // }
         
         // ========== 重写验证方法 ==========
         
@@ -92,8 +97,7 @@ namespace Game.Logic.Map
         public override string ToString()
         {
             string ownerInfo = IsOwned ? $"Owner={OwnerId}" : "无主";
-            string buildingInfo = HasBuilding ? $", Building={Building.BuildingType}" : "";
-            return $"LandLogic(Id={id}, {ownerInfo}{buildingInfo})";
+            return $"LandLogic(Id={id}, {ownerInfo})";
         }
     }
 }

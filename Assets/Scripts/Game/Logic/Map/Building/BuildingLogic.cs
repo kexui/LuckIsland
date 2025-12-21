@@ -1,19 +1,22 @@
 ﻿using Core.Enums;
 using Core.Logic;
+using Game.Data.Map;
 
-namespace Game.Logic.Building
+namespace Game.Logic.Map.Building
 {
     public class BuildingLogic : LogicBase
     {
+        private readonly int landId;
         public BuildingType BuildingType { get; }
         public int OwnerId { get; private set; }
         public int Level { get; private set; }
 
-        public BuildingLogic(int id,BuildingType buildingType,int ownerId)
+        public BuildingLogic(BuildingData data)
         {
-            this.id = id;
-            this.BuildingType = buildingType;
-            this.OwnerId = ownerId;
+            id = data.Id;
+            landId = data.LandId;
+            BuildingType = data.Type;
+            OwnerId = -1;
             Level = 1;
         }
         

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Data.Config;
 
 namespace Game.Data.Map
 {

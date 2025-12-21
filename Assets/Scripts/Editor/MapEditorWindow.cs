@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Enums;
 using Game.Data.Config;
+using Game.Data.Map;
 using Game.View.Building;
 using UnityEngine;
 using UnityEditor;
@@ -183,7 +184,7 @@ namespace Game.Editor.Map
             allTiles.Remove(startTileView);
 
             int index = 0;
-            startTileView.Config.TileId = index;
+            startTileView.data.TileId = index;
             TileView currentTile = startTileView;
 
             while (allTiles.Count > 0)
@@ -199,10 +200,10 @@ namespace Game.Editor.Map
                     {
                         foundNeighbor = true;
                         index++;
-                        tile.Config.TileId = index;
+                        tile.data.TileId = index;
 
-                        currentTile.Config.FrontIndex = index;
-                        tile.Config.BackIndex = currentTile.Config.TileId;
+                        currentTile.data.FrontIndex = index;
+                        tile.data.BackIndex = currentTile.data.TileId;
 
                         currentTile = tile;
                         tempTileViews.Add(currentTile);
@@ -239,8 +240,8 @@ namespace Game.Editor.Map
                 return;
             }
 
-            currentTile.Config.FrontIndex = startTileView.Config.TileId;
-            startTileView.Config.BackIndex = currentTile.Config.TileId;
+            currentTile.data.FrontIndex = startTileView.data.TileId;
+            startTileView.data.BackIndex = currentTile.data.TileId;
             EditorUtility.SetDirty(currentTile);
 
             allTiles = tempTileViews;
@@ -287,13 +288,13 @@ namespace Game.Editor.Map
             while (true)
             {
                 // 确保数组已初始化
-                if (currentTile.Config.AdjacentLandIds == null || currentTile.Config.AdjacentLandIds.Length == 0)
+                if (currentTile.data.AdjacentLandIds == null || currentTile.data.AdjacentLandIds.Length == 0)
                 {
-                    currentTile.Config.AdjacentLandIds = new int[2];
+                    currentTile.data.AdjacentLandIds = new int[2];
                 }
 
                 int nums = 0;
-                int maxCount = currentTile.Config.AdjacentLandIds.Length;
+                int maxCount = currentTile.data.AdjacentLandIds.Length;
 
                 foreach (var land in allLands)
                 {
@@ -303,13 +304,13 @@ namespace Game.Editor.Map
                         // 防止数组越界
                         if (nums < maxCount)
                         {
-                            currentTile.Config.AdjacentLandIds[nums] = land.GetID();
-                            land.Config.TileId = currentTile.GetId();
+                            currentTile.data.AdjacentLandIds[nums] = land.GetID();
+                            land.data.TileId = currentTile.GetId();
                             nums++;
                         }
                         else
                         {
-                            Debug.LogWarning($"Tile {currentTile.Config.TileId} 找到的相邻Land超过数组容量 ({maxCount})");
+                            Debug.LogWarning($"Tile {currentTile.data.TileId} 找到的相邻Land超过数组容量 ({maxCount})");
                             break; // 数组已满，停止添加
                         }
                     }
@@ -327,14 +328,14 @@ namespace Game.Editor.Map
                 }
 
                 // 检查 FrontIndex 是否有效
-                if (currentTile.Config.FrontIndex < 0 || currentTile.Config.FrontIndex >= allTiles.Count)
+                if (currentTile.data.FrontIndex < 0 || currentTile.data.FrontIndex >= allTiles.Count)
                 {
                     Debug.LogWarning(
-                        $"Tile {currentTile.Config.FrontIndex} 的 FrontIndex ({currentTile.Config.FrontIndex}) 无效");
+                        $"Tile {currentTile.data.FrontIndex} 的 FrontIndex ({currentTile.data.FrontIndex}) 无效");
                     break;
                 }
 
-                currentTile = allTiles[currentTile.Config.FrontIndex];
+                currentTile = allTiles[currentTile.data.FrontIndex];
 
                 if (currentTile == startTileView)
                 {
@@ -375,7 +376,7 @@ namespace Game.Editor.Map
                         index = building.GetId();
                     }
 
-                    if (building.Config.Type == BuildingType.Start)
+                    if (building.data.Type == BuildingType.Start)
                     {
                         hasStart = true;
                     }
@@ -396,8 +397,8 @@ namespace Game.Editor.Map
                     return;
                 }
 
-                if (startTileView.Config.AdjacentLandIds == null ||
-                    !startTileView.Config.AdjacentLandIds.Contains(startLandView.GetID()))
+                if (startTileView.data.AdjacentLandIds == null ||
+                    !startTileView.data.AdjacentLandIds.Contains(startLandView.GetID()))
                 {
                     EditorUtility.DisplayDialog("错误", "startLandView与startTileView没有相邻", "确定");
                     return;
@@ -413,9 +414,9 @@ namespace Game.Editor.Map
                 BuildingView start = (BuildingView)PrefabUtility.InstantiatePrefab(startPrefab, buildingRoot);
                 start.transform.position = startLandView.transform.position + Vector3.up * neighborDistance;
             
-                start.Config.BuildingId = ++index;
-                start.Config.LandId = startLandView.GetID();
-                startLandView.Config.BuildingId = start.Config.BuildingId;
+                start.data.Id = ++index;
+                start.data.LandId = startLandView.GetID();
+                startLandView.data.BuildingId = start.data.Id;
                 EditorUtility.SetDirty(startLandView);
             
                 EditorUtility.SetDirty(start);
@@ -437,9 +438,9 @@ namespace Game.Editor.Map
 
                 BuildingView shop = (BuildingView)PrefabUtility.InstantiatePrefab(shopPrefab, buildingRoot);
                 shop.transform.position = ShopLandView.transform.position + Vector3.up * neighborDistance;
-                shop.Config.BuildingId = ++index;
-                shop.Config.LandId = ShopLandView.GetID();
-                ShopLandView.Config.BuildingId = shop.Config.BuildingId;
+                shop.data.Id = ++index;
+                shop.data.LandId = ShopLandView.GetID();
+                ShopLandView.data.BuildingId = shop.data.Id;
                 
                 EditorUtility.SetDirty(shop);
                 EditorUtility.SetDirty(ShopLandView);
@@ -497,9 +498,9 @@ namespace Game.Editor.Map
             while (tileView != null && !visited.Contains(tileView))
             {
                 visited.Add(tileView);
-                asset.tiles.Add(new TileConfig(tileView.Config));
+                asset.tiles.Add(new TileData(tileView.data));
 
-                int nextIndex = tileView.Config.FrontIndex;
+                int nextIndex = tileView.data.FrontIndex;
                 if (nextIndex < 0 || nextIndex >= allTiles.Count)
                     break;
 
@@ -508,12 +509,12 @@ namespace Game.Editor.Map
 
             foreach (var land in allLands)
             {
-                asset.lands.Add(new LandConfig(land.Config));
+                asset.lands.Add(new LandData(land.data));
             }
 
             foreach (var building in allBuildings)
             {
-                asset.buildings.Add(new BuildingConfig(building.Config));
+                asset.buildings.Add(new BuildingData(building.data));
             }
 
             AssetDatabase.CreateAsset(asset, assetPath);
@@ -551,8 +552,8 @@ namespace Game.Editor.Map
 
             for (int i = 0; i < landCount; i++)
             {
-                if (allLands[i]?.Config == null) continue;
-                allLands[i].Config.LandId = landIds[i]; // 0 ~ landCount-1 的随机排列
+                if (allLands[i]?.data == null) continue;
+                allLands[i].data.LandId = landIds[i]; // 0 ~ landCount-1 的随机排列
                 EditorUtility.SetDirty(allLands[i]);
             }
 

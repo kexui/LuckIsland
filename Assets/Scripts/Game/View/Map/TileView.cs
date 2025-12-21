@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core.Grid;
 using Game.Data.Config;
+using Game.Data.Map;
 using Game.Logic.Map;
 using Game.Managers;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Game.View.Map
 {
     public class TileView : MonoBehaviour
     {
-        public TileConfig Config;
+        public TileData data;
         
         private TileLogic tileLogic;
         public TileLogic TileLogic => tileLogic;
@@ -21,7 +22,7 @@ namespace Game.View.Map
 
         public int GetId()
         {
-            return Config.TileId;
+            return data.TileId;
         }
 
         private void RegisterToMapSystem()
@@ -29,20 +30,11 @@ namespace Game.View.Map
             var gameManager = GameManager.Instance;
             if (gameManager == null || gameManager.MapSystem == null)
             {
-                Debug.LogWarning($"TileView {Config.TileId}: GameManager或MapSystem未初始化");
+                Debug.LogWarning($"TileView {data.TileId}: GameManager或MapSystem未初始化");
                 return;
             }
             
             var mapSystem = gameManager.MapSystem;
-            
-            // 获取或创建Logic
-            tileLogic = mapSystem.GetTile(Config.TileId);
-            if (tileLogic == null)
-            {
-                // 创建新的Logic
-                tileLogic = new TileLogic(Config.TileId);
-                mapSystem.AddTile(tileLogic);
-            }
         }
         
         

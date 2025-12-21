@@ -1,15 +1,16 @@
 ﻿using Game.Data.Config;
+using Game.Data.Map;
 using UnityEngine;
 
 namespace Game.View.Building
 {
     public class BuildingView : MonoBehaviour
     {
-        public BuildingConfig Config;
+        public BuildingData data;
 
         public int GetId()
         {
-            return Config.BuildingId;
+            return data.Id;
         }
     }
 }

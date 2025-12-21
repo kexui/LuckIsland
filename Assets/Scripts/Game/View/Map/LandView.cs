@@ -1,6 +1,7 @@
 ﻿using Core.Enums;
 using Core.Grid;
 using Game.Data.Config;
+using Game.Data.Map;
 using Game.Logic.Map;
 using Game.Managers;
 using UnityEngine;
@@ -9,14 +10,14 @@ namespace Game.View.Map
 {
     public class LandView : MonoBehaviour
     {
-        public LandConfig Config;
+        public LandData data;
         
         private LandLogic landLogic;
         public LandLogic LandLogic => landLogic;
         
         public int GetID()
         {
-            return Config.LandId;
+            return data.LandId;
         }
         
         private void Start()
@@ -36,14 +37,6 @@ namespace Game.View.Map
             }
             
             var mapSystem = gameManager.MapSystem;
-            
-            // 获取或创建Logic
-            landLogic = mapSystem.GetLand(GetID());
-            if (landLogic == null)
-            {
-                landLogic = new LandLogic(GetID());
-                mapSystem.AddLand(landLogic);
-            }
             
             Debug.Log($"LandView {GetID()} 注册成功");
         }

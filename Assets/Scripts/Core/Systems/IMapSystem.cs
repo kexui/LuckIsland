@@ -10,10 +10,6 @@ namespace Core.Systems
     {
         TileLogic GetTile(int index);
         LandLogic GetLand(int landId);
-
-        void AddTile(TileLogic tile);
-
-        void AddLand(LandLogic land);
         
         //List<LandLogic> GetAdjacentLands(int tileIndex);
         //List<TileLogic> GetTilesAdjacentToLand(int landId);
