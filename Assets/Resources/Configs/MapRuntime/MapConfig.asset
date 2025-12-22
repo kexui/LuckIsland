@@ -16,87 +16,87 @@ MonoBehaviour:
   - TileId: 0
     FrontIndex: 1
     BackIndex: 35
-    AdjacentLandIds: 2000000000000000
+    AdjacentLandIds: 1c00000000000000
   - TileId: 1
     FrontIndex: 2
     BackIndex: 0
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0400000000000000
   - TileId: 2
     FrontIndex: 3
     BackIndex: 1
-    AdjacentLandIds: 2000000000000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 3
     FrontIndex: 4
     BackIndex: 2
-    AdjacentLandIds: 0200000003000000
+    AdjacentLandIds: 0400000000000000
   - TileId: 4
     FrontIndex: 5
     BackIndex: 3
-    AdjacentLandIds: 1a00000000000000
+    AdjacentLandIds: 0c00000000000000
   - TileId: 5
     FrontIndex: 6
     BackIndex: 4
-    AdjacentLandIds: 1300000000000000
+    AdjacentLandIds: 2100000000000000
   - TileId: 6
     FrontIndex: 7
     BackIndex: 5
-    AdjacentLandIds: 1c00000021000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 7
     FrontIndex: 8
     BackIndex: 6
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0300000021000000
   - TileId: 8
     FrontIndex: 9
     BackIndex: 7
-    AdjacentLandIds: 1c00000000000000
+    AdjacentLandIds: 1000000000000000
   - TileId: 9
     FrontIndex: 10
     BackIndex: 8
-    AdjacentLandIds: 0900000000000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 10
     FrontIndex: 11
     BackIndex: 9
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 1000000000000000
   - TileId: 11
     FrontIndex: 12
     BackIndex: 10
-    AdjacentLandIds: 0900000000000000
+    AdjacentLandIds: 0500000000000000
   - TileId: 12
     FrontIndex: 13
     BackIndex: 11
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0b0000000e000000
   - TileId: 13
     FrontIndex: 14
     BackIndex: 12
-    AdjacentLandIds: 0800000000000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 14
     FrontIndex: 15
     BackIndex: 13
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0e00000000000000
   - TileId: 15
     FrontIndex: 16
     BackIndex: 14
-    AdjacentLandIds: 080000000b000000
+    AdjacentLandIds: 0100000000000000
   - TileId: 16
     FrontIndex: 17
     BackIndex: 15
-    AdjacentLandIds: 1700000000000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 17
     FrontIndex: 18
     BackIndex: 16
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0100000000000000
   - TileId: 18
     FrontIndex: 19
     BackIndex: 17
-    AdjacentLandIds: 1700000000000000
+    AdjacentLandIds: 1900000000000000
   - TileId: 19
     FrontIndex: 20
     BackIndex: 18
-    AdjacentLandIds: 1400000000000000
+    AdjacentLandIds: 1800000016000000
   - TileId: 20
     FrontIndex: 21
     BackIndex: 19
-    AdjacentLandIds: 0e0000000a000000
+    AdjacentLandIds: 1f00000000000000
   - TileId: 21
     FrontIndex: 22
     BackIndex: 20
@@ -104,31 +104,31 @@ MonoBehaviour:
   - TileId: 22
     FrontIndex: 23
     BackIndex: 21
-    AdjacentLandIds: 0e00000000000000
+    AdjacentLandIds: 1f00000000000000
   - TileId: 23
     FrontIndex: 24
     BackIndex: 22
-    AdjacentLandIds: 1b00000000000000
+    AdjacentLandIds: 2000000000000000
   - TileId: 24
     FrontIndex: 25
     BackIndex: 23
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 0900000000000000
   - TileId: 25
     FrontIndex: 26
     BackIndex: 24
-    AdjacentLandIds: 1b00000000000000
+    AdjacentLandIds: 0700000000000000
   - TileId: 26
     FrontIndex: 27
     BackIndex: 25
-    AdjacentLandIds: 0400000000000000
+    AdjacentLandIds: 0000000000000000
   - TileId: 27
     FrontIndex: 28
     BackIndex: 26
-    AdjacentLandIds: 1d00000012000000
+    AdjacentLandIds: 0700000000000000
   - TileId: 28
     FrontIndex: 29
     BackIndex: 27
-    AdjacentLandIds: 1900000000000000
+    AdjacentLandIds: 1300000000000000
   - TileId: 29
     FrontIndex: 30
     BackIndex: 28
@@ -136,132 +136,134 @@ MonoBehaviour:
   - TileId: 30
     FrontIndex: 31
     BackIndex: 29
-    AdjacentLandIds: 1900000000000000
+    AdjacentLandIds: 1300000000000000
   - TileId: 31
     FrontIndex: 32
     BackIndex: 30
-    AdjacentLandIds: 0700000000000000
+    AdjacentLandIds: 060000000d000000
   - TileId: 32
     FrontIndex: 33
     BackIndex: 31
-    AdjacentLandIds: 0c00000000000000
+    AdjacentLandIds: 0a00000000000000
   - TileId: 33
     FrontIndex: 34
     BackIndex: 32
-    AdjacentLandIds: 1e00000000000000
+    AdjacentLandIds: 1200000000000000
   - TileId: 34
     FrontIndex: 35
     BackIndex: 33
-    AdjacentLandIds: 0000000000000000
+    AdjacentLandIds: 000000001c000000
   - TileId: 35
     FrontIndex: 0
     BackIndex: 34
-    AdjacentLandIds: 1e00000000000000
-  buildings:
-  - BuildingId: 2
-    Type: 0
-  - BuildingId: 1
-    Type: 0
+    AdjacentLandIds: 0000000000000000
   lands:
-  - LandId: 28
-    TileId: 8
+  - LandId: 32
+    TileId: 23
     BuildingId: -1
-  - LandId: 6
-    TileId: -1
+  - LandId: 19
+    TileId: 30
     BuildingId: -1
-  - LandId: 12
-    TileId: 32
-    BuildingId: 2
-  - LandId: 5
-    TileId: -1
-    BuildingId: -1
-  - LandId: 20
-    TileId: 19
-    BuildingId: -1
-  - LandId: 14
-    TileId: 22
-    BuildingId: -1
-  - LandId: 31
+  - LandId: 8
     TileId: -1
     BuildingId: -1
   - LandId: 16
+    TileId: 10
+    BuildingId: -1
+  - LandId: 0
+    TileId: 34
+    BuildingId: -1
+  - LandId: 11
+    TileId: 12
+    BuildingId: -1
+  - LandId: 28
+    TileId: 34
+    BuildingId: 1
+  - LandId: 24
+    TileId: 19
+    BuildingId: -1
+  - LandId: 14
+    TileId: 14
+    BuildingId: -1
+  - LandId: 5
+    TileId: 11
+    BuildingId: -1
+  - LandId: 25
+    TileId: 18
+    BuildingId: -1
+  - LandId: 4
+    TileId: 3
+    BuildingId: -1
+  - LandId: 3
+    TileId: 7
+    BuildingId: -1
+  - LandId: 31
+    TileId: 22
+    BuildingId: -1
+  - LandId: 22
+    TileId: 19
+    BuildingId: -1
+  - LandId: 10
+    TileId: 32
+    BuildingId: -1
+  - LandId: 6
+    TileId: 31
+    BuildingId: -1
+  - LandId: 21
+    TileId: -1
+    BuildingId: -1
+  - LandId: 27
+    TileId: -1
+    BuildingId: -1
+  - LandId: 26
+    TileId: -1
+    BuildingId: -1
+  - LandId: 2
+    TileId: -1
+    BuildingId: -1
+  - LandId: 29
+    TileId: -1
+    BuildingId: -1
+  - LandId: 20
+    TileId: -1
+    BuildingId: -1
+  - LandId: 30
+    TileId: -1
+    BuildingId: -1
+  - LandId: 33
+    TileId: 7
+    BuildingId: -1
+  - LandId: 7
+    TileId: 27
+    BuildingId: 2
+  - LandId: 23
     TileId: -1
     BuildingId: -1
   - LandId: 15
     TileId: -1
     BuildingId: -1
-  - LandId: 4
-    TileId: 26
-    BuildingId: -1
-  - LandId: 7
-    TileId: 31
-    BuildingId: -1
-  - LandId: 9
-    TileId: 11
-    BuildingId: -1
-  - LandId: 22
-    TileId: -1
-    BuildingId: -1
-  - LandId: 13
-    TileId: -1
-    BuildingId: -1
-  - LandId: 19
-    TileId: 5
-    BuildingId: -1
-  - LandId: 25
-    TileId: 30
-    BuildingId: 4
-  - LandId: 29
-    TileId: 27
-    BuildingId: -1
-  - LandId: 18
-    TileId: 27
-    BuildingId: -1
-  - LandId: 26
-    TileId: 4
-    BuildingId: -1
-  - LandId: 1
-    TileId: -1
-    BuildingId: -1
-  - LandId: 2
-    TileId: 3
-    BuildingId: -1
-  - LandId: 3
-    TileId: 3
-    BuildingId: -1
-  - LandId: 32
-    TileId: 2
-    BuildingId: 3
-  - LandId: 8
-    TileId: 15
-    BuildingId: -1
-  - LandId: 21
-    TileId: -1
-    BuildingId: -1
-  - LandId: 33
-    TileId: 6
-    BuildingId: -1
-  - LandId: 27
-    TileId: 25
-    BuildingId: -1
-  - LandId: 11
-    TileId: 15
-    BuildingId: -1
-  - LandId: 30
-    TileId: 35
-    BuildingId: -1
-  - LandId: 23
-    TileId: 18
-    BuildingId: -1
   - LandId: 17
     TileId: -1
     BuildingId: -1
-  - LandId: 24
-    TileId: -1
+  - LandId: 9
+    TileId: 24
     BuildingId: -1
-  - LandId: 10
-    TileId: 20
+  - LandId: 12
+    TileId: 4
     BuildingId: -1
-  - LandId: 0
-    TileId: 12
+  - LandId: 18
+    TileId: 33
     BuildingId: -1
+  - LandId: 1
+    TileId: 17
+    BuildingId: -1
+  - LandId: 13
+    TileId: 31
+    BuildingId: -1
+  buildings:
+  - Id: 1
+    LandId: 28
+    Type: 1
+  - Id: 2
+    LandId: 7
+    Type: 2

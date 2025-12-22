@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b611ef277084084a472fb25381fe7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Config:
-    BuildingId: 0
-    type: 1
+  data:
+    Id: 0
+    LandId: 0
+    Type: 1

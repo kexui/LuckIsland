@@ -25,7 +25,7 @@ namespace Game.Editor.Map
         private Transform buildingRoot;
         private List<TileView> allTiles;
         private List<LandView> allLands;
-        private List<BuildingView> allBuildings;
+        private List<BuildingView>allBuildings;
 
         private float neighborDistance = 1f;
         private float distanceOffset = 0.1f;
@@ -299,12 +299,12 @@ namespace Game.Editor.Map
                 foreach (var land in allLands)
                 {
                     float distance = Vector3.Distance(currentTile.transform.position, land.transform.position);
-                    if (distance < neighborDistance)
+                    if (distance < neighborDistance + distanceOffset)
                     {
                         // 防止数组越界
                         if (nums < maxCount)
                         {
-                            currentTile.data.AdjacentLandIds[nums] = land.GetID();
+                            currentTile.data.AdjacentLandIds[nums] = land.GetId();
                             land.data.TileId = currentTile.GetId();
                             nums++;
                         }
@@ -398,7 +398,7 @@ namespace Game.Editor.Map
                 }
 
                 if (startTileView.data.AdjacentLandIds == null ||
-                    !startTileView.data.AdjacentLandIds.Contains(startLandView.GetID()))
+                    !startTileView.data.AdjacentLandIds.Contains(startLandView.GetId()))
                 {
                     EditorUtility.DisplayDialog("错误", "startLandView与startTileView没有相邻", "确定");
                     return;
@@ -413,9 +413,10 @@ namespace Game.Editor.Map
 
                 BuildingView start = (BuildingView)PrefabUtility.InstantiatePrefab(startPrefab, buildingRoot);
                 start.transform.position = startLandView.transform.position + Vector3.up * neighborDistance;
+                allBuildings.Add(start);
             
                 start.data.Id = ++index;
-                start.data.LandId = startLandView.GetID();
+                start.data.LandId = startLandView.GetId();
                 startLandView.data.BuildingId = start.data.Id;
                 EditorUtility.SetDirty(startLandView);
             
@@ -437,9 +438,10 @@ namespace Game.Editor.Map
                 }
 
                 BuildingView shop = (BuildingView)PrefabUtility.InstantiatePrefab(shopPrefab, buildingRoot);
+                allBuildings.Add(shop);
                 shop.transform.position = ShopLandView.transform.position + Vector3.up * neighborDistance;
                 shop.data.Id = ++index;
-                shop.data.LandId = ShopLandView.GetID();
+                shop.data.LandId = ShopLandView.GetId();
                 ShopLandView.data.BuildingId = shop.data.Id;
                 
                 EditorUtility.SetDirty(shop);

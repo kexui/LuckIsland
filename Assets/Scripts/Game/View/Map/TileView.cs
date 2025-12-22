@@ -12,29 +12,9 @@ namespace Game.View.Map
     {
         public TileData data;
         
-        private TileLogic tileLogic;
-        public TileLogic TileLogic => tileLogic;
-        
-        private void Start()
-        {
-            RegisterToMapSystem();
-        }
-
         public int GetId()
         {
             return data.TileId;
-        }
-
-        private void RegisterToMapSystem()
-        {
-            var gameManager = GameManager.Instance;
-            if (gameManager == null || gameManager.MapSystem == null)
-            {
-                Debug.LogWarning($"TileView {data.TileId}: GameManager或MapSystem未初始化");
-                return;
-            }
-            
-            var mapSystem = gameManager.MapSystem;
         }
         
         

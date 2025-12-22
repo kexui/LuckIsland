@@ -42,9 +42,14 @@ namespace Game.Managers
             mapSystem.Enable();
             yield return null;
 
-            PlayerSystem = new PlayerSystem(MapSystem);
-            PlayerSystem.Initialize();
-            PlayerSystem.Enable();
+            //PlayerSystem = new PlayerSystem(MapSystem);
+            //PlayerSystem.Initialize();
+            //PlayerSystem.Enable();
+            
+            TurnSystem = new TurnSystem();
+            TurnSystem.Initialize();
+            TurnSystem.Enable();
+            
             yield return null;
             
             StartGame();

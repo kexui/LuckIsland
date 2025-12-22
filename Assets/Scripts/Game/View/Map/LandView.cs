@@ -12,33 +12,9 @@ namespace Game.View.Map
     {
         public LandData data;
         
-        private LandLogic landLogic;
-        public LandLogic LandLogic => landLogic;
-        
-        public int GetID()
+        public int GetId()
         {
             return data.LandId;
-        }
-        
-        private void Start()
-        {
-            RegisterToMapSystem();
-        }
-        /// <summary>
-        /// 注册到MapSystem
-        /// </summary>
-        private void RegisterToMapSystem()
-        {
-            var gameManager = GameManager.Instance;
-            if (gameManager == null || gameManager.MapSystem == null)
-            {
-                Debug.LogWarning($"LandView {GetID()}: GameManager或MapSystem未初始化");
-                return;
-            }
-            
-            var mapSystem = gameManager.MapSystem;
-            
-            Debug.Log($"LandView {GetID()} 注册成功");
         }
         
         /// <summary>

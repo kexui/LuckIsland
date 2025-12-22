@@ -2,14 +2,13 @@ using System.Collections.Generic;
 using Core.Systems;
 using Game.Data.Config;
 using Game.Logic.Map;
-using Game.View.Map;
 using UnityEngine;
 
 namespace Game.Systems
 {
     public class MapSystem : SystemBase ,IMapSystem
     {
-        private const string configPath = "Configs/MapRuntime//MapConfig";
+        private const string configPath = "Configs/MapRuntime/MapConfig";
         private MapLogic mapLogic;
         
         public MapSystem()
