@@ -1,8 +1,9 @@
-﻿using Core.Enums;
+﻿using System;
+using Core.Enums;
 
 namespace Game.Data.Map
 {
-    [System.Serializable]
+    [Serializable]
     public class BuildingData
     {
         public int Id;

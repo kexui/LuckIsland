@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
-using Game.Data.Config;
 
 namespace Game.Data.Map
 {
-    [System.Serializable]
+    [Serializable]
     public class MapData
     {
         public List<TileData> tiles;
