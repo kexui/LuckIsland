@@ -10,11 +10,6 @@ namespace Game.Systems
     {
         private const string configPath = "Configs/MapRuntime/MapConfig";
         private MapLogic mapLogic;
-        
-        public MapSystem()
-        {
-            // 无依赖，直接创建
-        }
 
         // ========== SystemBase 继承实现 ==========
         protected override void OnInitialize()
@@ -32,7 +27,7 @@ namespace Game.Systems
             }
             mapLogic = new MapLogic(mapConfig);
             
-            Debug.Log($"MapSystem 初始化完成: {mapLogic.GetTileCount()} Tiles, {mapLogic.GetLandCount()} Lands");
+            Debug.Log($"MapSystem 初始化完成: {mapLogic.GetTileCount()} Tiles, {mapLogic.GetLandCount()} Lands,{mapLogic.GetBuildingCount()} Buildings");
         }
 
         protected override void OnCleanup()

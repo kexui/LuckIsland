@@ -1,18 +1,19 @@
 ﻿using Core.Systems;
+using UnityEngine;
 
 namespace Game.Systems.Turn
 {
     public class RollDicePhase : ITurnPhase
     {
-        public int time { get; }
+        public int time { get; } = 10;
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Entering StartPhase");
         }
 
         public void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

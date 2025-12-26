@@ -15,17 +15,17 @@ namespace Game.Systems
 {
     public class TurnSystem : SystemBase,ITurnSystem
     {
-        private TurnScheduler turnScheduler;
-        public TurnState CurrentState { get; private set; }
-        private bool isTurnCycleRunning = false;
-        private int currentPlayerIndex;
-        private List<int> playerOrder = new ();
+        private TurnScheduler turnScheduler; //调度器
+        public TurnState CurrentState { get; private set; } //回合状态
+        private bool isTurnCycleRunning = false; //回合循环运行
+        private int currentPlayerIndex; //当前玩家下标
+        private List<int> playerOrder = new (); //所有玩家
         
         // ========== 计时器相关 ==========
-        private CancellationTokenSource timerCancellationTokenSource;
-        private bool isTimerRunning = false;
-        private float currentPhaseTime = 0f;
-        private float currentPhaseRemainingTime = 0f;
+        private CancellationTokenSource timerCancellationTokenSource; //
+        private bool isTimerRunning = false; //时间中
+        private float currentPhaseTime = 0f; //回合时间
+        private float currentPhaseRemainingTime = 0f; //回合剩余时间
         
         private const string path = "";
 
@@ -53,18 +53,24 @@ namespace Game.Systems
 
             isTurnCycleRunning = true;
             CurrentState = TurnState.Running;
-
             _ = RunTurnCycleAsync();
         }
 
         private async Task RunTurnCycleAsync()
         {
-            if (turnScheduler != null && turnScheduler.HasNextPhase())
+            if (turnScheduler == null)
+            {
+                Debug.LogWarning("TurnSystem: turnScheduler为空");
+                return;
+            }
+
+            if (turnScheduler.HasNextPhase())
             {
                 turnScheduler.StartFristPhase();
             }
             
-            while (isTurnCycleRunning && turnScheduler != null && turnScheduler.HasNextPhase())
+            //阶段循环
+            while (isTurnCycleRunning && turnScheduler.HasNextPhase())
             {
                 var currentPhase = turnScheduler.CurrentPhase;
                 if (currentPhase != null)
@@ -80,6 +86,7 @@ namespace Game.Systems
                 }
                 else
                 {
+                    Debug.LogWarning("TurnSyatem: 无下一个阶段");
                     break; // 没有下一个阶段，结束循环
                 }
             }
@@ -152,6 +159,9 @@ namespace Game.Systems
             }
         }
 
+        /// <summary>
+        /// 停止时间
+        /// </summary>
         public void StopTimer()
         {
             if (timerCancellationTokenSource != null)
@@ -165,6 +175,10 @@ namespace Game.Systems
             currentPhaseRemainingTime = 0f;
         }
 
+        /// <summary>
+        /// 回合时间到
+        /// </summary>
+        /// <param name="phase"></param>
         private void OnPhaseTimeUp(ITurnPhase phase)
         {
             isTimerRunning = false;
@@ -190,11 +204,19 @@ namespace Game.Systems
             }
         }
 
+        /// <summary>
+        /// 获取当前回合
+        /// </summary>
+        /// <returns></returns>
         public ITurnPhase GetCurrentPhase()
         {
             return turnScheduler.CurrentPhase;
         }
         
+        /// <summary>
+        /// 获取剩余时间
+        /// </summary>
+        /// <returns></returns>
         public float GetRemainingTime()
         {
             return currentPhaseRemainingTime;

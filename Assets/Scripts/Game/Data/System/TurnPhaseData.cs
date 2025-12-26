@@ -12,7 +12,11 @@ namespace Game.Data.System
         {
             AllTurnPhases = new List<ITurnPhase>();
             AllTurnPhases.Add(new StartPhase());
-            
+            AllTurnPhases.Add(new WaitPhase());
+            AllTurnPhases.Add(new RollDicePhase());
+            AllTurnPhases.Add(new MovePhase());
+            AllTurnPhases.Add(new PlayerPhase());
+            AllTurnPhases.Add(new PlayerPhase());
         }
     }
 }

@@ -10,18 +10,13 @@ namespace Game.Logic.Map
 {
     public class MapLogic
     {
-        private List<TileLogic> tiles;
-        private Dictionary<int, LandLogic> landDic;
-        private List<LandLogic> lands;
-        private List<BuildingLogic> buildings;
+        private List<TileLogic> tiles = new();
+        private Dictionary<int, LandLogic> landDic = new();
+        private List<LandLogic> lands= new ();
+        private List<BuildingLogic> buildings = new();
 
         public MapLogic(MapData mapData)
         {
-            tiles = new();
-            landDic = new();
-            lands = new();
-            buildings = new();
-
             foreach (var tile in mapData.tiles)
             {
                 tiles.Add(new TileLogic(tile));
@@ -42,11 +37,6 @@ namespace Game.Logic.Map
 
         public MapLogic(MapRuntimeConfig mapConfig)
         {
-            tiles = new();
-            landDic = new();
-            lands = new();
-            buildings = new();
-            
             foreach (var tile in mapConfig.tiles)
             {
                 tiles.Add(new TileLogic(tile));

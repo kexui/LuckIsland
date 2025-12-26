@@ -19,7 +19,7 @@ namespace Game.Logic.Map
         public int OwnerId { get; set; } = -1;
         public LandLogic(LandData data)
         {
-            id = data.TileId;  // 设置基类的id
+            id = data.LandId;  // 设置基类的id
             tileId = data.TileId;
             buildingId = data.BuildingId;
             

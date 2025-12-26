@@ -9,10 +9,10 @@ namespace Game.Systems.Turn
 {
     public class TurnScheduler
     {
-        private List<ITurnPhase> allPhases;
+        private List<ITurnPhase> allPhases; //所有阶段
         private ITurnPhase currentPhase;
-        private int currentPhaseIndex = -1;
-        public ITurnPhase CurrentPhase =>  currentPhase;
+        public ITurnPhase CurrentPhase =>  currentPhase; //当前阶段
+        private int currentPhaseIndex = -1; //当前阶段下标
         
         private TurnSystem turnSystem;
         
@@ -22,6 +22,9 @@ namespace Game.Systems.Turn
             this.turnSystem = turnSystem;
         }
     
+        /// <summary>
+        /// 开始第一个阶段
+        /// </summary>
         public void StartFristPhase()
         {
             if (allPhases == null || allPhases.Count == 0)
@@ -34,6 +37,9 @@ namespace Game.Systems.Turn
             ChangePhase(allPhases[currentPhaseIndex]);
         }
 
+        /// <summary>
+        /// 移动到下一个阶段
+        /// </summary>
         public void MoveToNextPhase()
         {
             if (!HasNextPhase())
@@ -47,11 +53,19 @@ namespace Game.Systems.Turn
             ChangePhase(allPhases[currentPhaseIndex]);
         }
 
+        /// <summary>
+        /// 是否有下一个阶段
+        /// </summary>
+        /// <returns></returns>
         public bool HasNextPhase()
         {
             return allPhases != null && currentPhaseIndex < allPhases.Count;
         }
 
+        /// <summary>
+        /// 改变阶段
+        /// </summary>
+        /// <param name="next"></param>
         public void ChangePhase(ITurnPhase next)
         {
             if (next == null)
@@ -77,6 +91,5 @@ namespace Game.Systems.Turn
             
             Debug.Log($"TurnScheduler: 切换到阶段 {currentPhase.GetType().Name}");
         }
-        
     }
 }

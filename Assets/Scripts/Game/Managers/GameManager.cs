@@ -62,6 +62,7 @@ namespace Game.Managers
             {
                 return;
             }
+            
             isGameStarted = true;
             isGamePaused = false;
             
