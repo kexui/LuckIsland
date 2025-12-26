@@ -83,13 +83,13 @@ namespace Core.Systems
                 throw new ArgumentNullException(nameof(handler));
             }
     
-            if (Core.Events.EventBus.Instance == null)
+            if (EventBus.Instance == null)
             {
                 Debug.LogWarning($"EventBus未初始化，无法订阅事件 {typeof(T).Name}");
                 return null;
             }
     
-            var subscription = Core.Events.EventBus.Instance.Subscribe(handler);
+            var subscription = EventBus.Instance.Subscribe(handler);
             if (subscription != null)
             {
                 _subscriptions.Add(subscription);

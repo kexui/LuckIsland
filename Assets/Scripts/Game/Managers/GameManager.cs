@@ -17,6 +17,7 @@ namespace Game.Managers
         private MapSystem mapSystem;
         public IMapSystem MapSystem => mapSystem;
         public PlayerSystem PlayerSystem { get; private set; }
+        public PlayerViewSystem PlayerViewSystem { get; private set; }
         public TurnSystem TurnSystem { get; private set; }
         
         //public BuildingSystem BuildingSystem { get; private set; }
@@ -42,17 +43,28 @@ namespace Game.Managers
             mapSystem.Enable();
             yield return null;
 
-            //PlayerSystem = new PlayerSystem(MapSystem);
-            //PlayerSystem.Initialize();
-            //PlayerSystem.Enable();
+            PlayerSystem = new PlayerSystem(MapSystem);
+            PlayerSystem.Initialize();
+            PlayerSystem.Enable();
+            
+            PlayerViewSystem playerViewSystem = new PlayerViewSystem();
+            playerViewSystem.Initialize();
+            playerViewSystem.Enable();
             
             TurnSystem = new TurnSystem();
             TurnSystem.Initialize();
             TurnSystem.Enable();
             
             yield return null;
-            
+
+            LoadPlayers();
             StartGame();
+        }
+
+        private void LoadPlayers()
+        {
+            PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
+            PlayerSystem.LoadPlayer(1,"Player2",500,0,"Character_B");
         }
 
         //开始游戏

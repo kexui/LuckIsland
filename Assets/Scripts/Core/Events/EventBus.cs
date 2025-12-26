@@ -1,30 +1,13 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Core.Events
 {
     /// <summary>
     /// 事件总线（类型安全）
     /// </summary>
-    public class EventBus : MonoBehaviour
+    public class EventBus : Singleton<EventBus>
     {
-        // 简单单例，可用你自己的 Singleton<T>
-        private static EventBus _instance;
-        public static EventBus Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    var go = new GameObject(nameof(EventBus));
-                    _instance = go.AddComponent<EventBus>();
-                    DontDestroyOnLoad(go);
-                }
-                return _instance;
-            }
-        }
-
         // 事件存储：事件类型 -> 回调列表
         private readonly Dictionary<Type, List<Delegate>> _handlers = new();
         // 主线程队列

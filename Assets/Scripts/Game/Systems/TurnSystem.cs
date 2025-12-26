@@ -188,7 +188,6 @@ namespace Game.Systems
                 var timerUpEvent = new TurnPhaseTimeUpEvent(phase);
                 EventBus.Instance.Publish(timerUpEvent);
             }
-            
             Debug.Log($"TurnSystem: Phase {phase.GetType().Name} 时间到");
         }
 
