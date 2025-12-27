@@ -1,10 +1,12 @@
 ﻿using Core.Events;
+using Game.Logic.Map;
 using Game.Managers;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.View.Player
 {
-    public class PlayerView : MonoBehaviour
+    public class PlayerView : ViewBase
     {
         [SerializeField] private Animator animator;
         private int playerId;
@@ -17,17 +19,25 @@ namespace Game.View.Player
         private const string IS_MOVING = "IsMoving";
         private const string TRIGGER_KNOCKBACK = "TriggerKnockback";
 
-        public int GetPlayerId() => playerId;
-        
+        public override int GetId()
+        {
+            return playerId;
+        }
+
         public void Initialize(int id, PlayerLogic logic)
         {
             playerId = id;
             playerLogic = logic;
             
             LoadCharacterModel(logic.GetCharacterPrefabName());
+            InitializePosition();
             SubscribeToEvents();
         }
         
+        /// <summary>
+        /// 加载角色模型
+        /// </summary>
+        /// <param name="characterName"></param>
         private void LoadCharacterModel(string characterName)
         {
             GameObject prefab = Resources.Load<GameObject>(prefabName + characterName);
@@ -46,17 +56,31 @@ namespace Game.View.Player
             {
                 animator = characterModel.GetComponentInChildren<Animator>();
             }
+            
+            SetWait();
+        }
 
+        private void InitializePosition()
+        {
+            if (playerLogic == null)
+            {
+                Debug.LogWarning($"PlayerView {playerId}: PlayerLogic为空，无法初始化位置");
+                return;
+            }
+            
+            var tile = GameManager.Instance.MapSystem.GetTile(playerLogic.GetCurrentTileIndex());
+            SetPosition(tile);
+        }
+
+        private void SetPosition(TileLogic tileLogic)
+        {
             if (playerLogic != null && GameManager.Instance?.MapSystem != null)
             {
-                var tile = GameManager.Instance.MapSystem.GetTile(playerLogic.GetId());
-                if (tile != null)
+                if (tileLogic != null)
                 {
-                    //transform.position = tile.Position;
+                    transform.position = GridHelper.GetPositionByGridPos(tileLogic.Pos, GridManager.Instance.cellSize);
                 }
             }
-
-            SetWait();
         }
 
         private void SubscribeToEvents()

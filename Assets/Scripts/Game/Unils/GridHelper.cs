@@ -19,5 +19,11 @@ namespace Game.Utils
                 Mathf.RoundToInt(position.z / cellSize));
             return pos;
         }
+
+        public static Vector3 GetPositionByGridPos(GridPos pos, float cellSize)
+        {
+            Vector3 position = new Vector3(pos.X * cellSize, pos.Y * cellSize, pos.Z * cellSize);
+            return position;
+        }
     }
 }

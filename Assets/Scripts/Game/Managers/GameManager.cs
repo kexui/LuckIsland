@@ -41,24 +41,26 @@ namespace Game.Managers
             mapSystem = new MapSystem();
             mapSystem.Initialize();
             mapSystem.Enable();
-            yield return null;
 
             PlayerSystem = new PlayerSystem(MapSystem);
             PlayerSystem.Initialize();
             PlayerSystem.Enable();
             
-            PlayerViewSystem playerViewSystem = new PlayerViewSystem();
-            playerViewSystem.Initialize();
-            playerViewSystem.Enable();
+            
             
             TurnSystem = new TurnSystem();
             TurnSystem.Initialize();
             TurnSystem.Enable();
             
-            yield return null;
+            
 
+            PlayerViewSystem = new PlayerViewSystem();
+            PlayerViewSystem.Initialize();
+            PlayerViewSystem.Enable();
+            
             LoadPlayers();
             StartGame();
+            yield return null;
         }
 
         private void LoadPlayers()

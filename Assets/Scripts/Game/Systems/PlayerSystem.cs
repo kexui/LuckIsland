@@ -4,6 +4,7 @@ using Game.Data.Player;
 using UnityEngine;
 using Core.Events;
 using Game.Events;
+using Game.Logic.Map;
 
 
 public class PlayerSystem : SystemBase ,IPlayerSystem

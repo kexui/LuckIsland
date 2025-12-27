@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Game.View.Building
 {
-    public class BuildingView : MonoBehaviour
+    public class BuildingView : ViewBase
     {
         public BuildingData data;
 
-        public int GetId()
+        public override int GetId()
         {
             return data.Id;
         }

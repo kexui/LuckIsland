@@ -13,13 +13,14 @@ namespace Game.Logic.Map
     /// </summary>
     public class LandLogic : LogicBase
     {
+        private int tileId;
         private int buildingId;
         
         public int OwnerId { get; set; } = -1;
         public LandLogic(LandData data)
         {
             logicId = data.LandId;  // 设置基类的id
-            logicId = data.TileId;
+            tileId = data.TileId;
             buildingId = data.BuildingId;
             
             OwnerId = -1;
