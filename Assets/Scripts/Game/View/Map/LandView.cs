@@ -8,15 +8,15 @@ using UnityEngine;
 
 namespace Game.View.Map
 {
-    public class LandView : MonoBehaviour
+    public class LandView : ViewBase
     {
-        public LandData data;
+        public LandData data;//Runtimedata
         
-        public int GetId()
+        public override int GetId()
         {
             return data.LandId;
         }
-        
+
         /// <summary>
         /// 在编辑器中可视化（可选）
         /// </summary>

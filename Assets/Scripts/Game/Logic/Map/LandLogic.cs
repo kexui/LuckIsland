@@ -13,14 +13,13 @@ namespace Game.Logic.Map
     /// </summary>
     public class LandLogic : LogicBase
     {
-        private int tileId;
         private int buildingId;
         
         public int OwnerId { get; set; } = -1;
         public LandLogic(LandData data)
         {
-            id = data.LandId;  // 设置基类的id
-            tileId = data.TileId;
+            logicId = data.LandId;  // 设置基类的id
+            logicId = data.TileId;
             buildingId = data.BuildingId;
             
             OwnerId = -1;
@@ -54,7 +53,7 @@ namespace Game.Logic.Map
         {
             if (playerId < 0)
             {
-                Debug.LogWarning($"LandLogic {id} 占领失败: 无效的玩家ID {playerId}");
+                Debug.LogWarning($"LandLogic {logicId} 占领失败: 无效的玩家ID {playerId}");
                 return;
             }
             
@@ -75,14 +74,14 @@ namespace Game.Logic.Map
             // 验证：如果有建筑，OwnerId应该有效
             if (HasBuilding && !IsOwned)
             {
-                Debug.LogWarning($"LandLogic {id} 验证失败: 有建筑但无主");
+                Debug.LogWarning($"LandLogic {logicId} 验证失败: 有建筑但无主");
                 return false;
             }
             
             // 验证：OwnerId要么是-1（无主），要么>=0（有效玩家ID）
             if (OwnerId < -1)
             {
-                Debug.LogWarning($"LandLogic {id} 验证失败: 无效的OwnerId {OwnerId}");
+                Debug.LogWarning($"LandLogic {logicId} 验证失败: 无效的OwnerId {OwnerId}");
                 return false;
             }
             
@@ -97,7 +96,7 @@ namespace Game.Logic.Map
         public override string ToString()
         {
             string ownerInfo = IsOwned ? $"Owner={OwnerId}" : "无主";
-            return $"LandLogic(Id={id}, {ownerInfo})";
+            return $"LandLogic(Id={logicId}, {ownerInfo})";
         }
     }
 }

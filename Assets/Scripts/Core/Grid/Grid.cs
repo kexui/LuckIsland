@@ -12,9 +12,9 @@ namespace Core.Grid
         private Dictionary<int, Cell> cellsById = new();
         private int nextId = 0;
 
-        public Cell CreateCell(int x, int y)
+        public Cell CreateCell(int x, int y ,int z)
         {
-            var pos = new  GridPos(x, y);
+            var pos = new GridPos(x, y, z);
             if (cells.ContainsKey(pos))
             {
                 throw new Exception($"Cell already exists at {x},{y}");
@@ -41,9 +41,9 @@ namespace Core.Grid
         public List<Cell> GetNeighbors(Cell cell)
         {
             var result = new List<Cell>();
-            foreach (var dir in GridDirs.Four)
+            foreach (var dir in GridDirs.Dir)
             {
-                var pos = new GridPos(cell.Pos.X + dir.X, cell.Pos.Y + dir.Y);
+                var pos = new GridPos(cell.Pos.X + dir.X, cell.Pos.Y + dir.Y ,cell.Pos.Z + dir.Z);
                 var neighbor = GetCell(pos);
                 if (neighbor != null)
                 {

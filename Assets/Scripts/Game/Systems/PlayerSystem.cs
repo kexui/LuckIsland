@@ -4,7 +4,7 @@ using Game.Data.Player;
 using UnityEngine;
 using Core.Events;
 using Game.Events;
-using Game.Systems;
+
 
 public class PlayerSystem : SystemBase ,IPlayerSystem
 {
@@ -15,6 +15,8 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
     {
         this.mapSystem = mapSystem; // 依赖注入
     }
+    
+    // ========== SystemBase ==========
     
     protected override void OnInitialize()
     {
@@ -38,10 +40,12 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
         Players.Clear();
     }
     
+    // ========== IPlayerSystem ==========
+    
     /// <summary>
     /// 创建玩家
     /// </summary>
-    public PlayerLogic CreatePlayer(int playerId, string playerName, int startGold = 1000, int startTileIndex = 0, string characterName = "Character_A")
+    public PlayerLogic CreatePlayer(int playerId, string playerName, int startGold = 500, int startTileIndex = 0, string characterName = "Character_Default")
     {
         ValidateSystem();
         
@@ -62,7 +66,7 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
         // 创建玩家逻辑
         PlayerLogic player = new PlayerLogic(playerId, playerName, startGold, startTileIndex, characterName);
         Players.Add(player);
-        
+
         Debug.Log($"创建玩家: ID={playerId}, Name={playerName}, Gold={startGold}, Tile={startTileIndex}");
         
         return player;
@@ -76,6 +80,7 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
         EventBus.Instance?.Publish(new PlayerCreatedEvent
         {
             PlayerId = playerId,
+            PlayerLogic = player
         });
     }
     

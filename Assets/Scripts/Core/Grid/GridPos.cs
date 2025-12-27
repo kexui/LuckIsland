@@ -5,11 +5,13 @@ namespace Core.Grid
     {
         public int X;
         public int Y;
+        public int Z;
 
-        public GridPos(int x, int y)
+        public GridPos(int x, int y,int z)
         {
             this.X = x;
             this.Y = y;
+            this.Z = z;
         }
 
         public override bool Equals(object obj)
@@ -18,12 +20,12 @@ namespace Core.Grid
             {
                 return false;
             }
-            return other.X == X && other.Y == Y;
+            return other.X == X && other.Y == Y &&  other.Z == Z;
         }
 
         public override int GetHashCode()
         {
-            return (X, Y).GetHashCode();
+            return (X, Y, Z).GetHashCode();
         }
     }
 }

@@ -11,24 +11,23 @@ namespace Game.View.Player
         private PlayerLogic playerLogic;
         private GameObject characterModel;
 
-        private const string prefabName = ""; 
+        private const string prefabName = "Prefabs/Characters/"; 
         // 动画参数常量
         private const string SPEED = "Speed";
         private const string IS_MOVING = "IsMoving";
         private const string TRIGGER_KNOCKBACK = "TriggerKnockback";
 
+        public int GetPlayerId() => playerId;
+        
         public void Initialize(int id, PlayerLogic logic)
         {
             playerId = id;
             playerLogic = logic;
             
-            // 加载角色模型
             LoadCharacterModel(logic.GetCharacterPrefabName());
-            
-            // 订阅事件
             SubscribeToEvents();
         }
-
+        
         private void LoadCharacterModel(string characterName)
         {
             GameObject prefab = Resources.Load<GameObject>(prefabName + characterName);
@@ -104,7 +103,7 @@ namespace Game.View.Player
             }
         }
         
-        // ========== 事件响应 ==========
+        // ========== Events ==========
         
         private void OnPlayerMoved(Events.PlayerMovedEvent evt)
         {
@@ -122,6 +121,5 @@ namespace Game.View.Player
             }
         }
         
-        public int GetPlayerId() => playerId;
     }
 }

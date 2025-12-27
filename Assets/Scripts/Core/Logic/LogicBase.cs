@@ -8,12 +8,12 @@ namespace Core.Logic
     {
         // ========== ILogic 实现 ==========
         
-        [SerializeField] protected int id = -1;
+        [SerializeField] protected int logicId = -1;
 
         /// <summary>
         /// 获取ID（子类必须实现）
         /// </summary>
-        public virtual int GetId() => id;
+        public virtual int GetId() => logicId;
 
         public virtual string ToJson()
         {

@@ -12,6 +12,15 @@ namespace Game.Systems
         private Dictionary<int, PlayerView> playerViewMap = new();
         private Transform playerContainer; // 玩家容器
         
+        // ========== Events ==========
+        
+        private void OnPlayerCreaed(Events.PlayerCreatedEvent evt)
+        {
+            CreatePlayerView(evt.PlayerLogic);
+        }
+        
+        // ========== SystemBase ==========
+        
         protected override void OnInitialize()
         {
             GameObject container = new GameObject("Players");
@@ -38,11 +47,11 @@ namespace Game.Systems
             }
         }
 
-        private void OnPlayerCreaed(Events.PlayerCreatedEvent evt)
-        {
-            CreatePlayerView(evt.PlayerLogic);
-        }
-
+        // ========== PlayerViewSystem ==========
+        
+        /// <summary>
+        /// 创建玩家显示层
+        /// </summary>
         private void CreatePlayerView(PlayerLogic playerLogic)
         {
             if (playerLogic == null)

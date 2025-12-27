@@ -1,23 +1,19 @@
-using System.Collections.Generic;
-using Core.Grid;
-using Game.Data.Config;
 using Game.Data.Map;
-using Game.Logic.Map;
 using Game.Managers;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.View.Map
 {
-    public class TileView : MonoBehaviour
+    public class TileView : ViewBase
     {
         public TileData data;
         
-        public int GetId()
+        public override int GetId()
         {
             return data.TileId;
         }
-        
-        
+
         /// <summary>
         /// 在编辑器中可视化（可选）
         /// </summary>

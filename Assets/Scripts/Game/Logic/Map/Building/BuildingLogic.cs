@@ -13,7 +13,7 @@ namespace Game.Logic.Map.Building
 
         public BuildingLogic(BuildingData data)
         {
-            id = data.Id;
+            logicId = data.Id;
             landId = data.LandId;
             BuildingType = data.Type;
             OwnerId = -1;

@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Enums;
 using Game.Data.Config;
 using Game.Data.Map;
+using Game.Utils;
 using Game.View.Building;
 using UnityEngine;
 using UnityEditor;
@@ -12,54 +13,108 @@ namespace Game.Editor.Map
 {
     /// <summary>
     /// 地图编辑器窗口
-    /// 提供可视化界面来编辑地图连接关系
+    /// 提供可视化界面来编辑地图方块关系
     /// </summary>
     public class MapEditorWindow : EditorWindow
     {
+        // ========== 常量 ==========
+        private const string FOLDER_PATH = "Assets/Resources/Configs/MapRuntime"; //配置保存地址
+        private const string PREFAB_PATH = "Assets/Resources/Prefabs"; //预设体位置
+        private const int MAX_ADJACENT_LANDS = 2; //最大邻居数量
+        
         // ========== 窗口字段 ==========
         // 注意：EditorWindow的字段不会自动序列化
         // 使用 EditorPrefs 或 ScriptableObject 来持久化，或者直接使用临时变量
-        private TileView startTileView; //起点
-        private LandView startLandView; //Start下的Land
-        private LandView ShopLandView; //Shop下的Land
-        private Transform buildingRoot;
+        
+        private string configName = "MapConfig"; //默认名
+        private float cellSize = 1f;
+        private float distanceOffect = 0.1f; //偏移、扩大
+        
         private List<TileView> allTiles;
         private List<LandView> allLands;
         private List<BuildingView>allBuildings;
-
-        private float neighborDistance = 1f;
-        private float distanceOffset = 0.1f;
+        
+        private TileView startTileView; //起点
+        private LandView startLandView; //Start下的Land
+        private LandView shopLandView; //Shop下的Land
+        private Transform buildingRoot;
+        
         private Vector2 scrollPosition;
-
-        private string configName = "MapConfig"; //默认名
-        private const string folderPath = "Assets/Resources/Configs/MapRuntime"; //配置保存地址
-        private const string PrefabPath = "Assets/Resources/Prefabs";
         
         // ========== 窗口打开 ==========
 
         [MenuItem("Tools/Map/Map Editor")]
         public static void ShowWindow()
         {
-            MapEditorWindow window = GetWindow<MapEditorWindow>("Map Editor");
-            window.minSize = new Vector2(400, 300);
-            window.Show();
+            MapEditorWindow window = GetWindow<MapEditorWindow>("Map Editor");//获取或创建窗口
+            window.minSize = new Vector2(400, 300);//窗口属性
+            window.Show();//显示窗口
+        }
+
+        private void OnEnable()
+        {
+            allTiles = new List<TileView>(FindObjectsOfType<TileView>());
+            allLands = new List<LandView>(FindObjectsOfType<LandView>());
+            allBuildings = new List<BuildingView>(FindObjectsOfType<BuildingView>());
+
+            UpdataGridPosByPosition();
+        }
+
+        private void OnDestroy()
+        {
+            
         }
 
         // ========== 窗口绘制 ==========
-
         private void OnGUI()
         {
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            // 标题，地图编辑器
+            DrawHeader();
+            DrawParameters();
+            DrawPath();
+            DrawOperations();
+            DrawBuildingSettings();
+            DrawSaveSettings();
+
+            EditorGUILayout.EndScrollView();
+        }
+        
+        // ========== UI 绘制方法 ==========
+        
+        //标题
+        private void DrawHeader()
+        {
             EditorGUILayout.LabelField("地图编辑器", EditorStyles.boldLabel);
             EditorGUILayout.Space();
+        }
 
-            // 标题，起点TileView选择
-            EditorGUILayout.LabelField("起点设置", EditorStyles.boldLabel);
-
-            //起点 TileVie
+        //参数
+        private void DrawParameters()
+        {
+            EditorGUILayout.LabelField("计算参数", EditorStyles.boldLabel);
+            cellSize = EditorGUILayout.FloatField(
+                "CellSize",
+                cellSize
+            );
+            EditorGUILayout.HelpBox(
+                "两个Tile之间的距离小于等于此值时，视为邻居",
+                MessageType.None
+            );
+            distanceOffect = EditorGUILayout.FloatField("距离偏移", distanceOffect);
+            EditorGUILayout.HelpBox(
+                "用于扩大邻居判断范围",
+                MessageType.None
+            );
             
+            EditorGUILayout.Space();
+        }
+
+        //路线
+        private void DrawPath()
+        {
+            EditorGUILayout.LabelField("路线设置", EditorStyles.boldLabel);
+            //起点 TileVie
             startTileView = (TileView)EditorGUILayout.ObjectField(
                 "起点 TileView",
                 startTileView,
@@ -80,71 +135,72 @@ namespace Game.Editor.Map
             {
                 EditorGUILayout.HelpBox("请从Hierarchy中拖入一个TileView", MessageType.Warning);
             }
-
-            EditorGUILayout.Space();
-
-            // 配置参数
-            EditorGUILayout.LabelField("计算参数", EditorStyles.boldLabel);
-            neighborDistance = EditorGUILayout.FloatField(
-                "邻居距离阈值",
-                neighborDistance
-            );
-            EditorGUILayout.HelpBox(
-                "两个Tile之间的距离小于等于此值时，视为邻居",
-                MessageType.None
-            );
-
-            EditorGUILayout.Space();
-
-            // 操作按钮
-            EditorGUILayout.LabelField("操作", EditorStyles.boldLabel);
-
-            GUI.enabled = true;
-            if (GUILayout.Button("随机分配LandsId", GUILayout.Height(30)))
-            {
-                RandomLandsID();
-            }
-
+            
             GUI.enabled = startTileView != null;
             if (GUILayout.Button("从起点计算出路线", GUILayout.Height(30)))
             {
                 CalculateAllNeighbors();
             }
 
-            GUI.enabled = true;
+            EditorGUILayout.Space();
+        }
 
+        //操作
+        private void DrawOperations()
+        {
+            EditorGUILayout.LabelField("操作", EditorStyles.boldLabel);
+
+            GUI.enabled = true;
+            if (GUILayout.Button("刷新所有Views的Pos", GUILayout.Height(30)))
+            {
+                UpdataGridPosByPosition();
+            }
+            if (GUILayout.Button("随机分配LandsId", GUILayout.Height(30)))
+            {
+                RandomLandsID();
+            }
             if (GUILayout.Button("确定Tile与Land的邻居关系", GUILayout.Height(30)))
             {
                 LinkLandToTile();
             }
+            EditorGUILayout.Space();
+        }
 
-
+        //建筑
+        private void DrawBuildingSettings()
+        {
+            EditorGUILayout.LabelField("建筑", EditorStyles.boldLabel);
+            
             buildingRoot = (Transform)EditorGUILayout.ObjectField(
-                "buildingRoot",
+                "BuildingRoot",
                 buildingRoot,
                 typeof(Transform),
                 true
             );
-            // 使用 ObjectField 来拖入对象
             startLandView = (LandView)EditorGUILayout.ObjectField(
                 "起点 LandView",
                 startLandView,
                 typeof(LandView),
-                true // 允许场景中的对象
+                true
             );
-
-            ShopLandView = (LandView)EditorGUILayout.ObjectField(
+            shopLandView = (LandView)EditorGUILayout.ObjectField(
                 "商店 LandView",
-                ShopLandView,
+                shopLandView,
                 typeof(LandView),
-                true // 允许场景中的对象
+                true
             );
 
             if (GUILayout.Button("创建Building", GUILayout.Height(30)))
             {
                 BuildBuilding();
             }
+            EditorGUILayout.Space();
+        }
 
+        //保存
+        private void DrawSaveSettings()
+        {
+            EditorGUILayout.LabelField("保存",EditorStyles.boldLabel);
             //配置保存
             configName = EditorGUILayout.TextField("生成配置名称", configName);
             // 防止空名
@@ -153,61 +209,93 @@ namespace Game.Editor.Map
                 EditorGUILayout.HelpBox("配置名称不能为空", MessageType.Warning);
                 return;
             }
-
             if (GUILayout.Button("创建 / 覆盖 MapConfig 资源"))
             {
                 CreateOrOverrideConfig();
             }
-
-            EditorGUILayout.EndScrollView();
         }
+
 
         // ========== 功能实现 ==========
 
+        /// <summary>
+        /// 刷新所有View的Pos数据
+        /// </summary>
+        private void UpdataGridPosByPosition()
+        {
+            if (allTiles != null)
+            {
+                foreach (var tileView in allTiles)
+                {
+                    if (tileView != null)
+                    {
+                        tileView.data.Pos = GridHelper.GetGridPosByPosition(tileView.transform.position, cellSize);
+                    }
+                }
+            }
+
+            if (allLands != null)
+            {
+                foreach (var landView in allLands)
+                {
+                    if (landView != null)
+                    {
+                        landView.data.Pos = GridHelper.GetGridPosByPosition(landView.transform.position,cellSize);
+                    }
+                }
+            }
+
+            if (allBuildings != null)
+            {
+                foreach (var buildingView in allBuildings)
+                {
+                    buildingView.data.Pos = GridHelper.GetGridPosByPosition(buildingView.transform.position, cellSize);
+                }
+            }
+            
+            Debug.Log($"刷新完成: {allTiles.Count} Tiles, {allLands.Count} Lands, {allBuildings.Count} Buildings");
+        }
+        
         /// <summary>
         /// 从起点开始计算所有Tile的邻居关系
         /// </summary>
         private void CalculateAllNeighbors()
         {
-            allTiles = new List<TileView>(FindObjectsOfType<TileView>());
-            allLands = new List<LandView>(FindObjectsOfType<LandView>());
-
             if (startTileView == null)
             {
                 EditorUtility.DisplayDialog("错误", "请先拖入一个TileView作为起点", "确定");
                 return;
             }
 
-            List<TileView> tempTileViews = new List<TileView>();
+            List<TileView> processedTiles = new List<TileView>();
+            List<TileView> remainingTiles = new List<TileView>(allTiles);
 
-            tempTileViews.Add(startTileView);
-            allTiles.Remove(startTileView);
+            processedTiles.Add(startTileView);
+            remainingTiles.Remove(startTileView);
 
             int index = 0;
             startTileView.data.TileId = index;
             TileView currentTile = startTileView;
 
-            while (allTiles.Count > 0)
+            while (remainingTiles.Count > 0)
             {
                 bool foundNeighbor = false;
-
-                for (int i = allTiles.Count - 1; i >= 0; i--)
+                for (int i = remainingTiles.Count - 1; i >= 0; i--)
                 {
-                    var tile = allTiles[i];
-                    float distance = Vector3.Distance(currentTile.transform.position, tile.transform.position);
+                    var tile = remainingTiles[i];
 
-                    if (distance < neighborDistance + distanceOffset)
+                    if (IsWithinDistance(currentTile.transform.position, tile.transform.position,cellSize+distanceOffect))
                     {
                         foundNeighbor = true;
                         index++;
                         tile.data.TileId = index;
-
+                        
                         currentTile.data.FrontIndex = index;
                         tile.data.BackIndex = currentTile.data.TileId;
 
                         currentTile = tile;
-                        tempTileViews.Add(currentTile);
-                        allTiles.RemoveAt(i);
+                        processedTiles.Add(currentTile);
+                        remainingTiles.RemoveAt(i);
 
                         EditorUtility.SetDirty(tile);
                         break;
@@ -219,43 +307,37 @@ namespace Game.Editor.Map
                     break;
                 }
             }
-
+            
+            //是否成环
+            if (IsWithinDistance(currentTile.transform.position, startTileView.transform.position, cellSize+distanceOffect))
+            {
+                currentTile.data.FrontIndex = startTileView.data.TileId;
+                startTileView.data.BackIndex = currentTile.data.TileId;
+                EditorUtility.SetDirty(currentTile);
+            }
+            
             EditorUtility.SetDirty(startTileView);
-
-            if (allTiles.Count > 0)
-            {
-                EditorUtility.DisplayDialog(
-                    "警告",
-                    $"还有 {allTiles.Count} 个Tile未连接\n",
-                    "确定"
-                );
-                return;
-            }
-
-            //判断是否闭环
-            float dis = Vector3.Distance(currentTile.transform.position, startTileView.transform.position);
-            if (dis > neighborDistance + distanceOffset)
-            {
-                EditorUtility.DisplayDialog("错误", "路线未闭环", "确定");
-                return;
-            }
-
-            currentTile.data.FrontIndex = startTileView.data.TileId;
-            startTileView.data.BackIndex = currentTile.data.TileId;
-            EditorUtility.SetDirty(currentTile);
-
-            allTiles = tempTileViews;
+            allTiles = processedTiles;
 
             // 保存
             AssetDatabase.SaveAssets();
 
-            EditorUtility.DisplayDialog(
-                "完成",
-                $"已计算 {index + 1} 个Tile的邻居关系",
-                "确定"
-            );
-
-            Debug.Log($"地图编辑器: 已计算 {index + 1} 个Tile的邻居关系");
+            if (remainingTiles.Count > 0)
+            {
+                EditorUtility.DisplayDialog(
+                    "警告",
+                    $"已计算{allTiles.Count}个关系，\n还有 {remainingTiles.Count} 个未连接\n",
+                    "确定"
+                );
+            }
+            else
+            {
+                EditorUtility.DisplayDialog(
+                    "完成",
+                    $"已计算{allTiles.Count}个关系，\n还有 {remainingTiles.Count} 个未连接\n",
+                    "确定"
+                );
+            }
         }
 
         /// <summary>
@@ -285,39 +367,12 @@ namespace Game.Editor.Map
 
             TileView currentTile = startTileView;
             int processedCount = 0;
-            while (true)
+            HashSet<TileView> visited = new HashSet<TileView>();
+            while (currentTile != null && !visited.Contains(currentTile))
             {
+                visited.Add(currentTile);
                 // 确保数组已初始化
-                if (currentTile.data.AdjacentLandIds == null || currentTile.data.AdjacentLandIds.Length == 0)
-                {
-                    currentTile.data.AdjacentLandIds = new int[2];
-                }
-
-                int nums = 0;
-                int maxCount = currentTile.data.AdjacentLandIds.Length;
-
-                foreach (var land in allLands)
-                {
-                    float distance = Vector3.Distance(currentTile.transform.position, land.transform.position);
-                    if (distance < neighborDistance + distanceOffset)
-                    {
-                        // 防止数组越界
-                        if (nums < maxCount)
-                        {
-                            currentTile.data.AdjacentLandIds[nums] = land.GetId();
-                            land.data.TileId = currentTile.GetId();
-                            nums++;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"Tile {currentTile.data.TileId} 找到的相邻Land超过数组容量 ({maxCount})");
-                            break; // 数组已满，停止添加
-                        }
-                    }
-                }
-
-                // 标记为已修改
-                EditorUtility.SetDirty(currentTile);
+                LinkAdjacentLandToTile(currentTile);
                 processedCount++;
 
                 // 防止无限循环
@@ -351,8 +406,38 @@ namespace Game.Editor.Map
                 $"已关联 {processedCount} 个Tile到Land",
                 "确定"
             );
-
             Debug.Log($"地图编辑器: 已关联 {processedCount} 个Tile到Land");
+        }
+
+        private void LinkAdjacentLandToTile(TileView tile)
+        {
+            if (tile.data.AdjacentLandIds == null || tile.data.AdjacentLandIds.Length == 0)
+            {
+                tile.data.AdjacentLandIds = new int[MAX_ADJACENT_LANDS];
+            }
+
+            int count = 0;
+            foreach (var land in allLands)
+            {
+                if (land == null || count >= MAX_ADJACENT_LANDS)
+                {
+                    break;
+                }
+                if (IsWithinDistance(tile.transform.position, land.transform.position,cellSize + distanceOffect) )
+                {
+                    tile.data.AdjacentLandIds[count] = land.GetId();
+                    land.data.TileId = tile.GetId();
+                    count++;
+                }
+            }
+
+            if (count > MAX_ADJACENT_LANDS)
+            {
+                Debug.LogWarning($"Tile {tile.data.TileId} 找到的相邻Land超过数组容量 ({MAX_ADJACENT_LANDS})");
+            }
+            
+            // 标记为已修改
+            EditorUtility.SetDirty(tile);
         }
 
         /// <summary>
@@ -404,15 +489,15 @@ namespace Game.Editor.Map
                     return;
                 }
                 
-                var startPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "/Building/Start.prefab");
+                var startPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PREFAB_PATH + "/Building/Start.prefab");
                 if (startPrefab == null)
                 {
-                    EditorUtility.DisplayDialog("错误", $"找不到起点建筑 Prefab：\n{PrefabPath}/Building/Start.prefab","确定");
+                    EditorUtility.DisplayDialog("错误", $"找不到起点建筑 Prefab：\n{PREFAB_PATH}/Building/Start.prefab","确定");
                     return;
                 }
 
                 BuildingView start = (BuildingView)PrefabUtility.InstantiatePrefab(startPrefab, buildingRoot);
-                start.transform.position = startLandView.transform.position + Vector3.up * neighborDistance;
+                start.transform.position = startLandView.transform.position + Vector3.up * cellSize;
                 allBuildings.Add(start);
             
                 start.data.Id = ++index;
@@ -424,28 +509,28 @@ namespace Game.Editor.Map
                 EditorUtility.SetDirty(startLandView);
             }
 
-            if (ShopLandView == null)
+            if (shopLandView == null)
             {
                 Debug.LogWarning("ShopLandView 未指定，跳过设置商店");
             }
             else
             {
-                var shopPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PrefabPath + "/Building/Shop.prefab");
+                var shopPrefab = AssetDatabase.LoadAssetAtPath<BuildingView>(PREFAB_PATH + "/Building/Shop.prefab");
                 if (shopPrefab == null)
                 {
-                    EditorUtility.DisplayDialog("错误", $"找不到商店建筑 Prefab：\n{PrefabPath}/Building/Shop.prefab", "确定");
+                    EditorUtility.DisplayDialog("错误", $"找不到商店建筑 Prefab：\n{PREFAB_PATH}/Building/Shop.prefab", "确定");
                     return;
                 }
 
                 BuildingView shop = (BuildingView)PrefabUtility.InstantiatePrefab(shopPrefab, buildingRoot);
                 allBuildings.Add(shop);
-                shop.transform.position = ShopLandView.transform.position + Vector3.up * neighborDistance;
+                shop.transform.position = shopLandView.transform.position + Vector3.up * cellSize;
                 shop.data.Id = ++index;
-                shop.data.LandId = ShopLandView.GetId();
-                ShopLandView.data.BuildingId = shop.data.Id;
+                shop.data.LandId = shopLandView.GetId();
+                shopLandView.data.BuildingId = shop.data.Id;
                 
                 EditorUtility.SetDirty(shop);
-                EditorUtility.SetDirty(ShopLandView);
+                EditorUtility.SetDirty(shopLandView);
             }
 
             AssetDatabase.SaveAssets();
@@ -456,19 +541,17 @@ namespace Game.Editor.Map
         /// </summary>
         private void CreateOrOverrideConfig()
         {
-            // 1. 确保目录存在
-            if (!System.IO.Directory.Exists(folderPath))
+            // 确保目录存在
+            if (!System.IO.Directory.Exists(FOLDER_PATH))
             {
-                System.IO.Directory.CreateDirectory(folderPath); //创建目录
+                System.IO.Directory.CreateDirectory(FOLDER_PATH); //创建目录
                 AssetDatabase.Refresh();
             }
 
-            // 2. 组合完整路径
-            string assetPath = $"{folderPath}/{configName}.asset";
+            string assetPath = $"{FOLDER_PATH}/{configName}.asset";
 
-            // 3. 检查是否已存在同名资源
+            //检查是否已存在同名资源
             var mapConfig = AssetDatabase.LoadAssetAtPath<MapRuntimeConfig>(assetPath);
-
             if (mapConfig != null)
             {
                 // 4. 弹出是否覆盖对话框
@@ -494,6 +577,7 @@ namespace Game.Editor.Map
             asset.tiles = new();
             asset.lands = new();
             asset.buildings = new();
+            UpdataGridPosByPosition();
 
             TileView tileView = startTileView;
             HashSet<TileView> visited = new();
@@ -535,13 +619,13 @@ namespace Game.Editor.Map
         /// </summary>
         private void RandomLandsID()
         {
-            // 重新扫描
-            allLands = new List<LandView>(FindObjectsOfType<LandView>());
-
-            // 先准备 0 ~ n-1，再随机洗牌
+            if (allLands == null || allLands.Count == 0)
+            {
+                EditorUtility.DisplayDialog("警告", "Land列表为空", "确定");
+                return;
+            }
+            
             System.Random rng = new System.Random();
-
-            // --- Land 随机 ID ---
             int landCount = allLands.Count;
             int[] landIds = new int[landCount];
             for (int i = 0; i < landCount; i++) landIds[i] = i;
@@ -560,6 +644,13 @@ namespace Game.Editor.Map
             }
 
             AssetDatabase.SaveAssets();
+        }
+
+        //相邻距离是否小于指定值
+        private bool IsWithinDistance(Vector3 start, Vector3 end,float distance)
+        {
+            float dis = Vector3.Distance(start, end);
+            return dis < distance;
         }
     }
 }

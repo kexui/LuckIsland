@@ -64,7 +64,7 @@ namespace Game.Managers
         private void LoadPlayers()
         {
             PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
-            PlayerSystem.LoadPlayer(1,"Player2",500,0,"Character_B");
+            PlayerSystem.LoadPlayer(2,"Player2",500,0,"Character_B");
         }
 
         //开始游戏

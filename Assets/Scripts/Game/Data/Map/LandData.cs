@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Grid;
 
 namespace Game.Data.Map
 {
@@ -9,6 +10,7 @@ namespace Game.Data.Map
         
         public int TileId;
         public int BuildingId;
+        public GridPos Pos;
 
         public LandData()
         {
