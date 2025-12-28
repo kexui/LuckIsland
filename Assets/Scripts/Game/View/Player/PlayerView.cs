@@ -78,7 +78,8 @@ namespace Game.View.Player
             {
                 if (tileLogic != null)
                 {
-                    transform.position = GridHelper.GetPositionByGridPos(tileLogic.Pos, GridManager.Instance.cellSize);
+                    Vector3 pos = GridHelper.GetPositionByGridPos(tileLogic.Pos, GridManager.Instance.cellSize);
+                    transform.position = new Vector3(pos.x, pos.y + GridManager.Instance.cellSize, pos.z);
                 }
             }
         }

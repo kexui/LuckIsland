@@ -8,17 +8,19 @@ namespace Core.Events
     /// </summary>
     public class EventBus : Singleton<EventBus>
     {
+        protected override bool PersistAcrossScenes => false;
+
         // 事件存储：事件类型 -> 回调列表
-        private readonly Dictionary<Type, List<Delegate>> _handlers = new();
+        private readonly Dictionary<Type, List<Delegate>> handlers = new();
         // 主线程队列
-        private readonly Queue<Action> _mainThreadQueue = new();
+        private readonly Queue<Action> mainThreadQueue = new();
 
         private void Update()
         {
             // 主线程执行队列
-            while (_mainThreadQueue.Count > 0)
+            while (mainThreadQueue.Count > 0)
             {
-                _mainThreadQueue.Dequeue()?.Invoke();
+                mainThreadQueue.Dequeue()?.Invoke();
             }
         }
 
@@ -26,10 +28,10 @@ namespace Core.Events
         public IDisposable Subscribe<T>(Action<T> handler)
         {
             var t = typeof(T);
-            if (!_handlers.TryGetValue(t, out var list))
+            if (!handlers.TryGetValue(t, out var list))
             {
                 list = new List<Delegate>();
-                _handlers[t] = list;
+                handlers[t] = list;
             }
             list.Add(handler);
             return new Subscription<T>(this, handler);
@@ -51,7 +53,7 @@ namespace Core.Events
         public void Unsubscribe<T>(Action<T> handler)
         {
             var t = typeof(T);
-            if (_handlers.TryGetValue(t, out var list))
+            if (handlers.TryGetValue(t, out var list))
             {
                 list.Remove(handler);
             }
@@ -61,7 +63,7 @@ namespace Core.Events
         public void Publish<T>(T evt)
         {
             var t = typeof(T);
-            if (_handlers.TryGetValue(t, out var list))
+            if (handlers.TryGetValue(t, out var list))
             {
                 // 拷贝一份避免遍历中修改
                 var snapshot = list.ToArray();
@@ -75,7 +77,13 @@ namespace Core.Events
         /// <summary>发布到下一帧（主线程队列）。</summary>
         public void PublishNextFrame<T>(T evt)
         {
-            _mainThreadQueue.Enqueue(() => Publish(evt));
+            mainThreadQueue.Enqueue(() => Publish(evt));
+        }
+
+        private void OnDestroy()
+        {
+            handlers.Clear();
+            mainThreadQueue.Clear();
         }
 
         private class Subscription<T> : IDisposable
