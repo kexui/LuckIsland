@@ -20,6 +20,8 @@ namespace Game.Managers
         public PlayerViewSystem PlayerViewSystem { get; private set; }
         public TurnSystem TurnSystem { get; private set; }
         
+        public IDiceSystem DiceSystem { get; private set; }
+        
         //public BuildingSystem BuildingSystem { get; private set; }
         //public CardSystem CardSystem { get; private set; }
         //public EventSystem EventSystem { get; private set; }
