@@ -10,12 +10,15 @@ public class RollButton : MonoBehaviour
 
     private void Start()
     {
-        button.onClick.AddListener(OnRollButtonClicked);
+        if (TryGetComponent(out button))
+        {
+            button.onClick.AddListener(OnRollButtonClicked);
+        }
     }
 
     private void OnRollButtonClicked()
     {
-        button = GetComponent<Button>();
+        TryRollDice();
     }
 
     private void TryRollDice()
@@ -28,7 +31,7 @@ public class RollButton : MonoBehaviour
 
         if (GameManager.Instance?.DiceSystem != null)
         {
-            GameManager.Instance.DiceSystem.Roll();
+            GameManager.Instance.DiceSystem.RequestRollDice(GameManager.Instance.LocalPlayerId);
         }
     }
 }

@@ -86,8 +86,8 @@ namespace Game.View.Player
 
         private void SubscribeToEvents()
         {
-            EventBus.Instance?.Subscribe<Events.PlayerMovedEvent>(OnPlayerMoved);
-            EventBus.Instance?.Subscribe<Events.PlayerKnockbackEvent>(OnPlayerKnockback);
+            //EventBus.Instance?.Subscribe<Events.PlayerMovedEvent>(OnPlayerMoved);
+            //EventBus.Instance?.Subscribe<Events.PlayerKnockbackEvent>(OnPlayerKnockback);
         }
         
         private void OnDestroy()
@@ -130,21 +130,21 @@ namespace Game.View.Player
         
         // ========== Events ==========
         
-        private void OnPlayerMoved(Events.PlayerMovedEvent evt)
-        {
-            if (evt.PlayerId == playerId)
-            {
-                
-            }
-        }
-        
-        private void OnPlayerKnockback(Events.PlayerKnockbackEvent evt)
-        {
-            if (evt.PlayerId == playerId)
-            {
-                
-            }
-        }
+        // private void OnPlayerMoved(Events.PlayerMovedEvent evt)
+        // {
+        //     if (evt.PlayerId == playerId)
+        //     {
+        //         
+        //     }
+        // }
+        //
+        // private void OnPlayerKnockback(Events.PlayerKnockbackEvent evt)
+        // {
+        //     if (evt.PlayerId == playerId)
+        //     {
+        //         
+        //     }
+        // }
         
     }
 }

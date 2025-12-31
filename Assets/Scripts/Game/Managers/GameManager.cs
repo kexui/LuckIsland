@@ -13,6 +13,9 @@ namespace Game.Managers
         public bool isGameStarted { get; private set; } = false;
         public bool isGamePaused { get; private set; } = false;
         
+        // ========== 字段 ==========
+        public int LocalPlayerId { get; private set; } = -1;
+        
         // ========== System引用 ==========
         private MapSystem mapSystem;
         public IMapSystem MapSystem => mapSystem;
@@ -20,13 +23,15 @@ namespace Game.Managers
         public PlayerViewSystem PlayerViewSystem { get; private set; }
         public TurnSystem TurnSystem { get; private set; }
         
-        public IDiceSystem DiceSystem { get; private set; }
+        public DiceSystem DiceSystem { get; private set; }
         
         //public BuildingSystem BuildingSystem { get; private set; }
         //public CardSystem CardSystem { get; private set; }
         //public EventSystem EventSystem { get; private set; }
         //public AISystem AISystem { get; private set; }
         //public UISystem UISystem { get; private set; }
+        
+        
         
         private void Start()
         {
@@ -48,13 +53,13 @@ namespace Game.Managers
             PlayerSystem.Initialize();
             PlayerSystem.Enable();
             
-            
-            
             TurnSystem = new TurnSystem();
             TurnSystem.Initialize();
             TurnSystem.Enable();
             
-            
+            DiceSystem = new DiceSystem();
+            DiceSystem.Initialize();
+            DiceSystem.Enable();
 
             PlayerViewSystem = new PlayerViewSystem();
             PlayerViewSystem.Initialize();
@@ -69,6 +74,7 @@ namespace Game.Managers
         {
             PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
             PlayerSystem.LoadPlayer(2,"Player2",500,0,"Character_B");
+            LocalPlayerId = 1;
         }
 
         //开始游戏
@@ -147,7 +153,7 @@ namespace Game.Managers
         {
             mapSystem?.Cleanup();
             PlayerSystem?.Cleanup();
-            //TurnSystem?.Cleanup();
+            TurnSystem?.Cleanup();
             //UISystem?.Cleanup();
             //CardSystem?.Cleanup();
             //BuildingSystem?.Cleanup();
@@ -165,6 +171,10 @@ namespace Game.Managers
             
             // 清理System
             CleanupAllSystems();
+            if (Core.Events.EventBus.Instance != null)
+            {
+                Destroy(Core.Events.EventBus.Instance.gameObject);
+            }
         }
     }
 }

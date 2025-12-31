@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Core.Events;
 using Core.Systems;
 using Game.Enums;
-using Core.Systems;
-using Game.Data.Config;
 using Game.Data.System;
 using Game.Events;
 using Game.Systems.Turn;
@@ -18,7 +16,7 @@ namespace Game.Systems
         private TurnScheduler turnScheduler; //调度器
         public TurnState CurrentState { get; private set; } //回合状态
         private bool isTurnCycleRunning = false; //回合循环运行
-        private int currentPlayerIndex; //当前玩家下标
+        public int currentPlayerIndex { get; private set; } //当前玩家下标
         private List<int> playerOrder = new (); //所有玩家
         
         // ========== 计时器相关 ==========
@@ -64,17 +62,21 @@ namespace Game.Systems
                 return;
             }
 
+            Debug.Log($"TurnSystem: 开始回合循环，总阶段数: {turnScheduler.GetPhaseCount()}");
+            
             if (turnScheduler.HasNextPhase())
             {
                 turnScheduler.StartFristPhase();
             }
             
             //阶段循环
-            while (isTurnCycleRunning && turnScheduler.HasNextPhase())
+            while (isTurnCycleRunning)
             {
                 var currentPhase = turnScheduler.CurrentPhase;
+                Debug.Log($"TurnSystem: 当前阶段索引: {turnScheduler.CurrentPhase}, 阶段: {currentPhase?.GetType().Name}");
                 if (currentPhase != null)
                 {
+                    Debug.Log($"TurnSystem: 开始等待阶段 {currentPhase.GetType().Name}，时间: {currentPhase.Time}秒");
                     // 启动当前阶段的计时器
                     await StartPhaseTimerAsync(currentPhase);
                 }
@@ -82,6 +84,7 @@ namespace Game.Systems
                 // 移动到下一个阶段
                 if (turnScheduler.HasNextPhase())
                 {
+                    Debug.Log($"TurnSystem: 切换到下一个阶段");
                     turnScheduler.MoveToNextPhase();
                 }
                 else
@@ -90,6 +93,10 @@ namespace Game.Systems
                     break; // 没有下一个阶段，结束循环
                 }
             }
+            
+            Debug.Log("TurnSystem: 回合循环结束");
+            isTurnCycleRunning = false;
+            CurrentState = TurnState.Idle;
         }
 
         /// <summary>
@@ -103,20 +110,19 @@ namespace Game.Systems
                 return;
             }
 
-            if (phase.time <= 0)
+            if (phase.Time <= 0)
             {
-                Debug.Log($"TurnSystem: Phase {phase.GetType().Name} 的时间为 {phase.time}，不启动计时器（无限等待）");
+                Debug.Log($"TurnSystem: Phase {phase.GetType().Name} 的时间为 {phase.Time}，不启动计时器（无限等待）");
                 return;
             }
             
             StopTimer();
-            currentPhaseTime = phase.time;
-            currentPhaseRemainingTime = phase.time;
+            currentPhaseTime = phase.Time;
+            currentPhaseRemainingTime = phase.Time;
             isTimerRunning = true;
             
             timerCancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = timerCancellationTokenSource.Token;
-
             try
             {
                 float updateInterval = 0.1f; // 每0.1秒更新一次
@@ -129,6 +135,7 @@ namespace Game.Systems
                         break;
 
                     currentPhaseRemainingTime -= updateInterval;
+                    
                     
                     // 发布计时器更新事件
                     if (EventBus.Instance != null)

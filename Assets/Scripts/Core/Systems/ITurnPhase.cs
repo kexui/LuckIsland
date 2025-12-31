@@ -1,8 +1,11 @@
-﻿namespace Core.Systems
+﻿using Game.Enums;
+
+namespace Core.Systems
 {
     public interface ITurnPhase
     {
-        int time { get; }
+        TurnPhase Phase { get; }
+        int Time { get; }
         void Enter();
         void Exit();
     }

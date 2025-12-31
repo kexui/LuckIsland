@@ -1,11 +1,13 @@
 ﻿using Core.Systems;
+using Game.Enums;
 using UnityEngine;
 
 namespace Game.Systems.Turn
 {
     public class StartPhase:ITurnPhase
     {
-        public int time { get; } = 3;
+        public TurnPhase Phase { get; } = TurnPhase.Start;
+        public int Time { get; } = 3;
 
         public void Enter()
         {

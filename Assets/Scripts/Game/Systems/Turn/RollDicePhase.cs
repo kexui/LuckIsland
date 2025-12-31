@@ -1,11 +1,13 @@
 ﻿using Core.Systems;
+using Game.Enums;
 using UnityEngine;
 
 namespace Game.Systems.Turn
 {
     public class RollDicePhase : ITurnPhase
     {
-        public int time { get; } = 10;
+        public TurnPhase Phase { get; } = TurnPhase.RollDice;
+        public int Time { get; } = 10;
         private bool hasRolled = false;
         public void Enter()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.Events;
 using Core.Systems;
 using Game.Data.System;
@@ -59,7 +60,7 @@ namespace Game.Systems.Turn
         /// <returns></returns>
         public bool HasNextPhase()
         {
-            return allPhases != null && currentPhaseIndex < allPhases.Count;
+            return allPhases != null && currentPhaseIndex < allPhases.Count - 1;
         }
 
         /// <summary>
@@ -85,11 +86,21 @@ namespace Game.Systems.Turn
 
             if (EventBus.Instance != null)
             {
-                var phaseChangeedEvent = new TurnPhaseChangedEvent(previousPhase, currentPhase);
-                EventBus.Instance.Publish(phaseChangeedEvent);
+                var phaseChangedEvent = new TurnPhaseChangedEvent(currentPhase, previousPhase);
+        
+                try
+                {
+                    EventBus.Instance.Publish(phaseChangedEvent);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"TurnScheduler: 发布 TurnPhaseChangedEvent 时出错: {ex.Message}\n{ex.StackTrace}");
+                }
             }
             
             Debug.Log($"TurnScheduler: 切换到阶段 {currentPhase.GetType().Name}");
         }
+
+        public int GetPhaseCount() => allPhases.Count;
     }
 }

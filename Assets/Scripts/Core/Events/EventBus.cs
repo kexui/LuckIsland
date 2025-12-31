@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.Events
 {
-    /// <summary>
-    /// 事件总线（类型安全）
-    /// </summary>
     public class EventBus : Singleton<EventBus>
     {
-        protected override bool PersistAcrossScenes => false;
+        protected override bool PersistAcrossScenes { get; } = false;
 
         // 事件存储：事件类型 -> 回调列表
         private readonly Dictionary<Type, List<Delegate>> handlers = new();
@@ -69,7 +67,15 @@ namespace Core.Events
                 var snapshot = list.ToArray();
                 for (int i = 0; i < snapshot.Length; i++)
                 {
-                    (snapshot[i] as Action<T>)?.Invoke(evt);
+                    try
+                    {
+                        (snapshot[i] as Action<T>)?.Invoke(evt);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"EventBus: 处理事件 {typeof(T).Name} 时出错 (处理器 {i}): {ex.Message}\n{ex.StackTrace}");
+                        // 继续处理其他处理器，不中断
+                    }
                 }
             }
         }
