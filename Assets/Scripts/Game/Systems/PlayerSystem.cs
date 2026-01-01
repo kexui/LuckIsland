@@ -10,7 +10,7 @@ using Game.Logic.Map;
 public class PlayerSystem : SystemBase ,IPlayerSystem
 {
     private IMapSystem mapSystem;
-    public List<PlayerLogic> Players;
+    private Dictionary<int, PlayerLogic> players = new();
     
     public PlayerSystem(IMapSystem mapSystem)
     {
@@ -21,13 +21,13 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
     
     protected override void OnInitialize()
     {
-        Players = new List<PlayerLogic>();
         // 创建玩家逻辑
     }
     
     protected override void OnEnable()
     {
         // 订阅事件
+        SubscribeEvent<DiceRolledEvent>(OnGetDiceResult);
         //SubscribeEvent<Events.PlayerMovedEvent>(OnPlayerMoved);
     }
     
@@ -38,9 +38,15 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
     protected override void OnCleanup()
     {
         ClearSubscriptions(); // 清理事件订阅
-        Players.Clear();
+        players.Clear();
     }
     
+    // ========== Events ==========
+    private void OnGetDiceResult(DiceRolledEvent evt)
+    {
+        SetPlayerDiceResult(evt.PlayerId, evt.Result);
+    }
+
     // ========== IPlayerSystem ==========
     
     /// <summary>
@@ -66,7 +72,7 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
         
         // 创建玩家逻辑
         PlayerLogic player = new PlayerLogic(playerId, playerName, startGold, startTileIndex, characterName);
-        Players.Add(player);
+        players.Add(playerId,player);
 
         Debug.Log($"创建玩家: ID={playerId}, Name={playerName}, Gold={startGold}, Tile={startTileIndex}");
         
@@ -100,23 +106,31 @@ public class PlayerSystem : SystemBase ,IPlayerSystem
         Debug.Log($"批量加载了 {playerDataList.Count} 个玩家");
     }
     
-    
-    // ========== 公共接口 ==========
-    
     public PlayerLogic GetPlayer(int playerId)
     {
         ValidateSystem();
-        return Players.Find(p => p.GetId() == playerId);
+        PlayerLogic player;
+        if (!players.TryGetValue(playerId,out player))
+        {
+            Debug.LogError($"PlayerSystem: 未找到{playerId}");
+            return null;
+        }
+        return player;
     }
     
     public List<PlayerLogic> GetAllPlayers()
     {
         ValidateSystem();
-        return new List<PlayerLogic>(Players);
+        return new List<PlayerLogic>(players.Values);
     }
     
     private void OnPlayerMoved()//Events.PlayerMovedEvent evt)
     {
         // 处理玩家移动事件
+    }
+
+    private void SetPlayerDiceResult(int playerId,int result)
+    {
+        GetPlayer(playerId).SetRollResult(result);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core.Events;
 using Core.Systems;
 using Game.Events;
@@ -8,6 +9,10 @@ using UnityEngine;
 public class DiceSystem : SystemBase,IDiceSystem
 {
     private System.Random random;
+    private IPlayerSystem playerSystem;
+    
+    private Dictionary<int, bool> playerRolledState = new Dictionary<int, bool>();
+    
     
     // ========== SystemBase ==========
     protected override void OnInitialize()
@@ -23,6 +28,7 @@ public class DiceSystem : SystemBase,IDiceSystem
     protected override void OnCleanup()
     {
         random = null;
+        playerRolledState.Clear();
     }
 
     // ========== Events ==========
@@ -33,6 +39,36 @@ public class DiceSystem : SystemBase,IDiceSystem
     }
 
     // ========== IDiceSystem ==========
+
+    public void RequestRollDice(int playerID)
+    {
+        if (!CanRollDice())
+        {
+            Debug.LogWarning($"玩家 {playerID} 当前无法投骰子");
+            return;
+        }
+
+        if (HasPlayerRolled(playerID))
+        {
+            Debug.Log($"DiceSystem:玩家{playerID}已经投过了");
+            return;
+        }
+        
+        int result = random.Next(1, 7);
+        playerRolledState[playerID] = true;
+        Debug.Log($"RequestRollDice, ID:{playerID}, Result:{result}");
+        
+        if (EventBus.Instance != null)
+        {
+            var diceEvent = new DiceRolledEvent()
+            {
+                Result = result,
+                PlayerId = playerID
+            };
+            EventBus.Instance.Publish(diceEvent);
+        }
+    }
+    
     
     private bool CanRollDice()
     {
@@ -47,25 +83,12 @@ public class DiceSystem : SystemBase,IDiceSystem
         return false;
     }
 
-    public void RequestRollDice(int playerID)
+    private bool HasPlayerRolled(int playerId)
     {
-        if (!CanRollDice())
+        if (!playerRolledState.TryGetValue(playerId, out bool result))
         {
-            Debug.LogWarning($"玩家 {playerID} 当前无法投骰子");
-            return;
+            Debug.LogError($"DiceSystem: 玩家 {playerId} 不存在");
         }
-        
-        int result = random.Next(1, 7);
-        Debug.Log($"RequestRollDice, ID:{playerID}, Result:{result}");
-        
-        if (EventBus.Instance != null)
-        {
-            var diceEvent = new DiceRolledEvent()
-            {
-                Result = result,
-                PlayerId = playerID
-            };
-            EventBus.Instance.Publish(diceEvent);
-        }
+        return result;
     }
 }

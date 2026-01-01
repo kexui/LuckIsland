@@ -9,6 +9,9 @@ public class PlayerLogic : LogicBase
     private int currentTileIndex;
     private string characterPrefabName; // 角色预制体名称
     
+    
+    private int rollResult;
+    
     public PlayerLogic(int id, string name, int startGold, int startTileIndex, string characterName)
     {
         playerId = id;
@@ -27,4 +30,6 @@ public class PlayerLogic : LogicBase
     public void SetGold(int amount) => gold = amount;
     public void AddGold(int amount) => gold += amount;
     public void SetCurrentTileIndex(int index) => currentTileIndex = index;
+    
+    public void SetRollResult(int result) => rollResult = result;
 }

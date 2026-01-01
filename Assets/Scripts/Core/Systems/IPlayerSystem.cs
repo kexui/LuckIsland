@@ -8,5 +8,6 @@ namespace Core.Systems
             string characterName);
 
         void LoadPlayer(int playerId, string playerName, int startGold, int startTileIndex, string characterName);
+        PlayerLogic GetPlayer(int playerId);
     }
 }
