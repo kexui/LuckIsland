@@ -24,8 +24,7 @@ namespace Core
                     _instance = FindObjectOfType<T>();
                     if (_instance == null)
                     {
-                        var obj = new GameObject(typeof(T).Name + "_AutoCreated");
-                        _instance = obj.AddComponent<T>();
+                        Debug.LogError($"{typeof(T).Name}为在场景中初始化");
                     }
                 }
                 return _instance;

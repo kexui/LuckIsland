@@ -10,7 +10,7 @@ namespace Game.Systems.Turn
         public int Time { get; } = 3;
         public void Enter()
         {
-            Debug.Log("Entering StartPhase");
+            Debug.Log("Entering WaitPhase");
         }
 
         public void Exit()

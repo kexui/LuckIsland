@@ -2,7 +2,7 @@
 {
     public interface IDiceSystem
     {
-        int RequestRollDice(int playerID);
+        void RequestRollDice(int playerID);
         
     }
 }

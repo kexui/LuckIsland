@@ -25,6 +25,12 @@ namespace Game.Systems
             SubscribeEvent<PlayerCreatedEvent>(OnPlayerCreaed);
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+        }
+
         protected override void OnCleanup()
         {
             ClearSubscriptions();

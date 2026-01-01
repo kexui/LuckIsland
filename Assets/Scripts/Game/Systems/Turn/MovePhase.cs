@@ -7,7 +7,7 @@ namespace Game.Systems.Turn
     public class MovePhase : ITurnPhase
     {
         public TurnPhase Phase { get; } = TurnPhase.Move;
-        public int Time { get; } = 7;
+        public int Time { get; } = 5;
         public void Enter()
         {
             Debug.Log("Entered MovePhase");

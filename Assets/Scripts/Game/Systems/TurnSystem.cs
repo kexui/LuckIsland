@@ -37,8 +37,12 @@ namespace Game.Systems
 
         protected override void OnCleanup()
         {
+            isTurnCycleRunning = false;
+            StopTimer();
+            
             currentPlayerIndex = -1;
             playerOrder.Clear();
+            Debug.Log("TurnSystem: 清理完成");
         }
 
         public void StartTurnCycle()
@@ -74,11 +78,18 @@ namespace Game.Systems
             {
                 var currentPhase = turnScheduler.CurrentPhase;
                 Debug.Log($"TurnSystem: 当前阶段索引: {turnScheduler.CurrentPhase}, 阶段: {currentPhase?.GetType().Name}");
+                
                 if (currentPhase != null)
                 {
                     Debug.Log($"TurnSystem: 开始等待阶段 {currentPhase.GetType().Name}，时间: {currentPhase.Time}秒");
                     // 启动当前阶段的计时器
                     await StartPhaseTimerAsync(currentPhase);
+                }
+                
+                if (!isTurnCycleRunning)
+                {
+                    Debug.Log("TurnSystem: 回合循环已停止");
+                    break;
                 }
                 
                 // 移动到下一个阶段
@@ -127,7 +138,7 @@ namespace Game.Systems
             {
                 float updateInterval = 0.1f; // 每0.1秒更新一次
                 
-                while (currentPhaseRemainingTime > 0 && !cancellationToken.IsCancellationRequested)
+                while (currentPhaseRemainingTime > 0 && !cancellationToken.IsCancellationRequested && isTurnCycleRunning)
                 {
                     await Task.Delay((int)(updateInterval * 1000), cancellationToken);
                     
@@ -150,7 +161,7 @@ namespace Game.Systems
                 }
 
                 // 时间到，触发阶段结束
-                if (isTimerRunning && currentPhaseRemainingTime <= 0 && !cancellationToken.IsCancellationRequested)
+                if (isTimerRunning && currentPhaseRemainingTime <= 0 && !cancellationToken.IsCancellationRequested && isTurnCycleRunning)
                 {
                     OnPhaseTimeUp(phase);
                 }

@@ -51,6 +51,10 @@ namespace Game.Systems.Turn
             }
 
             currentPhaseIndex++;
+            if (currentPhaseIndex == allPhases.Count)
+            {
+                currentPhaseIndex = 0;
+            }
             ChangePhase(allPhases[currentPhaseIndex]);
         }
 
@@ -60,7 +64,8 @@ namespace Game.Systems.Turn
         /// <returns></returns>
         public bool HasNextPhase()
         {
-            return allPhases != null && currentPhaseIndex < allPhases.Count - 1;
+            return true;
+            return allPhases != null && currentPhaseIndex >= 0 && currentPhaseIndex < allPhases.Count;
         }
 
         /// <summary>

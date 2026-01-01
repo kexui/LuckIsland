@@ -1,5 +1,6 @@
 using System.Collections;
 using Core;
+using Core.Events;
 using Core.Systems;
 using Game.Systems;
 using UnityEngine;
@@ -48,14 +49,14 @@ namespace Game.Managers
             mapSystem = new MapSystem();
             mapSystem.Initialize();
             mapSystem.Enable();
-
-            PlayerSystem = new PlayerSystem(MapSystem);
-            PlayerSystem.Initialize();
-            PlayerSystem.Enable();
             
             TurnSystem = new TurnSystem();
             TurnSystem.Initialize();
             TurnSystem.Enable();
+
+            PlayerSystem = new PlayerSystem(MapSystem);
+            PlayerSystem.Initialize();
+            PlayerSystem.Enable();
             
             DiceSystem = new DiceSystem();
             DiceSystem.Initialize();
@@ -72,9 +73,12 @@ namespace Game.Managers
 
         private void LoadPlayers()
         {
-            PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
-            PlayerSystem.LoadPlayer(2,"Player2",500,0,"Character_B");
-            LocalPlayerId = 1;
+            if (PlayerSystem != null)
+            {
+                PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
+                PlayerSystem.LoadPlayer(2,"Player2",500,0,"Character_B");
+                LocalPlayerId = 1;
+            }
         }
 
         //开始游戏
@@ -152,8 +156,11 @@ namespace Game.Managers
         private void CleanupAllSystems()
         {
             mapSystem?.Cleanup();
-            PlayerSystem?.Cleanup();
             TurnSystem?.Cleanup();
+            DiceSystem?.Cleanup();
+            PlayerSystem?.Cleanup();
+            PlayerViewSystem?.Cleanup();
+            
             //UISystem?.Cleanup();
             //CardSystem?.Cleanup();
             //BuildingSystem?.Cleanup();
@@ -163,18 +170,13 @@ namespace Game.Managers
         
         private void OnDestroy()
         {
-            // 清理订阅
-            if (Core.Events.EventBus.Instance != null)
-            {
-                //EventBus.Instance.Unsubscribe<Events.GameOverEvent>(OnGameOver);
-            }
-            
-            // 清理System
-            CleanupAllSystems();
             if (Core.Events.EventBus.Instance != null)
             {
                 Destroy(Core.Events.EventBus.Instance.gameObject);
             }
+            
+            // 清理System
+            CleanupAllSystems();
         }
     }
 }

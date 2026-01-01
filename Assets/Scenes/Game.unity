@@ -570,6 +570,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 953416703}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TryEndPhase
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Game.View.Button.ButtonPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4271544041983042543, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
       propertyPath: m_text
       value: "\u8DF3\u8FC7"
@@ -10048,6 +10076,34 @@ PrefabInstance:
     - target: {fileID: 102408248014098818, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 953416703}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TryRollDice
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Game.View.Button.ButtonPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298645089248490885, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4271544041983042543, guid: d41634cff54348d4b89e7b74d6494cb7, type: 3}
       propertyPath: m_text

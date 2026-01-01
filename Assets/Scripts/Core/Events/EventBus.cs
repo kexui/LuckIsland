@@ -6,8 +6,6 @@ namespace Core.Events
 {
     public class EventBus : Singleton<EventBus>
     {
-        protected override bool PersistAcrossScenes { get; } = false;
-
         // 事件存储：事件类型 -> 回调列表
         private readonly Dictionary<Type, List<Delegate>> handlers = new();
         // 主线程队列

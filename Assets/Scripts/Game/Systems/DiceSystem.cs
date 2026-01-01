@@ -15,35 +15,25 @@ public class DiceSystem : SystemBase,IDiceSystem
         random = new System.Random();
     }
 
+    protected override void OnEnable()
+    {
+        SubscribeEvent<UIRollDiceRequest>(OnRequestRollDice);
+    }
+
     protected override void OnCleanup()
     {
         random = null;
     }
 
-    public int RequestRollDice(int playerId)
+    // ========== Events ==========
+    
+    public void OnRequestRollDice(UIRollDiceRequest evt)
     {
-        
-        if (!CanRollDice())
-        {
-            Debug.LogWarning($"玩家 {playerId} 当前无法投骰子");
-            return 0;
-        }
-        
-        int result = random.Next(1, 7);
-        Debug.Log($"RequestRollDice, ID:{playerId}, Result:{result}");
-        
-        if (EventBus.Instance != null)
-        {
-            var diceEvent = new DiceRolledEvent()
-            {
-                Result = result,
-                PlayerId = playerId
-            };
-            EventBus.Instance.Publish(diceEvent);
-        }
-        return result;
+        RequestRollDice(evt.PlayerID);
     }
 
+    // ========== IDiceSystem ==========
+    
     private bool CanRollDice()
     {
         if (GameManager.Instance?.TurnSystem != null)
@@ -55,5 +45,27 @@ public class DiceSystem : SystemBase,IDiceSystem
             }
         }
         return false;
+    }
+
+    public void RequestRollDice(int playerID)
+    {
+        if (!CanRollDice())
+        {
+            Debug.LogWarning($"玩家 {playerID} 当前无法投骰子");
+            return;
+        }
+        
+        int result = random.Next(1, 7);
+        Debug.Log($"RequestRollDice, ID:{playerID}, Result:{result}");
+        
+        if (EventBus.Instance != null)
+        {
+            var diceEvent = new DiceRolledEvent()
+            {
+                Result = result,
+                PlayerId = playerID
+            };
+            EventBus.Instance.Publish(diceEvent);
+        }
     }
 }

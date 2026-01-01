@@ -37,11 +37,21 @@ namespace Game.View.Button
 
         private void OnEnable()
         {
-            EventBus.Instance.Subscribe<TurnPhaseChangedEvent>(OnPhaseChanged);
+            if (EventBus.Instance != null)
+            {
+                EventBus.Instance.Subscribe<TurnPhaseChangedEvent>(OnPhaseChanged);
+            }
+            else
+            {
+                Debug.LogWarning("ButtonPanel: EventBus.Instance is null");
+            }
         }
         private void OnDisable()
         {
-            EventBus.Instance.Unsubscribe<TurnPhaseChangedEvent>(OnPhaseChanged);
+            if (EventBus.Instance != null)
+            {
+                EventBus.Instance.Unsubscribe<TurnPhaseChangedEvent>(OnPhaseChanged);
+            }
         }
 
         private void OnPhaseChanged(TurnPhaseChangedEvent evt)
@@ -100,15 +110,14 @@ namespace Game.View.Button
         // ========== 按钮方法 ==========
         public void TryRollDice()
         {
-            if (GameManager.Instance?.DiceSystem != null)
+            if (EventBus.Instance != null)
             {
-                GameManager.Instance.DiceSystem.RequestRollDice(GameManager.Instance.LocalPlayerId);
+                EventBus.Instance.Publish(new UIRollDiceRequest());
             }
             else
             {
-                Debug.LogError("ButtonPanel:DiceSystem == null");
+                Debug.LogWarning("ButtonPanel: EventBus 未初始化，无法投骰子");
             }
-            HideButton(this.gameObject);
         }
 
         public void TryEndPhase()

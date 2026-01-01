@@ -6,6 +6,7 @@ namespace Game.Managers
 {
     public class GridManager : Singleton<GridManager>
     {
+        protected override bool PersistAcrossScenes { get; } = false;
         public float cellSize = 1f;
 
         public Vector3 GetWorldPos(Cell cell)
