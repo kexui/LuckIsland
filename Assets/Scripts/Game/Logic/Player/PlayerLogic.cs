@@ -11,6 +11,7 @@ public class PlayerLogic : LogicBase
     
     
     private int rollResult;
+    private int remainingSteps;
     
     public PlayerLogic(int id, string name, int startGold, int startTileIndex, string characterName)
     {
@@ -24,12 +25,13 @@ public class PlayerLogic : LogicBase
     public override int GetId() => playerId;
     public string GetName() => playerName;
     public int GetGold() => gold;
-    public int GetCurrentTileIndex() => currentTileIndex;
-    public string GetCharacterPrefabName() => characterPrefabName;
-    
     public void SetGold(int amount) => gold = amount;
     public void AddGold(int amount) => gold += amount;
+    public int GetCurrentTileIndex() => currentTileIndex;
     public void SetCurrentTileIndex(int index) => currentTileIndex = index;
-    
+    public string GetCharacterPrefabName() => characterPrefabName;
+    public int GetRollResult() => rollResult;
     public void SetRollResult(int result) => rollResult = result;
+    public  int GetRemainingSteps() => remainingSteps;
+    public void SetRemainingSteps(int remaining) => remainingSteps = remaining;
 }

@@ -44,6 +44,11 @@ namespace Game.Systems
             return mapLogic?.GetTile(index);
         }
 
+        public int GetNextTile(int index)
+        {
+            return mapLogic.GetNextTile(index);
+        }
+
         public LandLogic GetLand(int landId)
         {
             return mapLogic?.GetLand(landId);

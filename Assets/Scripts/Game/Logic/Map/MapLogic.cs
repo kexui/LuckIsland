@@ -74,7 +74,13 @@ namespace Game.Logic.Map
         {
             return tiles[id];
         }
-        
+
+        public int GetNextTile(int id)
+        {
+            //暂时
+            return (id + 1) % tiles.Count;
+        }
+
         //获取所有Tile
         public List<TileLogic> GetAllTiles()
         {

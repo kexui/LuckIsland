@@ -12,6 +12,7 @@ public class DiceSystem : SystemBase,IDiceSystem
     private IPlayerSystem playerSystem;
     
     private Dictionary<int, bool> playerRolledState = new Dictionary<int, bool>();
+    private Dictionary<int, int> playerRollResults = new();
     
     
     // ========== SystemBase ==========
@@ -35,40 +36,40 @@ public class DiceSystem : SystemBase,IDiceSystem
     
     public void OnRequestRollDice(UIRollDiceRequest evt)
     {
-        RequestRollDice(evt.PlayerID);
+        RequestRollDice(evt.PlayerId);
     }
 
     // ========== IDiceSystem ==========
 
-    public void RequestRollDice(int playerID)
+    public void RequestRollDice(int playerId)
     {
         if (!CanRollDice())
         {
-            Debug.LogWarning($"玩家 {playerID} 当前无法投骰子");
+            Debug.LogWarning($"玩家 {playerId} 当前无法投骰子");
             return;
         }
 
-        if (HasPlayerRolled(playerID))
+        if (HasPlayerRolled(playerId))
         {
-            Debug.Log($"DiceSystem:玩家{playerID}已经投过了");
+            Debug.Log($"DiceSystem:玩家{playerId}已经投过了");
             return;
         }
         
         int result = random.Next(1, 7);
-        playerRolledState[playerID] = true;
-        Debug.Log($"RequestRollDice, ID:{playerID}, Result:{result}");
+        playerRolledState[playerId] = true;
+        playerRollResults.Add(playerId, result);
+        Debug.Log($"RequestRollDice, ID:{playerId}, Result:{result}");
         
         if (EventBus.Instance != null)
         {
             var diceEvent = new DiceRolledEvent()
             {
                 Result = result,
-                PlayerId = playerID
+                PlayerId = playerId
             };
             EventBus.Instance.Publish(diceEvent);
         }
     }
-    
     
     private bool CanRollDice()
     {

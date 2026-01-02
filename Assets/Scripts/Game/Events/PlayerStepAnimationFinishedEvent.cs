@@ -1,6 +1,6 @@
 ﻿namespace Game.Events
 {
-    public class UIRollDiceRequest
+    public class PlayerStepAnimationFinishedEvent
     {
         public int PlayerId;
     }

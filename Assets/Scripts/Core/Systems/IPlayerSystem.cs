@@ -9,5 +9,6 @@ namespace Core.Systems
 
         void LoadPlayer(int playerId, string playerName, int startGold, int startTileIndex, string characterName);
         PlayerLogic GetPlayer(int playerId);
+        List<PlayerLogic> GetAllPlayers();
     }
 }

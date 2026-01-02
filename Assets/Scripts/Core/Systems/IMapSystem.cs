@@ -9,8 +9,8 @@ namespace Core.Systems
     public interface IMapSystem
     {
         TileLogic GetTile(int index);
+        int GetNextTile(int index);
         LandLogic GetLand(int landId);
-        
         //List<LandLogic> GetAdjacentLands(int tileIndex);
         //List<TileLogic> GetTilesAdjacentToLand(int landId);
     }

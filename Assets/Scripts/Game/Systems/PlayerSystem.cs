@@ -10,7 +10,7 @@ using Game.Logic.Map;
 public class PlayerSystem : SystemBase ,IPlayerSystem
 {
     private IMapSystem mapSystem;
-    private Dictionary<int, PlayerLogic> players = new();
+    public Dictionary<int, PlayerLogic> players = new();
     
     public PlayerSystem(IMapSystem mapSystem)
     {
