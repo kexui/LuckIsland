@@ -1,8 +1,9 @@
-﻿using Core.Events;
+﻿using System.Collections.Generic;
+using Core.Events;
 using Core.Systems;
+using Game.Data.System;
 using Game.Enums;
 using Game.Events;
-using Game.Managers;
 using UnityEngine;
 
 namespace Game.Systems
@@ -11,6 +12,7 @@ namespace Game.Systems
     {
         private IMapSystem mapSystem;
         private IPlayerSystem playerSystem;
+        private Dictionary<int, MoveContext> moveContexts = new();
 
         public  MoveSystem(IMapSystem mapSystem , IPlayerSystem playerSystem)
         {
@@ -47,6 +49,19 @@ namespace Game.Systems
 
         private void OnFinishedOnceStep(PlayerStepAnimationFinishedEvent evt)
         {
+            if (!moveContexts.TryGetValue(evt.PlayerId,out var ctx))
+            {
+                Debug.LogError($"MoveSystem: PlayerStepAnimationFinishedEvent的playerid{evt.PlayerId}出错");
+                return;
+            }
+            
+            ctx.CurrentTileIndex = evt.CurrentTileIndex;
+            ctx.RemainingSteps--;
+            
+            //playerSystem订阅？
+            var player = playerSystem.GetPlayer(evt.PlayerId);
+            player.SetCurrentTileIndex(evt.CurrentTileIndex);
+            
             TryMoveNextStep(evt.PlayerId);
         }
 
@@ -54,47 +69,42 @@ namespace Game.Systems
 
         public void MovePhase()
         {
+            //读取数据
+            moveContexts.Clear();
+            
             var players = playerSystem.GetAllPlayers();
             foreach (var player in players)
             {
-                StartMove(player.GetId(),player.GetRemainingSteps());
+                var id = player.GetId();
+                var newMoveContext = new MoveContext()
+                {
+                    CurrentTileIndex = player.GetCurrentTileIndex(),
+                    RemainingSteps = player.GetRollResult(),
+                    IsFinished = false
+                };
+                moveContexts.Add(id, newMoveContext);
+                TryMoveNextStep(id);
             }
-        }
-
-        private void StartMove(int playerId,int step)
-        {
-            var player = playerSystem.GetPlayer(playerId);
-            if (player == null)
-            {
-                Debug.LogError($"MoveSystem: 无法找到玩家 {playerId}");
-                return;
-            }
-
-            if (step < 0||step > 6)
-            {
-                Debug.LogError($"MoveSystem: 点数有问题");
-                return;
-            }
-            
-            //一步一步走
-            TryMoveNextStep(playerId);
         }
 
         void TryMoveNextStep(int playerId)
         {
-            var player = playerSystem.GetPlayer(playerId);
-            if (player == null)
+            var ctx = moveContexts[playerId];
+            if (ctx.IsFinished)
             {
-                Debug.LogError($"MoveSystem: 无法找到玩家 {playerId}");
+                TryFinishMovePhase();
                 return;
             }
-            
-            int currentTileIndex = player.GetCurrentTileIndex();
+
+            if (ctx.RemainingSteps <= 0)
+            {
+                ctx.IsFinished = true;
+                
+                return;
+            }
+
+            int currentTileIndex = ctx.CurrentTileIndex;
             int nextTileIndex = mapSystem.GetNextTile(currentTileIndex);
-            int remainingStep = player.GetRemainingSteps();
-            
-            remainingStep--;
-            ApplyStep(playerId, nextTileIndex, remainingStep);
             
             //动画
             var moveEvent = new PlayerMoveStepRequestEvent()
@@ -105,17 +115,17 @@ namespace Game.Systems
             EventBus.Instance.Publish(moveEvent);
         }
 
-        private void ApplyStep(int playerId,int currentTileIndex,int remainingStep)
+        private void TryFinishMovePhase()
         {
-            var player = playerSystem.GetPlayer(playerId);
-            if (player == null)
+            foreach (var ctx in moveContexts.Values)
             {
-                Debug.LogError($"MoveSystem: 无法找到玩家 {playerId}");
-                return;
+                if (!ctx.IsFinished)
+                {
+                    return;
+                }
+                
+                EventBus.Instance.Publish(new MovePhaseFinishedEvent());
             }
-
-            player.SetCurrentTileIndex(currentTileIndex);
-            player.SetRemainingSteps(remainingStep);
         }
     }
 }

@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 namespace Game.Systems
 {
-    public class ViewSystem: SystemBase,IViewSystem
+    public class ViewSystem: SystemBase
     {
         private IMapSystem mapSystem;  // 依赖 MapSystem
         private Dictionary<int, TileView> tileViewMap;

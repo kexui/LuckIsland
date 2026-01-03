@@ -1,5 +1,6 @@
 ﻿namespace Game.Data.Player
 {
+    //用于初始化玩家数据
     public class PlayerData
     {
         public int playerId;

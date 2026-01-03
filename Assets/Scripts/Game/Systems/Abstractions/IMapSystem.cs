@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Game.Logic.Map;
+﻿using Game.Logic.Map;
 
-namespace Core.Systems
+namespace Game.Systems
 {
     /// <summary>
     /// 地图系统公共接口，供其他System使用

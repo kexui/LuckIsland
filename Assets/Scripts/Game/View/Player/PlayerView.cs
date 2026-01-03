@@ -9,11 +9,10 @@ namespace Game.View.Player
     public class PlayerView : ViewBase
     {
         [SerializeField] private Animator animator;
+        [SerializeField] private GameObject characterModel;
         private int playerId;
         private PlayerLogic playerLogic;
-        private GameObject characterModel;
 
-        private const string prefabName = "Prefabs/Characters/"; 
         // 动画参数常量
         private const string SPEED = "Speed";
         private const string IS_MOVING = "IsMoving";
@@ -24,40 +23,23 @@ namespace Game.View.Player
             return playerId;
         }
 
+        public PlayerView()
+        {
+            
+        }
+
         public void Initialize(int id, PlayerLogic logic)
         {
             playerId = id;
             playerLogic = logic;
             
-            LoadCharacterModel(logic.GetCharacterPrefabName());
-            InitializePosition();
-            SubscribeToEvents();
-        }
-        
-        /// <summary>
-        /// 加载角色模型
-        /// </summary>
-        /// <param name="characterName"></param>
-        private void LoadCharacterModel(string characterName)
-        {
-            GameObject prefab = Resources.Load<GameObject>(prefabName + characterName);
-
-            if (prefab == null)
-            {
-                Debug.LogError($"无法加载角色预制体: {prefabName + characterName}");
-                return;
-            }
-
-            characterModel = Instantiate(prefab, transform);
-            characterModel.name = $"Character_{playerId}";
-            
-            animator = characterModel.GetComponent<Animator>();
             if (animator == null)
             {
-                animator = characterModel.GetComponentInChildren<Animator>();
+                animator = GetComponent<Animator>();
             }
-            
             SetWait();
+            InitializePosition();
+            SubscribeToEvents();
         }
 
         private void InitializePosition()
@@ -68,13 +50,13 @@ namespace Game.View.Player
                 return;
             }
             
-            var tile = GameManager.Instance.MapSystem.GetTile(playerLogic.GetCurrentTileIndex());
+            var tile = GameManager.Instance.Context.MapSystem.GetTile(playerLogic.GetCurrentTileIndex());
             SetPosition(tile);
         }
 
         private void SetPosition(TileLogic tileLogic)
         {
-            if (playerLogic != null && GameManager.Instance?.MapSystem != null)
+            if (playerLogic != null && GameManager.Instance.Context.MapSystem != null)
             {
                 if (tileLogic != null)
                 {

@@ -1,4 +1,4 @@
-﻿namespace Core.Systems
+﻿namespace Game.Systems
 {
     public interface IDiceSystem
     {

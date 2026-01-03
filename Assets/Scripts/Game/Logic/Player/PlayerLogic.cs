@@ -1,4 +1,5 @@
 using Core.Logic;
+using Game.Data.Player;
 using UnityEngine;
 
 public class PlayerLogic : LogicBase
@@ -11,7 +12,7 @@ public class PlayerLogic : LogicBase
     
     
     private int rollResult;
-    private int remainingSteps;
+    //private int remainingSteps;
     
     public PlayerLogic(int id, string name, int startGold, int startTileIndex, string characterName)
     {
@@ -21,7 +22,16 @@ public class PlayerLogic : LogicBase
         currentTileIndex = startTileIndex;
         characterPrefabName = characterName;
     }
-    
+
+    public PlayerLogic(PlayerData data)
+    {
+        playerId = data.playerId;
+        playerName = data.playerName;
+        gold = data.startGold;
+        currentTileIndex = data.startTileIndex;
+        characterPrefabName = data.characterPrefabName;
+    }
+
     public override int GetId() => playerId;
     public string GetName() => playerName;
     public int GetGold() => gold;
@@ -32,6 +42,6 @@ public class PlayerLogic : LogicBase
     public string GetCharacterPrefabName() => characterPrefabName;
     public int GetRollResult() => rollResult;
     public void SetRollResult(int result) => rollResult = result;
-    public  int GetRemainingSteps() => remainingSteps;
-    public void SetRemainingSteps(int remaining) => remainingSteps = remaining;
+    //public  int GetRemainingSteps() => remainingSteps;
+    //public void SetRemainingSteps(int remaining) => remainingSteps = remaining;
 }

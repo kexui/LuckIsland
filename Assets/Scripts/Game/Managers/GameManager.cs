@@ -1,8 +1,6 @@
 using System.Collections;
 using Core;
-using Core.Events;
-using Core.Systems;
-using Game.Systems;
+using Game.Data.Context;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,24 +16,12 @@ namespace Game.Managers
         public int LocalPlayerId { get; private set; } = -1;
         
         // ========== System引用 ==========
-        private MapSystem mapSystem;
-        public IMapSystem MapSystem => mapSystem;
-        public PlayerSystem PlayerSystem { get; private set; }
-        public PlayerViewSystem PlayerViewSystem { get; private set; }
-        public TurnSystem TurnSystem { get; private set; }
-        
-        public DiceSystem DiceSystem { get; private set; }
-        
-        //public BuildingSystem BuildingSystem { get; private set; }
-        //public CardSystem CardSystem { get; private set; }
-        //public EventSystem EventSystem { get; private set; }
-        //public AISystem AISystem { get; private set; }
-        //public UISystem UISystem { get; private set; }
-        
-        
+        public GameContext Context { get; private set; }
         
         private void Start()
         {
+            Context = new GameContext();
+            
             string sceneName = SceneManager.GetActiveScene().name;
             if (sceneName == "Game")
             {
@@ -46,25 +32,8 @@ namespace Game.Managers
         //初始化服务
         private IEnumerator InitializeGame()
         {
-            mapSystem = new MapSystem();
-            mapSystem.Initialize();
-            mapSystem.Enable();
-            
-            TurnSystem = new TurnSystem();
-            TurnSystem.Initialize();
-            TurnSystem.Enable();
-
-            PlayerSystem = new PlayerSystem(MapSystem);
-            PlayerSystem.Initialize();
-            PlayerSystem.Enable();
-            
-            DiceSystem = new DiceSystem();
-            DiceSystem.Initialize();
-            DiceSystem.Enable();
-
-            PlayerViewSystem = new PlayerViewSystem();
-            PlayerViewSystem.Initialize();
-            PlayerViewSystem.Enable();
+            Context.Initialize();
+            Context.Enable();
             
             LoadPlayers();
             StartGame();
@@ -73,10 +42,10 @@ namespace Game.Managers
 
         private void LoadPlayers()
         {
-            if (PlayerSystem != null)
+            if (Context.PlayerSystem != null)
             {
-                PlayerSystem.LoadPlayer(1,"Player1",500,0,"Character_A");
-                PlayerSystem.LoadPlayer(2,"Player2",500,0,"Character_B");
+                Context.PlayerSystem.CreatePlayer(1,"Player1",500,0,"Character_A");
+                Context.PlayerSystem.CreatePlayer(2,"Player2",500,0,"Character_B");
                 LocalPlayerId = 1;
             }
         }
@@ -96,9 +65,9 @@ namespace Game.Managers
             //EventBus.Instance.Subscribe<Events.GameOverEvent>(OnGameOver);
             
             //事件
-            if (TurnSystem != null)
+            if (Context.TurnSystem != null)
             {
-                TurnSystem.StartTurnCycle();
+                Context.TurnSystem.StartTurnCycle();
             }
             Debug.Log("Game started");
         }
@@ -155,28 +124,18 @@ namespace Game.Managers
         /// </summary>
         private void CleanupAllSystems()
         {
-            mapSystem?.Cleanup();
-            TurnSystem?.Cleanup();
-            DiceSystem?.Cleanup();
-            PlayerSystem?.Cleanup();
-            PlayerViewSystem?.Cleanup();
-            
-            //UISystem?.Cleanup();
-            //CardSystem?.Cleanup();
-            //BuildingSystem?.Cleanup();
-            //EventSystem?.Cleanup();
-            //AISystem?.Cleanup();
+            Context?.Cleanup();
         }
         
         private void OnDestroy()
         {
+            // 清理System
+            CleanupAllSystems();
+            
             if (Core.Events.EventBus.Instance != null)
             {
                 Destroy(Core.Events.EventBus.Instance.gameObject);
             }
-            
-            // 清理System
-            CleanupAllSystems();
         }
     }
 }

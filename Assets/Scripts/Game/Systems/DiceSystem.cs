@@ -4,6 +4,7 @@ using Core.Systems;
 using Game.Events;
 using Game.Managers;
 using Game.Systems.Turn;
+using Game.Systems;
 using UnityEngine;
 
 public class DiceSystem : SystemBase,IDiceSystem
@@ -73,9 +74,9 @@ public class DiceSystem : SystemBase,IDiceSystem
     
     private bool CanRollDice()
     {
-        if (GameManager.Instance?.TurnSystem != null)
+        if (GameManager.Instance.Context != null)
         {
-            var currentPhase = GameManager.Instance.TurnSystem.GetCurrentPhase();
+            var currentPhase = GameManager.Instance.Context.TurnSystem.GetCurrentPhase();
             if (currentPhase is RollDicePhase)
             {
                 return true;
